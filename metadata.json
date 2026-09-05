@@ -1,5 +1,5 @@
 {
-  "name": "Remix Ferry Service Route Dispatcher \u0026 Optimizer MVP",
+  "name": "Route Management Optimizer MVP",
   "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, role-based access control, cyber attack defense, automated security audit checks, and real-time client IP threat tracing.",
   "requestFramePermissions": [],
   "majorCapabilities": [

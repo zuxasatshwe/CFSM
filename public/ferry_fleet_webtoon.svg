@@ -1,0 +1,379 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Sky & Atmosphere Gradients -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="25%" stop-color="#141829" />
+      <stop offset="50%" stop-color="#241940" />
+      <stop offset="70%" stop-color="#4a154b" />
+      <stop offset="85%" stop-color="#93284f" />
+      <stop offset="95%" stop-color="#dd493a" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <radialGradient id="sunGlow" cx="65%" cy="65%" r="60%">
+      <stop offset="0%" stop-color="#fed7aa" stop-opacity="0.9" />
+      <stop offset="20%" stop-color="#fb923c" stop-opacity="0.6" />
+      <stop offset="50%" stop-color="#e11d48" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#311347" stop-opacity="0" />
+    </radialGradient>
+
+    <linearGradient id="cyberSun" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffedd5" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+
+    <!-- Highway Perspective Gradients -->
+    <linearGradient id="highwayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161b2b" />
+      <stop offset="40%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#04060b" />
+    </linearGradient>
+
+    <linearGradient id="roadGleam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ffff" stop-opacity="0.05" />
+      <stop offset="35%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.5" />
+      <stop offset="65%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#00ffff" stop-opacity="0.05" />
+    </linearGradient>
+
+    <linearGradient id="headlightBeam1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
+      <stop offset="30%" stop-color="#60a5fa" stop-opacity="0.4" />
+      <stop offset="70%" stop-color="#93c5fd" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="headlightBeamWarm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.95" />
+      <stop offset="25%" stop-color="#fde68a" stop-opacity="0.5" />
+      <stop offset="75%" stop-color="#f59e0b" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="tailLightGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#be123c" />
+    </linearGradient>
+
+    <!-- Vehicle Shading & Metallic Gloss (Webtoon 3D Cel-shade) -->
+    <linearGradient id="vanBodyMetallic" x1="0%" y1="0%" x2="100%" y2="60%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="40%" stop-color="#f1f5f9" />
+      <stop offset="70%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+
+    <linearGradient id="vanDecalCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <linearGradient id="vanGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="40%" stop-color="#0f172a" />
+      <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.85" />
+    </linearGradient>
+
+    <linearGradient id="busBodyAzure" x1="0%" y1="0%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="35%" stop-color="#0ea5e9" />
+      <stop offset="70%" stop-color="#0369a1" />
+      <stop offset="100%" stop-color="#075985" />
+    </linearGradient>
+
+    <filter id="bloom" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 1. Background Sky Canvas -->
+  <rect width="1920" height="1080" fill="url(#skyGrad)" />
+  <rect width="1920" height="1080" fill="url(#sunGlow)" />
+
+  <!-- Webtoon Stylized Setting Sun with Horizon Rings -->
+  <circle cx="1280" cy="580" r="160" fill="url(#cyberSun)" opacity="0.9" />
+  <ellipse cx="1280" cy="620" rx="420" ry="12" fill="#fb923c" opacity="0.3" />
+  <ellipse cx="1280" cy="635" rx="550" ry="8" fill="#f43f5e" opacity="0.25" />
+
+  <!-- Webtoon Clouds & Speed Horizon Atmosphere -->
+  <g opacity="0.45">
+    <path d="M-100,520 Q200,480 600,510 T1300,490 T1950,530 L1950,570 L-100,570 Z" fill="#6d28d9" opacity="0.3" />
+    <path d="M100,460 Q500,430 950,450 T1800,440 L1800,480 L100,480 Z" fill="#f43f5e" opacity="0.2" />
+    <path d="M-50,380 Q400,340 850,370 T1700,350 L1700,390 L-50,390 Z" fill="#fb7185" opacity="0.15" />
+  </g>
+
+  <!-- 2. Distant Webtoon 3D City Skyline (Yangon Transit Metropolis) -->
+  <g opacity="0.85">
+    <!-- Layer 1: Distant Purple Silhouette -->
+    <path d="M0,580 L40,580 L40,490 L70,490 L70,580 L110,580 L110,430 L140,430 L140,390 L150,390 L150,430 L160,430 L160,580 L220,580 L220,470 L260,470 L260,580 L310,580 L310,510 L350,510 L350,580 L400,580 L400,420 L440,420 L440,580 L520,580 L520,460 L570,460 L570,580 L620,580 L620,380 L630,380 L630,340 L635,340 L635,380 L660,380 L660,580 L750,580 L750,480 L800,480 L800,580 L880,580 L880,520 L940,520 L940,580 L1020,580 L1020,440 L1070,440 L1070,580 L1150,580 L1150,400 L1190,400 L1190,580 L1260,580 L1260,490 L1310,490 L1310,580 L1400,580 L1400,430 L1440,430 L1440,580 L1520,580 L1520,470 L1580,470 L1580,580 L1640,580 L1640,390 L1650,350 L1660,390 L1690,390 L1690,580 L1760,580 L1760,480 L1820,480 L1820,580 L1920,580 L1920,620 L0,620 Z" fill="#201538" />
+
+    <!-- Layer 2: Closer Dark City Buildings with glowing cyber windows -->
+    <path d="M0,600 L60,600 L60,510 L120,510 L120,600 L180,600 L180,460 L240,460 L240,600 L320,600 L320,530 L380,530 L380,600 L460,600 L460,480 L540,480 L540,600 L680,600 L680,440 L730,440 L730,600 L840,600 L840,530 L900,530 L900,600 L1040,600 L1040,470 L1100,470 L1100,600 L1220,600 L1220,510 L1290,510 L1290,600 L1380,600 L1380,460 L1450,460 L1450,600 L1560,600 L1560,520 L1620,520 L1620,600 L1720,600 L1720,440 L1780,440 L1780,600 L1920,600 L1920,640 L0,640 Z" fill="#12182b" />
+
+    <!-- Window lights dotting the towers -->
+    <g fill="#fbbf24" opacity="0.6">
+      <rect x="70" y="525" width="4" height="4" /><rect x="80" y="525" width="4" height="4" /><rect x="90" y="525" width="4" height="4" />
+      <rect x="70" y="540" width="4" height="4" /><rect x="90" y="540" width="4" height="4" />
+      <rect x="195" y="475" width="5" height="5" fill="#38bdf8" /><rect x="210" y="475" width="5" height="5" />
+      <rect x="195" y="490" width="5" height="5" /><rect x="225" y="490" width="5" height="5" fill="#38bdf8" />
+      <rect x="195" y="510" width="5" height="5" fill="#f43f5e" /><rect x="210" y="510" width="5" height="5" />
+      <rect x="475" y="495" width="6" height="5" fill="#38bdf8" /><rect x="490" y="495" width="6" height="5" />
+      <rect x="510" y="495" width="6" height="5" fill="#38bdf8" />
+      <rect x="475" y="515" width="6" height="5" /><rect x="510" y="515" width="6" height="5" />
+      <rect x="1055" y="485" width="6" height="5" /><rect x="1075" y="485" width="6" height="5" fill="#38bdf8" />
+      <rect x="1055" y="505" width="6" height="5" fill="#38bdf8" /><rect x="1075" y="505" width="6" height="5" />
+      <rect x="1400" y="475" width="6" height="5" fill="#f43f5e" /><rect x="1420" y="475" width="6" height="5" />
+      <rect x="1735" y="455" width="5" height="5" fill="#38bdf8" /><rect x="1750" y="455" width="5" height="5" fill="#38bdf8" />
+    </g>
+
+    <!-- Communication Tower Beacon Lights -->
+    <circle cx="145" cy="385" r="3" fill="#ef4444" filter="url(#bloom)" />
+    <circle cx="632" cy="335" r="4" fill="#38bdf8" filter="url(#bloom)" />
+    <circle cx="1650" cy="345" r="3" fill="#ef4444" filter="url(#bloom)" />
+  </g>
+
+  <!-- 3. Elevated Transit Bridges & Overhead Signage -->
+  <g>
+    <!-- Distant Suspension Cable bridge -->
+    <path d="M1200,600 Q1500,560 1800,600" stroke="#0ea5e9" stroke-width="2" fill="none" opacity="0.4" />
+    <path d="M1200,605 Q1500,565 1800,605" stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.3" />
+    <line x1="1350" y1="578" x2="1350" y2="603" stroke="#38bdf8" stroke-width="1" opacity="0.4" />
+    <line x1="1500" y1="565" x2="1500" y2="603" stroke="#38bdf8" stroke-width="1" opacity="0.4" />
+    <line x1="1650" y1="578" x2="1650" y2="603" stroke="#38bdf8" stroke-width="1" opacity="0.4" />
+
+    <!-- Modern Highway Overhead Sign Gantry (3D angle) -->
+    <polygon points="120,440 450,420 450,475 120,490" fill="#0f172a" stroke="#0284c7" stroke-width="2" />
+    <polygon points="130,445 440,427 440,470 130,483" fill="#0369a1" opacity="0.85" />
+    <text x="150" y="465" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="14" fill="#ffffff" letter-spacing="1">YANGON COMMUTER EXPRESSWAY 01</text>
+    <text x="150" y="478" font-family="'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="9" fill="#7dd3fc" letter-spacing="1.5">FERRY FLEET DISPATCH TERMINAL • VIP CORRIDOR</text>
+
+    <!-- Support Pillars for Gantry -->
+    <line x1="120" y1="440" x2="120" y2="660" stroke="#334155" stroke-width="8" />
+    <line x1="450" y1="420" x2="450" y2="640" stroke="#334155" stroke-width="7" />
+  </g>
+
+  <!-- 4. 3D Perspective Modern Multi-Lane Highway Ground -->
+  <polygon points="0,610 1920,610 1920,1080 0,1080" fill="url(#highwayGrad)" />
+  <!-- Asphalt Wet Gloss Reflection of the sunset -->
+  <polygon points="300,610 1620,610 1920,1080 0,1080" fill="url(#roadGleam)" opacity="0.4" />
+
+  <!-- Road Guideline Perspective Markings -->
+  <!-- Left Shoulder Neon Guardrail -->
+  <polygon points="0,620 40,620 0,1080" fill="#0284c7" opacity="0.3" />
+  <line x1="0" y1="620" x2="0" y2="1080" stroke="#38bdf8" stroke-width="4" filter="url(#bloom)" />
+
+  <!-- Highway Lane 1 Divider (Perspective dashes) -->
+  <g stroke="#38bdf8" stroke-width="4" opacity="0.75" stroke-linecap="round">
+    <line x1="450" y1="620" x2="470" y2="640" stroke-width="1.5" />
+    <line x1="490" y1="660" x2="520" y2="690" stroke-width="2.5" />
+    <line x1="550" y1="720" x2="600" y2="770" stroke-width="4" />
+    <line x1="645" y1="815" x2="720" y2="890" stroke-width="6" />
+    <line x1="780" y1="950" x2="890" y2="1060" stroke-width="8" />
+  </g>
+
+  <!-- Highway Center Divider (Glowing Dual Amber Lines) -->
+  <g stroke="#f59e0b" filter="url(#bloom)">
+    <line x1="880" y1="615" x2="1180" y2="1080" stroke-width="3" opacity="0.85" />
+    <line x1="895" y1="615" x2="1205" y2="1080" stroke-width="3" opacity="0.85" />
+  </g>
+
+  <!-- Highway Lane 2 Divider (Right dashes) -->
+  <g stroke="#06b6d4" stroke-width="4" opacity="0.65">
+    <line x1="1280" y1="615" x2="1320" y2="645" stroke-width="1.5" />
+    <line x1="1370" y1="680" x2="1430" y2="725" stroke-width="3" />
+    <line x1="1500" y1="775" x2="1600" y2="850" stroke-width="5" />
+    <line x1="1680" y1="910" x2="1830" y2="1020" stroke-width="8" />
+  </g>
+
+  <!-- 5. MODERN FERRY FLEET IN 3D WEBTOON CEL-SHADED STYLE -->
+
+  <!-- FLEET VEHICLE 3 (Distant Commuter Van in Convoy, Lane 1) -->
+  <g transform="translate(680, 570) scale(0.42)">
+    <!-- Shadow -->
+    <ellipse cx="200" cy="180" rx="160" ry="25" fill="#000000" opacity="0.7" />
+    <!-- Body -->
+    <path d="M60,110 L150,70 L280,72 L330,110 L340,165 L50,165 Z" fill="#e2e8f0" stroke="#1e293b" stroke-width="3" />
+    <polygon points="150,74 270,75 270,115 130,115" fill="#0f172a" />
+    <!-- Rear/Front Lights -->
+    <circle cx="70" cy="140" r="10" fill="#f43f5e" filter="url(#bloom)" />
+    <polygon points="310,135 335,138 332,150 308,146" fill="#38bdf8" filter="url(#bloom)" />
+    <!-- Wheels -->
+    <circle cx="110" cy="165" r="22" fill="#0f172a" stroke="#475569" stroke-width="4" />
+    <circle cx="280" cy="165" r="22" fill="#0f172a" stroke="#475569" stroke-width="4" />
+  </g>
+
+  <!-- FLEET VEHICLE 2: Modern Ferry City Bus / Transit Cruiser (Left Lane - Medium Distance) -->
+  <g transform="translate(260, 580) scale(0.65)">
+    <!-- Long Vehicle Cast Shadow -->
+    <polygon points="40,240 460,240 400,280 -20,280" fill="#000000" opacity="0.6" />
+    <!-- Bus Main Chassis (3D Perspective Box) -->
+    <!-- Front Face -->
+    <polygon points="360,60 480,90 470,230 350,225" fill="#0284c7" stroke="#082f49" stroke-width="3" />
+    <!-- Side Body Face -->
+    <polygon points="40,90 360,60 350,225 30,220" fill="url(#busBodyAzure)" stroke="#082f49" stroke-width="3" />
+    <!-- Roof Top Face -->
+    <polygon points="50,85 160,50 460,55 360,60" fill="#bae6fd" stroke="#082f49" stroke-width="2" />
+    <!-- Front Windshield -->
+    <polygon points="370,75 470,98 465,160 365,150" fill="url(#vanGlass)" stroke="#0f172a" stroke-width="2" />
+    <!-- Side Windows (Sleek panoramic webtoon strip) -->
+    <polygon points="55,100 350,75 345,140 50,140" fill="#0f172a" stroke="#0284c7" stroke-width="2" />
+    <!-- Passenger Silhouettes & LED strip inside -->
+    <line x1="60" y1="105" x2="340" y2="82" stroke="#38bdf8" stroke-width="3" opacity="0.8" />
+    <rect x="180" y="80" width="130" height="15" rx="3" fill="#0c4a6e" />
+    <text x="190" y="92" font-family="monospace" font-weight="bold" font-size="10" fill="#38bdf8">LINE 04 • EXPRESS</text>
+    <!-- Front LED Headlights (Crisp webtoon angle) -->
+    <polygon points="430,175 465,182 460,200 428,192" fill="#ffffff" filter="url(#bloom)" />
+    <polygon points="365,170 395,175 392,190 362,185" fill="#ffffff" filter="url(#bloom)" />
+    <!-- Light projection onto road -->
+    <polygon points="440,190 700,280 520,330 380,210" fill="url(#headlightBeam1)" opacity="0.5" />
+    <!-- Wheels with Alloy rims -->
+    <g fill="#0f172a" stroke="#334155" stroke-width="5">
+      <circle cx="110" cy="225" r="28" />
+      <circle cx="110" cy="225" r="14" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+      <circle cx="380" cy="230" r="30" />
+      <circle cx="380" cy="230" r="15" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+    </g>
+    <!-- Fleet Decal -->
+    <text x="60" y="190" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="20" fill="#ffffff" letter-spacing="2">ROUTE OPTIMIZER</text>
+    <path d="M55,200 L320,185" stroke="#38bdf8" stroke-width="5" />
+  </g>
+
+  <!-- FLEET VEHICLE 1 (HERO): Sleek Modern Commuter Ferry Van (3D Webtoon Center-Right) -->
+  <g id="heroFerryVan" transform="translate(780, 520)">
+    <!-- Dramatic Vehicle Underglow & Headlight Cast -->
+    <!-- Underglow Cyan Neon -->
+    <ellipse cx="380" cy="460" rx="360" ry="40" fill="#06b6d4" opacity="0.35" filter="url(#softGlow)" />
+    <!-- Primary Headlight Beam Streaks Sweeping Forward -->
+    <polygon points="560,370 1200,480 900,620 480,410" fill="url(#headlightBeamWarm)" opacity="0.75" />
+    <polygon points="400,360 850,560 620,640 330,390" fill="url(#headlightBeam1)" opacity="0.65" />
+
+    <!-- Cast Ground Shadow -->
+    <polygon points="80,440 680,440 620,490 20,490" fill="#000000" opacity="0.85" />
+
+    <!-- 3D COMMUTER VAN BODY (Front-Quarter View, Aerodynamic Luxury Commuter) -->
+    <!-- Main Body Left/Front Faces -->
+    <!-- Front Hood & Bumper Facia -->
+    <polygon points="410,240 590,265 620,380 430,420 370,390" fill="#f8fafc" stroke="#0f172a" stroke-width="4" />
+    <!-- Front Bumper Lower Air Dam (Aggressive Sporty 3D Look) -->
+    <polygon points="370,390 430,420 620,380 635,410 440,445 365,415" fill="#0f172a" stroke="#0284c7" stroke-width="2" />
+    <polygon points="450,420 610,388 615,405 455,435" fill="#0284c7" opacity="0.9" />
+
+    <!-- Side Passenger Body Shell -->
+    <polygon points="120,200 410,240 370,390 60,380 70,270" fill="url(#vanBodyMetallic)" stroke="#0f172a" stroke-width="4" />
+    <!-- Van Roof (3D Perspective) -->
+    <polygon points="160,110 440,140 410,240 120,200" fill="#ffffff" stroke="#0f172a" stroke-width="3" />
+
+    <!-- Windshield (Dynamic 3D Angular Glass with Sky Sunset Reflection) -->
+    <polygon points="425,145 565,170 580,260 415,235" fill="url(#vanGlass)" stroke="#0f172a" stroke-width="3" />
+    <!-- Glass Sunset Reflection Streak -->
+    <polygon points="460,150 500,155 460,240 430,235" fill="#ffffff" opacity="0.45" />
+    <polygon points="520,160 555,165 540,245 510,240" fill="#fb923c" opacity="0.35" />
+
+    <!-- Side Passenger Tinted Windows -->
+    <polygon points="140,160 395,190 385,255 130,240" fill="#090d16" stroke="#0284c7" stroke-width="2.5" />
+    <!-- Window Dividers & Pillars -->
+    <line x1="220" y1="170" x2="215" y2="245" stroke="#1e293b" stroke-width="4" />
+    <line x1="305" y1="180" x2="300" y2="250" stroke="#1e293b" stroke-width="4" />
+
+    <!-- High-Tech LED Headlight Clusters (Crystal Clear Anime 3D Style) -->
+    <!-- Right Headlight (Closest) -->
+    <polygon points="540,275 605,285 595,330 530,310" fill="#ffffff" stroke="#38bdf8" stroke-width="2" filter="url(#bloom)" />
+    <polygon points="550,285 595,292 590,315 545,305" fill="#e0f2fe" />
+    <circle cx="580" cy="300" r="8" fill="#38bdf8" filter="url(#bloom)" />
+    <circle cx="555" cy="295" r="7" fill="#ffffff" filter="url(#bloom)" />
+
+    <!-- Left Headlight -->
+    <polygon points="415,260 455,268 450,305 410,290" fill="#ffffff" stroke="#38bdf8" stroke-width="2" filter="url(#bloom)" />
+    <circle cx="435" cy="280" r="7" fill="#ffffff" filter="url(#bloom)" />
+
+    <!-- Grille & Ferry Fleet Badge -->
+    <polygon points="465,280 525,290 515,360 455,340" fill="#0f172a" stroke="#334155" stroke-width="2" />
+    <line x1="465" y1="300" x2="520" y2="310" stroke="#38bdf8" stroke-width="2" />
+    <line x1="462" y1="320" x2="515" y2="330" stroke="#38bdf8" stroke-width="2" />
+    <!-- Glowing Golden Fleet Logo -->
+    <polygon points="485,310 495,295 505,310 495,325" fill="#f59e0b" filter="url(#bloom)" />
+
+    <!-- Dynamic Fleet Vinyl Decals (Korean Webtoon Speed Graphics) -->
+    <path d="M125,290 L360,310 L345,345 L115,320 Z" fill="url(#vanDecalCyan)" opacity="0.95" />
+    <path d="M90,335 L260,350 L250,370 L80,350 Z" fill="#0284c7" opacity="0.8" />
+    <path d="M280,315 L360,320 L350,335 L270,330 Z" fill="#f43f5e" opacity="0.9" />
+
+    <!-- Decal Typography -->
+    <text x="110" y="315" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="16" fill="#ffffff" font-style="italic" letter-spacing="1">ROUTE MANAGEMENT OPTIMIZER</text>
+    <text x="140" y="332" font-family="'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="9" fill="#e0f2fe" letter-spacing="2">YBS SPECIAL COMMUTER CORRIDOR</text>
+
+    <!-- Chrome Door Handles & Side Mirror -->
+    <rect x="235" y="260" width="18" height="5" rx="2" fill="#0f172a" />
+    <polygon points="405,230 435,225 430,245 400,245" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+
+    <!-- High-Definition 3D Wheels & Alloy Rims -->
+    <!-- Front Right Wheel -->
+    <g transform="translate(480, 390)">
+      <ellipse cx="30" cy="30" rx="38" ry="48" fill="#090d16" stroke="#334155" stroke-width="6" />
+      <ellipse cx="30" cy="30" rx="24" ry="30" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+      <!-- Multi-spoke alloy rim -->
+      <line x1="30" y1="5" x2="30" y2="55" stroke="#94a3b8" stroke-width="3" />
+      <line x1="10" y1="20" x2="50" y2="40" stroke="#94a3b8" stroke-width="3" />
+      <line x1="10" y1="40" x2="50" y2="20" stroke="#94a3b8" stroke-width="3" />
+      <!-- Brembo Cyan Caliper -->
+      <rect x="18" y="16" width="8" height="15" rx="2" fill="#06b6d4" />
+    </g>
+
+    <!-- Rear Left Wheel -->
+    <g transform="translate(110, 365)">
+      <ellipse cx="25" cy="25" rx="32" ry="42" fill="#090d16" stroke="#334155" stroke-width="5" />
+      <ellipse cx="25" cy="25" rx="18" ry="24" fill="#1e293b" stroke="#0284c7" stroke-width="2" />
+      <line x1="25" y1="6" x2="25" y2="44" stroke="#94a3b8" stroke-width="2.5" />
+      <line x1="12" y1="18" x2="38" y2="32" stroke="#94a3b8" stroke-width="2.5" />
+    </g>
+  </g>
+
+  <!-- 6. Anime Webtoon Speed Streaks, Light Trails & Lens Flares -->
+  <!-- Tail light red trails in distance -->
+  <path d="M720,640 Q850,680 1100,750" stroke="url(#tailLightGlow)" stroke-width="6" stroke-linecap="round" opacity="0.75" filter="url(#bloom)" />
+  <path d="M735,648 Q865,688 1115,758" stroke="#f43f5e" stroke-width="3" opacity="0.9" />
+
+  <!-- Cyan Speed Streaks -->
+  <g stroke="#38bdf8" opacity="0.6" stroke-linecap="round">
+    <line x1="150" y1="840" x2="420" y2="840" stroke-width="2" />
+    <line x1="80" y1="890" x2="500" y2="890" stroke-width="3" />
+    <line x1="200" y1="940" x2="700" y2="940" stroke-width="4" />
+    <line x1="1400" y1="780" x2="1750" y2="780" stroke-width="2" />
+    <line x1="1300" y1="860" x2="1850" y2="860" stroke-width="3" stroke="#f59e0b" />
+    <line x1="1220" y1="920" x2="1900" y2="920" stroke-width="4" stroke="#06b6d4" />
+  </g>
+
+  <!-- Glowing Webtoon Bokeh Hexagons / Circles in Foreground -->
+  <g opacity="0.35">
+    <circle cx="280" cy="780" r="18" fill="#38bdf8" filter="url(#softGlow)" />
+    <circle cx="340" cy="850" r="30" fill="#f43f5e" filter="url(#softGlow)" />
+    <circle cx="1680" cy="680" r="22" fill="#fbbf24" filter="url(#softGlow)" />
+    <circle cx="1780" cy="820" r="45" fill="#38bdf8" filter="url(#softGlow)" />
+    <circle cx="1520" cy="940" r="35" fill="#c084fc" filter="url(#softGlow)" />
+  </g>
+
+  <!-- Cinematic Vignette Darkening on Edges for Login Card Contrast -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+    <stop offset="35%" stop-color="#000000" stop-opacity="0" />
+    <stop offset="75%" stop-color="#020617" stop-opacity="0.55" />
+    <stop offset="100%" stop-color="#020617" stop-opacity="0.92" />
+  </radialGradient>
+  <rect width="1920" height="1080" fill="url(#vignette)" />
+</svg>
