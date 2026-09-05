@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ferry Service Route Dispatcher & Optimizer MVP</title>
-    <meta name="description" content="Logistics dashboard for managing pick-up points and generating optimized route manifests using the OSRM Trip API.">
+    <meta name="description" content="Logistics dashboard for managing pick-up points, generating optimized route manifests, and role-based access control with Admin, Manager, and Operator authentication.">
     <meta property="og:title" content="Ferry Service Route Dispatcher & Optimizer MVP">
-    <meta property="og:description" content="Logistics dashboard for managing pick-up points and generating optimized route manifests using the OSRM Trip API.">
+    <meta property="og:description" content="Logistics dashboard for managing pick-up points, generating optimized route manifests, and role-based access control with Admin, Manager, and Operator authentication.">
 
     <!-- Window fetch compatibility fix for sandboxed preview / iframe environments -->
     <script>
@@ -156,6 +156,30 @@
                 <button id="themeToggle" class="p-2 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700 transition border border-slate-700" title="Toggle Dark Mode">
                     <svg id="moonIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     <svg id="sunIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- User Role & Authentication Status Bar -->
+        <div id="userStatusBar" class="px-3.5 py-2 bg-slate-800/95 dark:bg-slate-900 border-b border-slate-700 flex items-center justify-between text-xs text-slate-300">
+            <div class="flex items-center gap-2 overflow-hidden">
+                <span id="currentUserIcon" class="text-base flex-shrink-0">👑</span>
+                <div class="truncate">
+                    <div class="flex items-center gap-1.5">
+                        <span id="currentUsernameText" class="font-bold text-white text-xs">Admin</span>
+                        <span id="currentUserRoleBadge" class="text-[9px] font-mono px-1.5 py-0.2 rounded font-bold uppercase tracking-wider bg-purple-500/25 text-purple-300 border border-purple-500/40">Admin</span>
+                    </div>
+                    <p id="currentUserPermHint" class="text-[10px] text-slate-400 font-medium truncate">Full Access: Route & DB Control</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-1 flex-shrink-0">
+                <button type="button" id="switchUserBtn" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded text-[10px] font-semibold transition flex items-center gap-1 border border-slate-600" title="Switch Account / Role (အကောင့်ပြောင်းရန်)">
+                    <span>🔄</span>
+                    <span class="hidden sm:inline">Switch</span>
+                </button>
+                <button type="button" id="logoutBtn" class="px-2 py-1 bg-red-950/60 hover:bg-red-900/80 text-red-300 hover:text-white rounded text-[10px] font-semibold transition flex items-center gap-1 border border-red-800/60" title="Sign out of system (စနစ်မှထွက်မည်)">
+                    <span>🚪</span>
+                    <span>Logout</span>
                 </button>
             </div>
         </div>
@@ -581,6 +605,92 @@
             </div>
         </div>
     </main>
+
+    <!-- Login Page & Authentication Modal Overlay -->
+    <div id="loginOverlay" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[9999] flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col my-auto animate-in fade-in zoom-in duration-200">
+            <!-- Brand Header -->
+            <div class="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 text-white border-b border-slate-800 text-center relative">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600/20 border border-blue-500/40 text-3xl mb-3 shadow-inner">
+                    🚐
+                </div>
+                <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">Ferry Dispatcher & Route Optimizer</h1>
+                <p class="text-xs text-blue-300/90 font-medium mt-0.5">ဖယ်ရီယာဉ်လိုင်း လမ်းကြောင်းစီမံခန့်ခွဲမှုစနစ်</p>
+                <div class="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] font-mono text-slate-300">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Role-Based Access Control (RBAC) System</span>
+                </div>
+            </div>
+
+            <!-- Login Form Body -->
+            <div class="p-5 sm:p-6 space-y-4">
+                <!-- Error Alert Box -->
+                <div id="loginErrorAlert" class="hidden p-3 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center gap-2">
+                    <span class="text-base">⚠️</span>
+                    <span id="loginErrorMessage">Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။ ပြန်လည်စစ်ဆေးပါ။</span>
+                </div>
+
+                <form id="loginForm" class="space-y-3.5">
+                    <div>
+                        <label for="loginUsername" class="block text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1">
+                            Username (အသုံးပြုသူ အမည်) *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-slate-400 text-sm">👤</span>
+                            <input type="text" id="loginUsername" required autocomplete="username" placeholder="Admin / Manager / Operator" class="w-full text-xs pl-9 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100 placeholder-slate-400 transition font-medium">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="loginPassword" class="block text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                                Password (လျှို့ဝှက်နံပါတ်) *
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-slate-400 text-sm">🔒</span>
+                            <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Enter password" class="w-full text-xs pl-9 pr-10 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-xl outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-slate-100 placeholder-slate-400 transition font-medium">
+                            <button type="button" id="toggleLoginPasswordBtn" class="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 text-xs" title="Show/Hide password">
+                                <span id="passwordEyeIcon">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="loginRememberMe" checked class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5">
+                            <span class="text-xs text-slate-500 dark:text-slate-400">Remember session (အကောင့်မှတ်ထားရန်)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" id="loginSubmitBtn" class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-md flex items-center justify-center gap-2">
+                        <span>Sign In (စနစ်သို့ ဝင်ရောက်မည်)</span>
+                        <span>➔</span>
+                    </button>
+                </form>
+
+                <!-- Permission Rule Guide -->
+                <div class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-[10px] space-y-1 text-slate-600 dark:text-slate-400 font-mono">
+                    <div class="flex items-center justify-between font-bold text-slate-700 dark:text-slate-300 pb-1 border-b border-slate-200 dark:border-slate-700">
+                        <span>Role Permission Policies</span>
+                        <span>Permissions</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>👑 Admin:</span>
+                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">Routes & Database Full Access ✓</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>👔 Manager:</span>
+                        <span class="text-amber-600 dark:text-amber-400 font-bold">Manage Routes ✓ | Delete DB ✕</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>⚙️ Operator:</span>
+                        <span class="text-blue-600 dark:text-blue-400 font-bold">Create & Save Route ✓ | No Delete ✕</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Save Current Route Modal -->
     <div id="saveRouteModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
@@ -1102,11 +1212,100 @@
         let isDockCollapsed = false;
         let isDockExpanded = false;
 
+        // ==========================================
+        // --- Role-Based Access Control (RBAC) Accounts ---
+        // ==========================================
+        const AUTH_ACCOUNTS = {
+            'admin': {
+                username: 'Admin',
+                password: 'Zxcv@1234',
+                role: 'Admin',
+                title: 'System Administrator (စနစ်အုပ်ချုပ်သူ)',
+                icon: '👑',
+                badgeClass: 'bg-purple-500/25 text-purple-300 border border-purple-500/40',
+                permHint: 'Full Access: Routes & Database Control (စီမံခွင့်အပြည့်)',
+                canCreateRoute: true,
+                canSaveRoute: true,
+                canDeleteRoute: true,
+                canDeleteStops: true,
+                canClearStops: true,
+                canManageDatabase: true,
+                canDeleteDatabase: true,
+                canResetDatabase: true
+            },
+            'manager': {
+                username: 'Manager',
+                password: 'Fsm@2026',
+                role: 'Manager',
+                title: 'Route Manager (လမ်းကြောင်း မန်နေဂျာ)',
+                icon: '👔',
+                badgeClass: 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40',
+                permHint: 'Manage Routes • Cannot Delete Database (ဒေတာဘေ့စ် မဖျက်နိုင်ပါ)',
+                canCreateRoute: true,
+                canSaveRoute: true,
+                canDeleteRoute: true,
+                canDeleteStops: true,
+                canClearStops: true,
+                canManageDatabase: true,
+                canDeleteDatabase: false,
+                canResetDatabase: false
+            },
+            'operator': {
+                username: 'Operator',
+                password: 'Ferry@2026',
+                role: 'Operator',
+                title: 'Route Operator (အော်ပရေတာ)',
+                icon: '⚙️',
+                badgeClass: 'bg-blue-500/25 text-blue-300 border border-blue-500/40',
+                permHint: 'Create & Save Routes • Deletions Prohibited (ဖျက်ခွင့်မရှိပါ)',
+                canCreateRoute: true,
+                canSaveRoute: true,
+                canDeleteRoute: false,
+                canDeleteStops: false,
+                canClearStops: false,
+                canManageDatabase: false,
+                canDeleteDatabase: false,
+                canResetDatabase: false
+            }
+        };
+
+        let currentUser = null;
+        try {
+            const savedAuth = localStorage.getItem('ferry_auth_user') || sessionStorage.getItem('ferry_auth_user');
+            if (savedAuth) {
+                const parsed = JSON.parse(savedAuth);
+                const key = (parsed.username || '').trim().toLowerCase();
+                if (AUTH_ACCOUNTS[key]) {
+                    currentUser = AUTH_ACCOUNTS[key];
+                }
+            }
+        } catch (e) {
+            currentUser = null;
+        }
+
         // --- DOM Elements ---
         const els = {
             themeToggle: document.getElementById('themeToggle'),
             moonIcon: document.getElementById('moonIcon'),
             sunIcon: document.getElementById('sunIcon'),
+            // Auth & User Status Elements
+            userStatusBar: document.getElementById('userStatusBar'),
+            currentUserIcon: document.getElementById('currentUserIcon'),
+            currentUsernameText: document.getElementById('currentUsernameText'),
+            currentUserRoleBadge: document.getElementById('currentUserRoleBadge'),
+            currentUserPermHint: document.getElementById('currentUserPermHint'),
+            switchUserBtn: document.getElementById('switchUserBtn'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            loginOverlay: document.getElementById('loginOverlay'),
+            loginForm: document.getElementById('loginForm'),
+            loginUsername: document.getElementById('loginUsername'),
+            loginPassword: document.getElementById('loginPassword'),
+            toggleLoginPasswordBtn: document.getElementById('toggleLoginPasswordBtn'),
+            passwordEyeIcon: document.getElementById('passwordEyeIcon'),
+            loginRememberMe: document.getElementById('loginRememberMe'),
+            loginSubmitBtn: document.getElementById('loginSubmitBtn'),
+            loginErrorAlert: document.getElementById('loginErrorAlert'),
+            loginErrorMessage: document.getElementById('loginErrorMessage'),
             // Header & Active Route Elements
             headerRoutesBtn: document.getElementById('headerRoutesBtn'),
             headerRoutesBadge: document.getElementById('headerRoutesBadge'),
@@ -1286,6 +1485,165 @@
             currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             applyTheme(currentTheme);
         });
+
+        // ==========================================
+        // --- Authentication & Role Enforcement Functions ---
+        // ==========================================
+        const applyRolePermissions = () => {
+            if (!currentUser) {
+                if (els.loginOverlay) els.loginOverlay.classList.remove('hidden');
+                if (els.userStatusBar) els.userStatusBar.classList.add('hidden');
+                return;
+            }
+
+            // Hide login modal & show user bar
+            if (els.loginOverlay) els.loginOverlay.classList.add('hidden');
+            if (els.userStatusBar) els.userStatusBar.classList.remove('hidden');
+
+            // Update user status bar elements
+            if (els.currentUserIcon) els.currentUserIcon.textContent = currentUser.icon;
+            if (els.currentUsernameText) els.currentUsernameText.textContent = currentUser.username;
+            if (els.currentUserRoleBadge) {
+                els.currentUserRoleBadge.textContent = currentUser.role;
+                els.currentUserRoleBadge.className = `text-[9px] font-mono px-1.5 py-0.2 rounded font-bold uppercase tracking-wider ${currentUser.badgeClass}`;
+            }
+            if (els.currentUserPermHint) els.currentUserPermHint.textContent = currentUser.permHint;
+
+            // Role-Specific UI element toggles
+            // 1. Clear stops button: Operator cannot delete stops
+            if (els.clearStopsBtn) {
+                if (currentUser.role === 'Operator') {
+                    els.clearStopsBtn.classList.add('hidden');
+                } else {
+                    els.clearStopsBtn.classList.remove('hidden');
+                }
+            }
+
+            // 2. Database Reset button: Only Admin can reset database (Manager & Operator cannot)
+            if (els.resetDbBtn) {
+                if (currentUser.role !== 'Admin') {
+                    els.resetDbBtn.classList.add('hidden');
+                } else {
+                    els.resetDbBtn.classList.remove('hidden');
+                }
+            }
+
+            // 3. Re-render dynamic lists to adjust lock/delete buttons
+            if (typeof renderStopsList === 'function') renderStopsList();
+            if (typeof renderManifestTable === 'function') renderManifestTable();
+            if (els.savedRoutesModal && !els.savedRoutesModal.classList.contains('hidden') && typeof renderSavedRoutesList === 'function') {
+                renderSavedRoutesList();
+            }
+            if (els.busStopsDbModal && !els.busStopsDbModal.classList.contains('hidden') && typeof renderDbStopsTable === 'function') {
+                renderDbStopsTable();
+            }
+        };
+
+        const setupAuthSystem = () => {
+            // Password Visibility Toggle
+            if (els.toggleLoginPasswordBtn && els.loginPassword) {
+                els.toggleLoginPasswordBtn.addEventListener('click', () => {
+                    const isPass = els.loginPassword.type === 'password';
+                    els.loginPassword.type = isPass ? 'text' : 'password';
+                    if (els.passwordEyeIcon) {
+                        els.passwordEyeIcon.textContent = isPass ? '🙈' : '👁️';
+                    }
+                });
+            }
+
+            // Helper to execute login attempt
+            const executeLogin = (username, password) => {
+                const key = (username || '').trim().toLowerCase();
+                const account = AUTH_ACCOUNTS[key];
+
+                if (!account || account.password !== password) {
+                    if (els.loginErrorAlert) {
+                        els.loginErrorAlert.classList.remove('hidden');
+                        if (els.loginErrorMessage) {
+                            els.loginErrorMessage.textContent = 'Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Invalid username or password)';
+                        }
+                    }
+                    return false;
+                }
+
+                if (els.loginErrorAlert) els.loginErrorAlert.classList.add('hidden');
+                currentUser = account;
+
+                // Save session preference
+                const authPayload = JSON.stringify({ username: account.username, role: account.role });
+                if (els.loginRememberMe && els.loginRememberMe.checked) {
+                    localStorage.setItem('ferry_auth_user', authPayload);
+                    sessionStorage.removeItem('ferry_auth_user');
+                } else {
+                    sessionStorage.setItem('ferry_auth_user', authPayload);
+                    localStorage.removeItem('ferry_auth_user');
+                }
+
+                applyRolePermissions();
+                showToast(`🎉 ${account.title} အဖြစ် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ (${account.role})`, 'success');
+                return true;
+            };
+
+            // Quick Role selector buttons
+            document.querySelectorAll('.quick-role-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const u = btn.getAttribute('data-username') || '';
+                    const p = btn.getAttribute('data-password') || '';
+                    if (els.loginUsername) els.loginUsername.value = u;
+                    if (els.loginPassword) els.loginPassword.value = p;
+                    executeLogin(u, p);
+                });
+            });
+
+            // Form Submit
+            if (els.loginForm) {
+                els.loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const u = els.loginUsername ? els.loginUsername.value.trim() : '';
+                    const p = els.loginPassword ? els.loginPassword.value : '';
+                    executeLogin(u, p);
+                });
+            }
+
+            // Logout Handler
+            if (els.logoutBtn) {
+                els.logoutBtn.addEventListener('click', () => {
+                    if (confirm('စနစ်မှ ထွက်ခွာရန် သေချာပါသလား? (Are you sure you want to sign out?)')) {
+                        currentUser = null;
+                        localStorage.removeItem('ferry_auth_user');
+                        sessionStorage.removeItem('ferry_auth_user');
+                        if (els.loginUsername) els.loginUsername.value = '';
+                        if (els.loginPassword) els.loginPassword.value = '';
+                        if (els.loginErrorAlert) els.loginErrorAlert.classList.add('hidden');
+                        if (els.loginOverlay) els.loginOverlay.classList.remove('hidden');
+                        if (els.userStatusBar) els.userStatusBar.classList.add('hidden');
+                        showToast('စနစ်မှ အောင်မြင်စွာ ထွက်ခွာပြီးပါပြီ (Signed out)', 'info');
+                    }
+                });
+            }
+
+            // Switch User Handler
+            if (els.switchUserBtn) {
+                els.switchUserBtn.addEventListener('click', () => {
+                    if (els.loginOverlay) {
+                        els.loginOverlay.classList.remove('hidden');
+                        if (els.loginUsername) {
+                            els.loginUsername.value = '';
+                            els.loginPassword.value = '';
+                            els.loginUsername.focus();
+                        }
+                    }
+                });
+            }
+
+            // Initial check on load
+            if (currentUser) {
+                applyRolePermissions();
+            } else {
+                if (els.loginOverlay) els.loginOverlay.classList.remove('hidden');
+                if (els.userStatusBar) els.userStatusBar.classList.add('hidden');
+            }
+        };
 
         // --- String & Search Sanitization ---
         const escapeHTML = (str) => {
@@ -2279,9 +2637,13 @@
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                     </button>
                                     ${!isDepot && item.originalIndex !== -1 ? `
-                                        <button onclick="removeStop(${item.originalIndex})" class="p-1 text-slate-400 hover:text-red-600 rounded transition" title="Delete stop">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        </button>
+                                        ${currentUser && currentUser.role === 'Operator' ? `
+                                            <span class="p-1 text-slate-300 dark:text-slate-600 cursor-not-allowed text-xs inline-flex items-center" title="Operator cannot delete stops (ဖျက်ခွင့်မရှိပါ)">🔒</span>
+                                        ` : `
+                                            <button onclick="removeStop(${item.originalIndex})" class="p-1 text-slate-400 hover:text-red-600 rounded transition" title="Delete stop">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            </button>
+                                        `}
                                     ` : ''}
                                 </div>
                             </td>
@@ -2350,9 +2712,13 @@
                             <button onclick="locateStop(${stop.lat}, ${stop.lng})" class="text-slate-400 hover:text-blue-600 p-1 rounded opacity-0 group-hover:opacity-100 transition" title="Locate on Map">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                             </button>
-                            <button onclick="removeStop(${idx})" class="text-slate-400 hover:text-red-500 p-1 rounded opacity-0 group-hover:opacity-100 transition" title="Delete Stop">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
+                            ${currentUser && currentUser.role === 'Operator' ? `
+                                <span class="text-slate-300 dark:text-slate-600 p-1 text-xs opacity-0 group-hover:opacity-100 transition cursor-not-allowed inline-flex items-center" title="Operator cannot delete stops (ဖျက်ခွင့်မရှိပါ)">🔒</span>
+                            ` : `
+                                <button onclick="removeStop(${idx})" class="text-slate-400 hover:text-red-500 p-1 rounded opacity-0 group-hover:opacity-100 transition" title="Delete Stop">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            `}
                         </div>
                     </div>
                 `;
@@ -2368,8 +2734,14 @@
         };
 
         window.removeStop = (idx) => {
+            if (currentUser && currentUser.role === 'Operator') {
+                showToast("⚠️ အော်ပရေတာအနေဖြင့် ရပ်နားဂိတ်များ ဖျက်ပစ်ခွင့်မရှိပါ (Operator cannot delete stops)", 'warning');
+                return;
+            }
             stops.splice(idx, 1);
+            isRouteModified = true;
             resetOptimization();
+            updateActiveRouteBar();
             updateAllViews();
         };
 
@@ -2812,6 +3184,10 @@
             },
 
             async delete(id) {
+                if (!currentUser || currentUser.role !== 'Admin') {
+                    showToast("❌ Admin သာ ဒေတာဘေ့စ်မှ မှတ်တမ်းများ ဖျက်ပစ်နိုင်ပါသည် (Manager & Operator cannot delete database records)", 'error');
+                    return false;
+                }
                 ybsStopsDB = ybsStopsDB.filter(s => s.id !== id);
                 if (this.db) {
                     try {
@@ -2822,9 +3198,14 @@
                     try { localStorage.setItem('ferry_ybs_stops_fallback', JSON.stringify(ybsStopsDB)); } catch(e){}
                 }
                 this.updateUI();
+                return true;
             },
 
             async reset() {
+                if (!currentUser || currentUser.role !== 'Admin') {
+                    showToast("❌ Admin သာ ဒေတာဘေ့စ်အား Reset ပြုလုပ်နိုင်ပါသည် (Manager & Operator cannot reset database)", 'error');
+                    return false;
+                }
                 try {
                     const res = await fetch('/ybs_stops_db.json');
                     if (res.ok) {
@@ -3231,9 +3612,15 @@
         });
 
         els.clearStopsBtn.addEventListener('click', () => {
-            if(confirm("Clear all stops?")) {
+            if (currentUser && currentUser.role === 'Operator') {
+                showToast("⚠️ အော်ပရေတာအနေဖြင့် ရပ်နားဂိတ်များ အားလုံးအား ဖျက်ပစ်ခွင့်မရှိပါ (Operator cannot clear stops)", 'warning');
+                return;
+            }
+            if(confirm("Clear all stops? (ဂိတ်အားလုံး ရှင်းလင်းမည်လား?)")) {
                 stops = [];
+                isRouteModified = true;
                 resetOptimization();
+                updateActiveRouteBar();
                 updateAllViews();
             }
         });
@@ -3859,9 +4246,13 @@
                             <button onclick="exportSingleRoute('${route.id}')" class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-lg transition" title="Export Route JSON">
                                 📥
                             </button>
-                            <button onclick="deleteSavedRoute('${route.id}')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition" title="Delete Route (ဖျက်မည်)">
-                                🗑️
-                            </button>
+                            ${currentUser && currentUser.role === 'Operator' ? `
+                                <span class="p-1.5 text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-50 text-xs inline-flex items-center" title="Operator cannot delete routes (အော်ပရေတာအနေဖြင့် လမ်းကြောင်းမဖျက်နိုင်ပါ)">🔒</span>
+                            ` : `
+                                <button onclick="deleteSavedRoute('${route.id}')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition" title="Delete Route (ဖျက်မည်)">
+                                    🗑️
+                                </button>
+                            `}
                         </div>
                     </div>
                 `;
@@ -3968,6 +4359,10 @@
 
         // Delete Saved Route
         window.deleteSavedRoute = (routeId) => {
+            if (currentUser && currentUser.role === 'Operator') {
+                showToast("⚠️ အော်ပရေတာအနေဖြင့် လမ်းကြောင်းများ ဖျက်ပစ်ခွင့်မရှိပါ (Operator cannot delete routes)", 'warning');
+                return;
+            }
             if (!savedRoutes) return;
             const target = savedRoutes.find(r => r.id === routeId);
             if (!target) return;
@@ -4253,9 +4648,13 @@
                                     <button type="button" class="db-edit-btn p-1 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-id="${s.id}" title="Edit in Database">
                                         <span>✏️</span>
                                     </button>
-                                    <button type="button" class="db-delete-btn p-1 text-slate-400 hover:text-red-600 rounded hover:bg-red-50 dark:hover:bg-red-950/40 transition" data-id="${s.id}" title="Delete from Database">
-                                        <span>🗑️</span>
-                                    </button>
+                                    ${currentUser && currentUser.role === 'Admin' ? `
+                                        <button type="button" class="db-delete-btn p-1 text-slate-400 hover:text-red-600 rounded hover:bg-red-50 dark:hover:bg-red-950/40 transition" data-id="${s.id}" title="Delete from Database (Admin only)">
+                                            <span>🗑️</span>
+                                        </button>
+                                    ` : `
+                                        <span class="p-1 text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40 text-xs inline-flex items-center" title="Admin only: Deletion restricted (ဒေတာဘေ့စ် မဖျက်နိုင်ပါ)">🔒</span>
+                                    `}
                                 </div>
                             </td>
                         </tr>
@@ -4308,6 +4707,10 @@
 
                 els.dbStopsTableBody.querySelectorAll('.db-delete-btn').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
+                        if (!currentUser || currentUser.role !== 'Admin') {
+                            showToast("❌ Admin သာ ဒေတာဘေ့စ်မှ ဖျက်ပစ်နိုင်ပါသည် (Manager & Operator cannot delete database)", 'error');
+                            return;
+                        }
                         const id = parseInt(btn.getAttribute('data-id'), 10);
                         const stop = ybsStopsDB.find(s => s.id === id);
                         if (!stop) return;
@@ -4560,6 +4963,10 @@
             // Reset Database to Factory
             if (els.resetDbBtn) {
                 els.resetDbBtn.addEventListener('click', async () => {
+                    if (!currentUser || currentUser.role !== 'Admin') {
+                        showToast("❌ Admin သာ ဒေတာဘေ့စ်အား Reset ပြုလုပ်နိုင်ပါသည် (Manager & Operator cannot reset database)", 'error');
+                        return;
+                    }
                     if (confirm("Reset bus stop database to official YBS master directory (2,093 stops)? Custom additions will be overwritten.")) {
                         const ok = await YBS_Database.reset();
                         if (ok) {
@@ -4589,6 +4996,9 @@
 
         // Initialize Bus Stops Database UI
         initBusStopsDatabaseUI();
+
+        // Initialize Role-Based Authentication System
+        setupAuthSystem();
 
     </script>
 </body>
