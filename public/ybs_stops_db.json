@@ -1,0 +1,2838 @@
+{
+  "version": "1.0",
+  "description": "Yangon Bus Service (YBS) Bus Stops Master Database",
+  "total_stops_in_pdf": 2093,
+  "total_townships": 40,
+  "stops": [
+    {
+      "id": 1,
+      "name": "Kyaung Shae/ Kone Sin",
+      "myanmar": "ကျောင်းရှေ့/ကုန်းဆင်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Hledan Road",
+      "lat": 16.825525,
+      "lng": 96.126583
+    },
+    {
+      "id": 2,
+      "name": "Kyaung Shae/ Dhamar Yon",
+      "myanmar": "ကျောင်းရှေ့/ဓမ္မာရုံ",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "University Avenue Road",
+      "lat": 16.826485,
+      "lng": 96.132192
+    },
+    {
+      "id": 3,
+      "name": "Kyuanlan",
+      "myanmar": "ကျောင်းလမ်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "University Avenue Road",
+      "lat": 16.825918,
+      "lng": 96.13846
+    },
+    {
+      "id": 4,
+      "name": "Khaing Shwe Wah",
+      "myanmar": "ခိုင်ရွှေဝါ",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Baho Road",
+      "lat": 16.8257,
+      "lng": 96.125134
+    },
+    {
+      "id": 5,
+      "name": "San Yeik Nyein",
+      "myanmar": "စံရိပ်ငြိမ်",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.830802,
+      "lng": 96.129527
+    },
+    {
+      "id": 6,
+      "name": "Saik Pyoe Yay",
+      "myanmar": "စိုက်ပျိုးရေး",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Pyay Road",
+      "lat": 16.817862,
+      "lng": 96.133326
+    },
+    {
+      "id": 7,
+      "name": "Site Kar Gate",
+      "myanmar": "ဆိုက်ကားဂိတ်",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Baho Road",
+      "lat": 16.831456,
+      "lng": 96.123502
+    },
+    {
+      "id": 8,
+      "name": "Sin Yae Twin",
+      "myanmar": "ဆင်ရေတွင်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.833769,
+      "lng": 96.128565
+    },
+    {
+      "id": 9,
+      "name": "Pyi Yeik Mon",
+      "myanmar": "ပြည်ရိပ်မွန်",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Baho Road",
+      "lat": 16.822004,
+      "lng": 96.125767
+    },
+    {
+      "id": 10,
+      "name": "B.R.B",
+      "myanmar": "ဘီအာဘီ",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Baho Road",
+      "lat": 16.828871,
+      "lng": 96.124352
+    },
+    {
+      "id": 11,
+      "name": "Marlar",
+      "myanmar": "မာလာ",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Pyay Road",
+      "lat": 16.832547,
+      "lng": 96.132826
+    },
+    {
+      "id": 12,
+      "name": "Yae Kyaung",
+      "myanmar": "ရေကြောင်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Bayint Naung Road",
+      "lat": 16.830092,
+      "lng": 96.121861
+    },
+    {
+      "id": 13,
+      "name": "Ye Win",
+      "myanmar": "ရဲဝင်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Baho Road",
+      "lat": 16.817803,
+      "lng": 96.12658
+    },
+    {
+      "id": 14,
+      "name": "Hledan",
+      "myanmar": "လှည်းတန်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.827952,
+      "lng": 96.130435
+    },
+    {
+      "id": 15,
+      "name": "Hledan Zay",
+      "myanmar": "လှည်းတန်းဈေး",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Hledan Road",
+      "lat": 16.826457,
+      "lng": 96.128887
+    },
+    {
+      "id": 16,
+      "name": "Thinbaw Kyin",
+      "myanmar": "သင်္ဘောကျင်း",
+      "township": "Kamayut",
+      "township_mm": "ကမာရွတ်",
+      "road": "Bayint Naung Road",
+      "lat": 16.82442,
+      "lng": 96.123027
+    },
+    {
+      "id": 17,
+      "name": "Lay-sae-chauk Lan (46 Lan)",
+      "myanmar": "(၄၆) လမ်း",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Anawrahta Road",
+      "lat": 16.776532,
+      "lng": 96.168562
+    },
+    {
+      "id": 18,
+      "name": "Sule Pan Chan",
+      "myanmar": "ဆူးလေပန်းခြံ",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Mahabandoola Road",
+      "lat": 16.774246,
+      "lng": 96.159554
+    },
+    {
+      "id": 19,
+      "name": "Sule Myodaw Khan Ma",
+      "myanmar": "ဆူးလေမြို့တော်ခန်းမ",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Sule Pagoda Road",
+      "lat": 16.775754,
+      "lng": 96.158879
+    },
+    {
+      "id": 20,
+      "name": "Pansodan",
+      "myanmar": "ပန်းဆိုးတန်း",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Anawrahta Road",
+      "lat": 16.776707,
+      "lng": 96.163806
+    },
+    {
+      "id": 21,
+      "name": "Pansodan Seikkanthar",
+      "myanmar": "ပန်းဆိုးတန်း (ဆိပ်ကမ်းသာလမ်း)",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Merchant Road",
+      "lat": 16.771652,
+      "lng": 96.163083
+    },
+    {
+      "id": 22,
+      "name": "Bar Lan",
+      "myanmar": "ဘားလမ်း",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Anawrahta Road",
+      "lat": 16.776803,
+      "lng": 96.160718
+    },
+    {
+      "id": 23,
+      "name": "Bokalay Zay",
+      "myanmar": "ဗိုလ်ကလေးဈေး",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Mahabandoola Road",
+      "lat": 16.774037,
+      "lng": 96.165841
+    },
+    {
+      "id": 24,
+      "name": "Lan Ngar Sae (50 Lan)",
+      "myanmar": "လမ်း (၅၀)",
+      "township": "Kyauktada",
+      "township_mm": "ကျောက်တံတား",
+      "road": "Bogyoke Aung San Road",
+      "lat": 16.778734,
+      "lng": 96.171312
+    },
+    {
+      "id": 25,
+      "name": "Kyauk Tan",
+      "myanmar": "ကျောက်တန်း",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.633214,
+      "lng": 96.327295
+    },
+    {
+      "id": 26,
+      "name": "Chan Myae Thar Yar",
+      "myanmar": "ချမ်းမြေ့သာယာ",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.649859,
+      "lng": 96.319806
+    },
+    {
+      "id": 27,
+      "name": "Gat Tae Kwae",
+      "myanmar": "ဂါတ်တဲကွေ့",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.638335,
+      "lng": 96.325244
+    },
+    {
+      "id": 28,
+      "name": "Si Saing",
+      "myanmar": "ဆီဆိုင်",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.648075,
+      "lng": 96.321124
+    },
+    {
+      "id": 29,
+      "name": "Zay Kwae",
+      "myanmar": "ဈေးကွေ့",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.635822,
+      "lng": 96.326508
+    },
+    {
+      "id": 30,
+      "name": "Pal Hlaw Pho",
+      "myanmar": "ပဲလှော်ဖို",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.640714,
+      "lng": 96.323798
+    },
+    {
+      "id": 31,
+      "name": "Aung Chan Thar",
+      "myanmar": "အောင်ချမ်းသာ",
+      "township": "Kyauktan",
+      "township_mm": "ကျောက်တန်း",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.644469,
+      "lng": 96.323547
+    },
+    {
+      "id": 32,
+      "name": "Kannar Zay",
+      "myanmar": "ကမ်းနားဈေး",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.812434,
+      "lng": 96.121964
+    },
+    {
+      "id": 33,
+      "name": "Kyaung Shae",
+      "myanmar": "ကျောင်းရှေ့",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Lower Kyee Myin Daing Road",
+      "lat": 16.800365,
+      "lng": 96.126217
+    },
+    {
+      "id": 34,
+      "name": "Kyee Myin Daing Nya Zay",
+      "myanmar": "ကြည့်မြင်တိုင်ညဈေး",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Upper Kyee Myin Daing Road",
+      "lat": 16.809934,
+      "lng": 96.125931
+    },
+    {
+      "id": 35,
+      "name": "Kyee Myin Daing Butar",
+      "myanmar": "ကြည့်မြင်တိုင်ဘူတာ",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Upper Kyee Myin Daing Road",
+      "lat": 16.806301,
+      "lng": 96.125743
+    },
+    {
+      "id": 36,
+      "name": "Salin Kwin",
+      "myanmar": "စလင်းကွင်း",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Upper Kyee Myin Daing Road",
+      "lat": 16.812025,
+      "lng": 96.12605
+    },
+    {
+      "id": 37,
+      "name": "Sar Taik",
+      "myanmar": "စာတိုက်",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.804178,
+      "lng": 96.122149
+    },
+    {
+      "id": 38,
+      "name": "Sinmalite",
+      "myanmar": "ဆင်မလိုက်",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.819289,
+      "lng": 96.121971
+    },
+    {
+      "id": 39,
+      "name": "Nat Sin Lan",
+      "myanmar": "နတ်စင်လမ်း",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Upper Kyee Myin Daing Road",
+      "lat": 16.814508,
+      "lng": 96.125932
+    },
+    {
+      "id": 40,
+      "name": "Thal Kwin",
+      "myanmar": "သဲကွင်း",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.800933,
+      "lng": 96.122099
+    },
+    {
+      "id": 41,
+      "name": "Hantharwaddy",
+      "myanmar": "ဟံသာဝတီ",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Upper Kyee Myin Daing Road",
+      "lat": 16.816229,
+      "lng": 96.126039
+    },
+    {
+      "id": 42,
+      "name": "Home Lan",
+      "myanmar": "ဟုမ်းလမ်း",
+      "township": "Kyimyindaing",
+      "township_mm": "ကြည့်မြင်တိုင်",
+      "road": "Lower Kyee Myin Daing Road",
+      "lat": 16.797192,
+      "lng": 96.126132
+    },
+    {
+      "id": 43,
+      "name": "Koe Htat Kyee",
+      "myanmar": "(၉) ထပ်ကြီး",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Bargayar Road",
+      "lat": 16.803777,
+      "lng": 96.128096
+    },
+    {
+      "id": 44,
+      "name": "Mahar Myaing",
+      "myanmar": "မဟာမြိုင်",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Pyay Road",
+      "lat": 16.806672,
+      "lng": 96.13654
+    },
+    {
+      "id": 45,
+      "name": "Myaynigone",
+      "myanmar": "မြေနီကုန်း",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Bargayar Road",
+      "lat": 16.803804,
+      "lng": 96.138814
+    },
+    {
+      "id": 46,
+      "name": "Myaynigone (Pyay Road)",
+      "myanmar": "မြေနီကုန်း (ပြည်လမ်း)",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Pyay Road",
+      "lat": 16.805399,
+      "lng": 96.136748
+    },
+    {
+      "id": 47,
+      "name": "Shan Lan",
+      "myanmar": "ရှမ်းလမ်း",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Bargayar Road",
+      "lat": 16.803776,
+      "lng": 96.131501
+    },
+    {
+      "id": 48,
+      "name": "Shwe Man",
+      "myanmar": "ရွှေမန်း",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Bargayar Road",
+      "lat": 16.803697,
+      "lng": 96.136183
+    },
+    {
+      "id": 49,
+      "name": "Hantharwaddy",
+      "myanmar": "ဟံသာဝတီ",
+      "township": "Sanchaung",
+      "township_mm": "စမ်းချောင်း",
+      "road": "Pyay Road",
+      "lat": 16.811923,
+      "lng": 96.135036
+    },
+    {
+      "id": 50,
+      "name": "Sar Taik Kyee",
+      "myanmar": "စာတိုက်ကြီး",
+      "township": "Seikkan",
+      "township_mm": "ဆိပ်ကမ်း",
+      "road": "Strand Road",
+      "lat": 16.769155,
+      "lng": 96.162463
+    },
+    {
+      "id": 51,
+      "name": "Pansodan (Strand)",
+      "myanmar": "ပန်းဆိုးတန်း (ကမ်းနားလမ်း)",
+      "township": "Seikkan",
+      "township_mm": "ဆိပ်ကမ်း",
+      "road": "Strand Road",
+      "lat": 16.769358,
+      "lng": 96.16083
+    },
+    {
+      "id": 52,
+      "name": "Baho Yone",
+      "myanmar": "ဗဟိုရုံး",
+      "township": "Seikkan",
+      "township_mm": "ဆိပ်ကမ်း",
+      "road": "Strand Road",
+      "lat": 16.76919,
+      "lng": 96.167048
+    },
+    {
+      "id": 53,
+      "name": "Botahtaung Paya",
+      "myanmar": "ဗိုလ်တထောင်ဘုရား",
+      "township": "Seikkan",
+      "township_mm": "ဆိပ်ကမ်း",
+      "road": "Strand Road",
+      "lat": 16.769592,
+      "lng": 96.172507
+    },
+    {
+      "id": 54,
+      "name": "Kalar Zay",
+      "myanmar": "ကုလားဈေး",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "East Horse Race Course Road",
+      "lat": 16.822483,
+      "lng": 96.172094
+    },
+    {
+      "id": 55,
+      "name": "Kyauk Myaung Zay",
+      "myanmar": "ကျောက်မြောင်းဈေး",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "Kyaikkasan Road",
+      "lat": 16.804034,
+      "lng": 96.175738
+    },
+    {
+      "id": 56,
+      "name": "Tamwe Zay/ Tamwe Bali",
+      "myanmar": "တာမွေဈေး / တာမွေဗလီ",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "Kyaikkasan Road",
+      "lat": 16.807522,
+      "lng": 96.176273
+    },
+    {
+      "id": 57,
+      "name": "Tamwe Plaza",
+      "myanmar": "တာမွေပလာဇာ",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "Thamain Bayan Road",
+      "lat": 16.810675,
+      "lng": 96.175352
+    },
+    {
+      "id": 58,
+      "name": "Byaing Yae Oh Sin",
+      "myanmar": "ဗျိုင်းရေအိုးစင်",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "Banyardala Road",
+      "lat": 16.806494,
+      "lng": 96.172126
+    },
+    {
+      "id": 59,
+      "name": "Alote Thamar Say Yone",
+      "myanmar": "အလုပ်သမားဆေးရုံကြီး",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "Kyaikkasan Road",
+      "lat": 16.797937,
+      "lng": 96.172712
+    },
+    {
+      "id": 60,
+      "name": "Awine Htate/ Tamwe",
+      "myanmar": "အဝိုင်းထိပ် / တာမွေ",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "West Horse Race Course Road",
+      "lat": 16.811852,
+      "lng": 96.170802
+    },
+    {
+      "id": 61,
+      "name": "Arthawka",
+      "myanmar": "အာသောက",
+      "township": "Tamwe",
+      "township_mm": "တာမွေ",
+      "road": "Thamain Bayan Road",
+      "lat": 16.80733,
+      "lng": 96.180163
+    },
+    {
+      "id": 62,
+      "name": "Kan Kone",
+      "myanmar": "ကန်ကုန်း",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.268613,
+      "lng": 95.954711
+    },
+    {
+      "id": 63,
+      "name": "Gone Kwae",
+      "myanmar": "ကုန်းကွေ့",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.211643,
+      "lng": 95.961621
+    },
+    {
+      "id": 64,
+      "name": "Kyun Chaung",
+      "myanmar": "ကျွန်းချောင်း",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.214592,
+      "lng": 95.961921
+    },
+    {
+      "id": 65,
+      "name": "Taik Kyi Khan Ma",
+      "myanmar": "တိုက်ကြီးခန်းမ",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.311269,
+      "lng": 95.966341
+    },
+    {
+      "id": 66,
+      "name": "Taik Kyi Zay",
+      "myanmar": "တိုက်ကြီးဈေး",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.313891,
+      "lng": 95.963622
+    },
+    {
+      "id": 67,
+      "name": "Myaung Takar Tar Sone",
+      "myanmar": "မြောင်းတကာတာဆုံ",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.181918,
+      "lng": 95.97471
+    },
+    {
+      "id": 68,
+      "name": "Shwe Mya Yar",
+      "myanmar": "ရွှေမြယာ",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.249597,
+      "lng": 95.960328
+    },
+    {
+      "id": 69,
+      "name": "Inn Yat Kyee",
+      "myanmar": "အင်းယက်ကြီး",
+      "township": "Taikkyi",
+      "township_mm": "တိုက်ကြီး",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.254568,
+      "lng": 95.958585
+    },
+    {
+      "id": 70,
+      "name": "Sae-shit Kwae (18 Kwae)",
+      "myanmar": "(၁၈) ကွေ့",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Si Pin Road",
+      "lat": 16.858028,
+      "lng": 96.234522
+    },
+    {
+      "id": 71,
+      "name": "Thone-Sae-Hnit Gate (32 Gate)",
+      "myanmar": "(၃၂) ဂိတ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Kyun Shwe Wah Road",
+      "lat": 16.821236,
+      "lng": 96.266156
+    },
+    {
+      "id": 72,
+      "name": "Chauk-Sae-Hnit (62)",
+      "myanmar": "(၆၂)",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Yadanarpon Road",
+      "lat": 16.880796,
+      "lng": 96.250144
+    },
+    {
+      "id": 73,
+      "name": "Kar Gyi Gate",
+      "myanmar": "ကားကြီးဂိတ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.847393,
+      "lng": 96.20904
+    },
+    {
+      "id": 74,
+      "name": "Kar Lay Gate",
+      "myanmar": "ကားလေးဂိတ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Hlawga Road",
+      "lat": 16.851637,
+      "lng": 96.237986
+    },
+    {
+      "id": 75,
+      "name": "Kone Taik",
+      "myanmar": "ကုန်တိုက်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Hlawga Road",
+      "lat": 16.848083,
+      "lng": 96.234927
+    },
+    {
+      "id": 76,
+      "name": "Kone Padaythar",
+      "myanmar": "ကုန်ပဒေသာ",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Si Pin Road",
+      "lat": 16.849757,
+      "lng": 96.227478
+    },
+    {
+      "id": 77,
+      "name": "Kyauk Lan",
+      "myanmar": "ကျောက်လမ်း",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.883455,
+      "lng": 96.234203
+    },
+    {
+      "id": 78,
+      "name": "G.E.C",
+      "myanmar": "ဂျီအီးစီ",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.843964,
+      "lng": 96.227274
+    },
+    {
+      "id": 79,
+      "name": "See Pwar Yay Takke Tho",
+      "myanmar": "စီးပွားရေးတက္ကသိုလ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.929015,
+      "lng": 96.268065
+    },
+    {
+      "id": 80,
+      "name": "Set Hmu Zone Hnit (2)",
+      "myanmar": "စက်မှုဇုံ (၂)",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.841916,
+      "lng": 96.229725
+    },
+    {
+      "id": 81,
+      "name": "Set Hmu Zone Zay",
+      "myanmar": "စက်မှုဇုံဈေး",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.838392,
+      "lng": 96.23263
+    },
+    {
+      "id": 82,
+      "name": "Sittaung Lan Htate",
+      "myanmar": "စစ်တောင်းလမ်းထိပ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.831646,
+      "lng": 96.234318
+    },
+    {
+      "id": 83,
+      "name": "Say Yon Shae",
+      "myanmar": "ဆေးရုံရှေ့",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.891062,
+      "lng": 96.239909
+    },
+    {
+      "id": 84,
+      "name": "Sauk Lote Yae",
+      "myanmar": "ဆောက်လုပ်ရေး",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.828674,
+      "lng": 96.240299
+    },
+    {
+      "id": 85,
+      "name": "Nyaung Pin",
+      "myanmar": "ညောင်ပင်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.905372,
+      "lng": 96.249197
+    },
+    {
+      "id": 86,
+      "name": "Tadar Phyu",
+      "myanmar": "တံတားဖြူ",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.857555,
+      "lng": 96.212463
+    },
+    {
+      "id": 87,
+      "name": "Taung Myauk Lan Sone",
+      "myanmar": "တောင်/မြောက်လမ်းဆုံ",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.858666,
+      "lng": 96.214548
+    },
+    {
+      "id": 88,
+      "name": "Tayar-Lay-Sae (140)",
+      "myanmar": "တစ်ရာ့လေးဆယ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "No. 2 Main Road",
+      "lat": 16.915026,
+      "lng": 96.25581
+    },
+    {
+      "id": 89,
+      "name": "Pan Chan",
+      "myanmar": "ပန်းခြံ",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.851407,
+      "lng": 96.21852
+    },
+    {
+      "id": 90,
+      "name": "Ayeyarwaddy Lan Htate",
+      "myanmar": "ဧရာဝတီလမ်းထိပ်",
+      "township": "South Dagon",
+      "township_mm": "တောင်ဒဂုံ",
+      "road": "Pyi Htaung Su Main Road",
+      "lat": 16.837392,
+      "lng": 96.233259
+    },
+    {
+      "id": 91,
+      "name": "(14/15) Lan Sone",
+      "myanmar": "(၁၄/၁၅) လမ်းဆုံ",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thu Mingalar Road",
+      "lat": 16.836957,
+      "lng": 96.185657
+    },
+    {
+      "id": 92,
+      "name": "Thone-sae-tit Gate (31 Gate)",
+      "myanmar": "(၃၁) ဂိတ်",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thanthumar Road",
+      "lat": 16.848939,
+      "lng": 96.194274
+    },
+    {
+      "id": 93,
+      "name": "13 Lan",
+      "myanmar": "၁၃ လမ်း",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Metta Road",
+      "lat": 16.847523,
+      "lng": 96.190186
+    },
+    {
+      "id": 94,
+      "name": "Kaytu Marlar Kwae",
+      "myanmar": "ကေတုမာလာကွေ့",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Parami Road",
+      "lat": 16.856264,
+      "lng": 96.172132
+    },
+    {
+      "id": 95,
+      "name": "Gandamar Wholesale",
+      "myanmar": "ဂန္ဓမာဟိုးဆေး",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Waizayanta Road",
+      "lat": 16.86419,
+      "lng": 96.159522
+    },
+    {
+      "id": 96,
+      "name": "Se Man Kane",
+      "myanmar": "စီမံကိန်း",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thanthumar Road",
+      "lat": 16.847434,
+      "lng": 96.19841
+    },
+    {
+      "id": 97,
+      "name": "Taung Okkalar Sar Taik",
+      "myanmar": "တောင်ဥက္ကလာစာတိုက်",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thitsar Road",
+      "lat": 16.845928,
+      "lng": 96.179701
+    },
+    {
+      "id": 98,
+      "name": "Taung Okkalar Paya",
+      "myanmar": "တောင်ဥက္ကလာပဘုရား",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thanthumar Road",
+      "lat": 16.852719,
+      "lng": 96.185283
+    },
+    {
+      "id": 99,
+      "name": "Nandawun Zay",
+      "myanmar": "နန္ဒဝန်ဈေး",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thu Mingalar Road",
+      "lat": 16.85178,
+      "lng": 96.175829
+    },
+    {
+      "id": 100,
+      "name": "Padaythar",
+      "myanmar": "ပဒေသာ",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thu Mingalar Road",
+      "lat": 16.841681,
+      "lng": 96.183249
+    },
+    {
+      "id": 101,
+      "name": "Parami",
+      "myanmar": "ပါရမီ",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Waizayanta Road",
+      "lat": 16.851365,
+      "lng": 96.167433
+    },
+    {
+      "id": 102,
+      "name": "Pinya",
+      "myanmar": "ပင်းယ",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Parami Road",
+      "lat": 16.85943,
+      "lng": 96.176149
+    },
+    {
+      "id": 103,
+      "name": "Baho Zay",
+      "myanmar": "ဗဟိုစျေး",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Waizayanta Road",
+      "lat": 16.840516,
+      "lng": 96.173677
+    },
+    {
+      "id": 104,
+      "name": "Bay Li",
+      "myanmar": "ဘေလီ",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Parami Road",
+      "lat": 16.860898,
+      "lng": 96.177126
+    },
+    {
+      "id": 105,
+      "name": "Myin Thar Zay",
+      "myanmar": "မြင်သာဈေး",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thanthumar Road",
+      "lat": 16.856761,
+      "lng": 96.181798
+    },
+    {
+      "id": 106,
+      "name": "Hantharwaddy Road",
+      "myanmar": "ဟံသာဝတီလမ်း",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Waizayanta Road",
+      "lat": 16.843534,
+      "lng": 96.171757
+    },
+    {
+      "id": 107,
+      "name": "Inwa",
+      "myanmar": "အင်းဝ",
+      "township": "South Okkalapa",
+      "township_mm": "တောင်ဥက္ကလာပ",
+      "road": "Thu Mingalar Road",
+      "lat": 16.849503,
+      "lng": 96.177506
+    },
+    {
+      "id": 108,
+      "name": "Sae-Chauk Gate (16 Gate)",
+      "myanmar": "(၁၆) ဂိတ်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.106811,
+      "lng": 96.053828
+    },
+    {
+      "id": 109,
+      "name": "Hnit Gate (2 Gate)",
+      "myanmar": "(၂) ဂိတ်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.065605,
+      "lng": 96.116331
+    },
+    {
+      "id": 110,
+      "name": "Shit-Sae-Hnit (82)",
+      "myanmar": "(၈၂)",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.054993,
+      "lng": 96.119843
+    },
+    {
+      "id": 111,
+      "name": "Nine Gate (9 Gate)",
+      "myanmar": "(၉) ဂိတ်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.051925,
+      "lng": 96.119561
+    },
+    {
+      "id": 112,
+      "name": "Koe-Sae-Tit Gate (91 Gate)",
+      "myanmar": "(၉၁) ဂိတ်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.100925,
+      "lng": 96.084445
+    },
+    {
+      "id": 113,
+      "name": "Kyat Phyu Kan",
+      "myanmar": "ကြက်ဖြူကန်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.086369,
+      "lng": 96.100841
+    },
+    {
+      "id": 114,
+      "name": "San Chaung Pauk",
+      "myanmar": "စမ်းချောင်းပေါက်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.095839,
+      "lng": 96.092856
+    },
+    {
+      "id": 115,
+      "name": "Htauk Kyant Lan Sone",
+      "myanmar": "ထောက်ကြန့်လမ်းဆုံ",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "No. 2 Main Road",
+      "lat": 17.042732,
+      "lng": 96.131957
+    },
+    {
+      "id": 116,
+      "name": "Bo Thin Tan",
+      "myanmar": "ဗိုလ်သင်တန်း",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.10556,
+      "lng": 96.078222
+    },
+    {
+      "id": 117,
+      "name": "Mee Sat",
+      "myanmar": "မီးစက်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.076985,
+      "lng": 96.107278
+    },
+    {
+      "id": 118,
+      "name": "Maw Taw Yin",
+      "myanmar": "မော်တော်ယာဉ်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.108103,
+      "lng": 96.074531
+    },
+    {
+      "id": 119,
+      "name": "Ye Baw Zay",
+      "myanmar": "ရဲဘော်ဈေး",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.094034,
+      "lng": 96.095166
+    },
+    {
+      "id": 120,
+      "name": "Lay Tat",
+      "myanmar": "လေတပ်",
+      "township": "Htaukkyant",
+      "township_mm": "ထောက်ကြန့်",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.109047,
+      "lng": 96.073097
+    },
+    {
+      "id": 121,
+      "name": "Kyauk Taing",
+      "myanmar": "ကျောက်တိုင်",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "ZOOLOGICAL Garden Road",
+      "lat": 16.788753,
+      "lng": 96.157194
+    },
+    {
+      "id": 122,
+      "name": "Sein Gyun",
+      "myanmar": "စိန်ဂျွန်း",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "Pyay Road",
+      "lat": 16.781942,
+      "lng": 96.143846
+    },
+    {
+      "id": 123,
+      "name": "Taung Phat Moke (Shwedagon South Gate)",
+      "myanmar": "တောင်ဘက်မုခ်",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "Shwedagon Pagoda Road",
+      "lat": 16.793821,
+      "lng": 96.151069
+    },
+    {
+      "id": 124,
+      "name": "Bago Kalat",
+      "myanmar": "ပဲခူးကလပ်",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "Pyay Road",
+      "lat": 16.786334,
+      "lng": 96.142429
+    },
+    {
+      "id": 125,
+      "name": "Myauk Phat Moke (Shwedagon North Gate)",
+      "myanmar": "မြောက်ဘက်မုခ်",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "RZarNi Road",
+      "lat": 16.800997,
+      "lng": 96.14897
+    },
+    {
+      "id": 126,
+      "name": "Lay Har Pyin Zay",
+      "myanmar": "လေဟာပြင်စျေး",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "Shwedagon Pagoda Road",
+      "lat": 16.77819,
+      "lng": 96.153137
+    },
+    {
+      "id": 127,
+      "name": "Halpin",
+      "myanmar": "ဟယ်(လ်)ပင်",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "Pyay Road",
+      "lat": 16.79028,
+      "lng": 96.141303
+    },
+    {
+      "id": 128,
+      "name": "Ashae Phat Moke (Shwedagon East Gate)",
+      "myanmar": "အရှေ့ဘက်မုခ်",
+      "township": "Dagon",
+      "township_mm": "ဒဂုံ",
+      "road": "RZarNi Road",
+      "lat": 16.798262,
+      "lng": 96.151938
+    },
+    {
+      "id": 129,
+      "name": "Sae-Tit Lan (11 Lan)",
+      "myanmar": "(၁၁) လမ်း",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Kyun Shwe Wah Road",
+      "lat": 16.823557,
+      "lng": 96.267862
+    },
+    {
+      "id": 130,
+      "name": "Shit-sae-koe Kwae (89 Kwae)",
+      "myanmar": "(၈၉) ကွေ့",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Kun At Min Thar Road",
+      "lat": 16.842434,
+      "lng": 96.279679
+    },
+    {
+      "id": 131,
+      "name": "Kanaung Kwae",
+      "myanmar": "ကနောင်ကွေ့",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Kanaung Minthargyi Road",
+      "lat": 16.832329,
+      "lng": 96.276597
+    },
+    {
+      "id": 132,
+      "name": "Padauk Kwae",
+      "myanmar": "ပိတောက်ကွေ့",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Kyun Shwe Wah Road",
+      "lat": 16.827115,
+      "lng": 96.269269
+    },
+    {
+      "id": 133,
+      "name": "Moke Oo Yuzana Garden",
+      "myanmar": "မုခ်ဦး (ယုဇနဥယျာဉ်)",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Bago River Road",
+      "lat": 16.832075,
+      "lng": 96.270439
+    },
+    {
+      "id": 134,
+      "name": "Mya Nandar",
+      "myanmar": "မြနန္ဒာ",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Bago River Road",
+      "lat": 16.835173,
+      "lng": 96.254615
+    },
+    {
+      "id": 135,
+      "name": "Yadanar Lan",
+      "myanmar": "ရတနာလမ်း",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Bago River Road",
+      "lat": 16.836588,
+      "lng": 96.249945
+    },
+    {
+      "id": 136,
+      "name": "Shwe Li Road",
+      "myanmar": "ရွှေလီလမ်း",
+      "township": "Dagon Seikkan",
+      "township_mm": "ဒဂုံဆိပ်ကမ်း",
+      "road": "Shwe Li Road",
+      "lat": 16.827104,
+      "lng": 96.245743
+    },
+    {
+      "id": 137,
+      "name": "Thone Gate Haung (3 Gate)",
+      "myanmar": "(၃) ဂိတ်ဟောင်း",
+      "township": "Dawbon",
+      "township_mm": "ဒေါပုံ",
+      "road": "Myintawthar Road",
+      "lat": 16.777583,
+      "lng": 96.195345
+    },
+    {
+      "id": 138,
+      "name": "Dhamar Yon",
+      "myanmar": "ဓမ္မာရုံ",
+      "township": "Dawbon",
+      "township_mm": "ဒေါပုံ",
+      "road": "Yamonar Road",
+      "lat": 16.776521,
+      "lng": 96.197328
+    },
+    {
+      "id": 139,
+      "name": "Man Pyae",
+      "myanmar": "မာန်ပြေ",
+      "township": "Dawbon",
+      "township_mm": "ဒေါပုံ",
+      "road": "Yamonar Road",
+      "lat": 16.778397,
+      "lng": 96.19404
+    },
+    {
+      "id": 140,
+      "name": "Yan Pyay",
+      "myanmar": "ရန်ပြေ",
+      "township": "Dawbon",
+      "township_mm": "ဒေါပုံ",
+      "road": "Yamonar Road",
+      "lat": 16.77991,
+      "lng": 96.191028
+    },
+    {
+      "id": 141,
+      "name": "Warso",
+      "myanmar": "ဝါဆို",
+      "township": "Dawbon",
+      "township_mm": "ဒေါပုံ",
+      "road": "Yamonar Road",
+      "lat": 16.782555,
+      "lng": 96.182733
+    },
+    {
+      "id": 142,
+      "name": "Thinbaw Kyin",
+      "myanmar": "သင်္ဘောကျင်း",
+      "township": "Dawbon",
+      "township_mm": "ဒေါပုံ",
+      "road": "Yamonar Road",
+      "lat": 16.781965,
+      "lng": 96.187147
+    },
+    {
+      "id": 143,
+      "name": "Chauk Lan (6 Lan)",
+      "myanmar": "(၆) လမ်း",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Upper Pazundaung Road",
+      "lat": 16.803755,
+      "lng": 96.185249
+    },
+    {
+      "id": 144,
+      "name": "Gandee",
+      "myanmar": "ဂန္ဓီ",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Mahabandoola Road",
+      "lat": 16.77384,
+      "lng": 96.174372
+    },
+    {
+      "id": 145,
+      "name": "Nyaung Tan",
+      "myanmar": "ညောင်တန်း",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Lower Pazundaung Road",
+      "lat": 16.778142,
+      "lng": 96.175494
+    },
+    {
+      "id": 146,
+      "name": "Pazundaung Zay",
+      "myanmar": "ပုဇွန်တောင်ဈေး",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Upper Pazundaung Road",
+      "lat": 16.780225,
+      "lng": 96.174547
+    },
+    {
+      "id": 147,
+      "name": "Botahtaung Zay",
+      "myanmar": "ဗိုလ်တထောင်ဈေး",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Strand Road",
+      "lat": 16.769349,
+      "lng": 96.174957
+    },
+    {
+      "id": 148,
+      "name": "B.O.C",
+      "myanmar": "ဘီအိုစီ",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Than Lyet Soon Road",
+      "lat": 16.76858,
+      "lng": 96.186345
+    },
+    {
+      "id": 149,
+      "name": "Lin Sadaung",
+      "myanmar": "လင်းစဒေါင်း",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Strand Road",
+      "lat": 16.768981,
+      "lng": 96.180341
+    },
+    {
+      "id": 150,
+      "name": "Thida Seik",
+      "myanmar": "သီတာဆိပ်",
+      "township": "Pazundaung",
+      "township_mm": "ပုဇွန်တောင်",
+      "road": "Lower Pazundaung Road",
+      "lat": 16.774333,
+      "lng": 96.180194
+    },
+    {
+      "id": 151,
+      "name": "Kone Zay Tan",
+      "myanmar": "ကုန်ဈေးတန်း",
+      "township": "Pabedan",
+      "township_mm": "ပန်းဘဲတန်း",
+      "road": "Anawrahta Road",
+      "lat": 16.777052,
+      "lng": 96.155092
+    },
+    {
+      "id": 152,
+      "name": "Bogyoke Zay",
+      "myanmar": "ဗိုလ်ချုပ်ဈေး",
+      "township": "Pabedan",
+      "township_mm": "ပန်းဘဲတန်း",
+      "road": "Bogyoke Aung San Road",
+      "lat": 16.779395,
+      "lng": 96.154447
+    },
+    {
+      "id": 153,
+      "name": "Yoke Shin Yon",
+      "myanmar": "ရုပ်ရှင်ရုံ",
+      "township": "Pabedan",
+      "township_mm": "ပန်းဘဲတန်း",
+      "road": "Sule Pagoda Road",
+      "lat": 16.777455,
+      "lng": 96.158736
+    },
+    {
+      "id": 154,
+      "name": "Lan Thone Sae (30 Lan)",
+      "myanmar": "လမ်း (၃၀)",
+      "township": "Pabedan",
+      "township_mm": "ပန်းဘဲတန်း",
+      "road": "Anawrahta Road",
+      "lat": 16.776964,
+      "lng": 96.157234
+    },
+    {
+      "id": 155,
+      "name": "Theingyi Zay",
+      "myanmar": "သိမ်ကြီးဈေး",
+      "township": "Pabedan",
+      "township_mm": "ပန်းဘဲတန်း",
+      "road": "Mahabandoola Road",
+      "lat": 16.774497,
+      "lng": 96.153833
+    },
+    {
+      "id": 156,
+      "name": "Hnit Gate (2 Gate)",
+      "myanmar": "(၂) ဂိတ်",
+      "township": "Hpaunggyi",
+      "township_mm": "ဖောင်ကြီး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.339783,
+      "lng": 96.197698
+    },
+    {
+      "id": 157,
+      "name": "San Pya",
+      "myanmar": "စံပြ",
+      "township": "Hpaunggyi",
+      "township_mm": "ဖောင်ကြီး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.335318,
+      "lng": 96.196239
+    },
+    {
+      "id": 158,
+      "name": "Say Yone Kone",
+      "myanmar": "ဆေးရုံကုန်း",
+      "township": "Hpaunggyi",
+      "township_mm": "ဖောင်ကြီး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.327288,
+      "lng": 96.185811
+    },
+    {
+      "id": 159,
+      "name": "Phaung Gyi Tar Sone",
+      "myanmar": "ဖောင်ကြီးတာဆုံ",
+      "township": "Hpaunggyi",
+      "township_mm": "ဖောင်ကြီး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.322331,
+      "lng": 96.179502
+    },
+    {
+      "id": 160,
+      "name": "Baho Wun Htan Takke Tho",
+      "myanmar": "ဗဟိုဝန်ထမ်းတက္ကသိုလ်",
+      "township": "Hpaunggyi",
+      "township_mm": "ဖောင်ကြီး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.331549,
+      "lng": 96.187184
+    },
+    {
+      "id": 161,
+      "name": "Thama War Ya Ma College",
+      "myanmar": "သမဝါယမကောလိပ်",
+      "township": "Hpaunggyi",
+      "township_mm": "ဖောင်ကြီး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.345723,
+      "lng": 96.200917
+    },
+    {
+      "id": 162,
+      "name": "Ngar Htat Kyee (5 Htat Kyee)",
+      "myanmar": "(၅) ထပ်ကြီး",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "East Shwe Gon Daing Road",
+      "lat": 16.810501,
+      "lng": 96.16332
+    },
+    {
+      "id": 163,
+      "name": "Chauk Htat Kyee (6 Htat Kyee)",
+      "myanmar": "(၆) ထပ်ကြီး",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "East Shwe Gon Daing Road",
+      "lat": 16.811207,
+      "lng": 96.165464
+    },
+    {
+      "id": 164,
+      "name": "Koke Kine",
+      "myanmar": "ကုက္ကိုင်း",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "University Avenue Road",
+      "lat": 16.823559,
+      "lng": 96.153043
+    },
+    {
+      "id": 165,
+      "name": "Kokkaing/ Kyaung Shae",
+      "myanmar": "ကုက္ကိုင်း / ကျောင်းရှေ့",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Kabar Aye Pagoda Road",
+      "lat": 16.820664,
+      "lng": 96.155299
+    },
+    {
+      "id": 166,
+      "name": "Set Hmu Tit/Myanmar Plaza",
+      "myanmar": "စက်မှု(၁)/မြန်မာပလာဇာ",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Kabar Aye Pagoda Road",
+      "lat": 16.826941,
+      "lng": 96.154453
+    },
+    {
+      "id": 167,
+      "name": "Nat Mauk Kyaung Shae",
+      "myanmar": "နတ်မောက်ကျောင်းရှေ့",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Nat Mauk Road",
+      "lat": 16.800321,
+      "lng": 96.166352
+    },
+    {
+      "id": 168,
+      "name": "Hnin Si Kone Yate Thar",
+      "myanmar": "နှင်းဆီကုန်းရိပ်သာ",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Kabar Aye Pagoda Road",
+      "lat": 16.810351,
+      "lng": 96.155935
+    },
+    {
+      "id": 169,
+      "name": "Phoe Sein Lan",
+      "myanmar": "ဖိုးစိန်လမ်း",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Nat Mauk Road",
+      "lat": 16.800151,
+      "lng": 96.167644
+    },
+    {
+      "id": 170,
+      "name": "Bahan Thone Lan",
+      "myanmar": "ဗဟန်းသုံးလမ်း",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Bahan Road",
+      "lat": 16.79706,
+      "lng": 96.157028
+    },
+    {
+      "id": 171,
+      "name": "Shwe Gon Daing",
+      "myanmar": "ရွှေဂုံတိုင်",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "West Shwe Gon Daing Road",
+      "lat": 16.805331,
+      "lng": 96.154423
+    },
+    {
+      "id": 172,
+      "name": "Wizaya Plaza",
+      "myanmar": "ဝိဇယပလာဇာ",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Dhamazedi Road",
+      "lat": 16.8052,
+      "lng": 96.143334
+    },
+    {
+      "id": 173,
+      "name": "Thanlwin",
+      "myanmar": "သံလွင်",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "University Avenue Road",
+      "lat": 16.824228,
+      "lng": 96.145139
+    },
+    {
+      "id": 174,
+      "name": "Ah Hta Ka Tit Bahan (No. 1 High School)",
+      "myanmar": "အထက (၁) ဗဟန်း",
+      "township": "Bahan",
+      "township_mm": "ဗဟန်း",
+      "road": "Dhamazedi Road",
+      "lat": 16.807292,
+      "lng": 96.151492
+    },
+    {
+      "id": 175,
+      "name": "Ngar-sae Kwae (50 Kwae)",
+      "myanmar": "(၅၀) ကွေ့",
+      "township": "Botahtaung",
+      "township_mm": "ဗိုလ်တထောင်",
+      "road": "Botahtaung Pagoda Road",
+      "lat": 16.774432,
+      "lng": 96.172566
+    },
+    {
+      "id": 176,
+      "name": "Kyel Ngar Pwint",
+      "myanmar": "ကြယ်ငါးပွင့်",
+      "township": "Botahtaung",
+      "township_mm": "ဗိုလ်တထောင်",
+      "road": "Thein Phyu Road",
+      "lat": 16.772389,
+      "lng": 96.166984
+    },
+    {
+      "id": 177,
+      "name": "Sein Paul",
+      "myanmar": "စိန်ပေါ(လ်)",
+      "township": "Botahtaung",
+      "township_mm": "ဗိုလ်တထောင်",
+      "road": "Thein Phyu Road",
+      "lat": 16.777445,
+      "lng": 96.167201
+    },
+    {
+      "id": 178,
+      "name": "Ocean (Botahtaung)",
+      "myanmar": "အိုးရှင်း",
+      "township": "Botahtaung",
+      "township_mm": "ဗိုလ်တထောင်",
+      "road": "Mahabandoola Road",
+      "lat": 16.773717,
+      "lng": 96.177385
+    },
+    {
+      "id": 179,
+      "name": "Chauk Mile Khawe (6 Mile)",
+      "myanmar": "(၆) မိုင်ခွဲ",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Pyay Road",
+      "lat": 16.844326,
+      "lng": 96.135839
+    },
+    {
+      "id": 180,
+      "name": "Khun-hnat Mile (7 Mile)",
+      "myanmar": "(၇) မိုင်",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Pyay Road",
+      "lat": 16.856031,
+      "lng": 96.141375
+    },
+    {
+      "id": 181,
+      "name": "Shit Mile (8 Mile)",
+      "myanmar": "(၈) မိုင်",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Pyay Road",
+      "lat": 16.867475,
+      "lng": 96.141751
+    },
+    {
+      "id": 182,
+      "name": "Koe Mile (9 Mile)",
+      "myanmar": "(၉) မိုင်",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Pyay Road",
+      "lat": 16.880519,
+      "lng": 96.13626
+    },
+    {
+      "id": 183,
+      "name": "Kabar Aye Paya",
+      "myanmar": "ကမ္ဘာအေးဘုရားလမ်း",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Kabar Aye Pagoda Road",
+      "lat": 16.856873,
+      "lng": 96.156653
+    },
+    {
+      "id": 184,
+      "name": "Kyaik Wine",
+      "myanmar": "ကျိုက်ဝိုင်း",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Kyaik Wine Pagoda Road",
+      "lat": 16.866536,
+      "lng": 96.128669
+    },
+    {
+      "id": 185,
+      "name": "Chaw Twin Kone",
+      "myanmar": "ချော်တွင်းကုန်း",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Kabar Aye Pagoda Road",
+      "lat": 16.848967,
+      "lng": 96.1573
+    },
+    {
+      "id": 186,
+      "name": "Bayint Naung Lan Sone",
+      "myanmar": "ဘုရင့်နောင်လမ်းဆုံ",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Bayint Naung Road",
+      "lat": 16.856972,
+      "lng": 96.108657
+    },
+    {
+      "id": 187,
+      "name": "Myaing Hay Wun",
+      "myanmar": "မြိုင်ဟေဝန်ပန်းခြံ",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Kabar Aye Pagoda Road",
+      "lat": 16.866588,
+      "lng": 96.143537
+    },
+    {
+      "id": 188,
+      "name": "Thamine Lan Son",
+      "myanmar": "သမိုင်းလမ်းဆုံ",
+      "township": "Mayangone",
+      "township_mm": "မရမ်းကုန်း",
+      "road": "Yangon-Insein Road",
+      "lat": 16.863581,
+      "lng": 96.121281
+    },
+    {
+      "id": 189,
+      "name": "Mingalar Zay",
+      "myanmar": "မင်္ဂလာဈေး",
+      "township": "Mingalar Taung Nyunt",
+      "township_mm": "မင်္ဂလာတောင်ညွန့်",
+      "road": "Mill Road",
+      "lat": 16.791773,
+      "lng": 96.174681
+    },
+    {
+      "id": 190,
+      "name": "Yuzana Plaza/ Lan Kyal",
+      "myanmar": "ယုဇနပလာဇာ / လမ်းကျယ်",
+      "township": "Mingalar Taung Nyunt",
+      "township_mm": "မင်္ဂလာတောင်ညွန့်",
+      "road": "Banyardala Road",
+      "lat": 16.794242,
+      "lng": 96.175678
+    },
+    {
+      "id": 191,
+      "name": "Yangon Central Railway Station",
+      "myanmar": "ရန်ကုန်ဘူတာကြီး",
+      "township": "Mingalar Taung Nyunt",
+      "township_mm": "မင်္ဂလာတောင်ညွန့်",
+      "road": "Upper Pansodan Road",
+      "lat": 16.784881,
+      "lng": 96.162024
+    },
+    {
+      "id": 192,
+      "name": "Thein Phyu Zay",
+      "myanmar": "သိမ်ဖြူဈေး",
+      "township": "Mingalar Taung Nyunt",
+      "township_mm": "မင်္ဂလာတောင်ညွန့်",
+      "road": "Thein Phyu Road",
+      "lat": 16.784569,
+      "lng": 96.167519
+    },
+    {
+      "id": 193,
+      "name": "Aung Mingalar",
+      "myanmar": "အောင်မင်္ဂလာ",
+      "township": "Mingalar Taung Nyunt",
+      "township_mm": "မင်္ဂလာတောင်ညွန့်",
+      "road": "Banyardala Road",
+      "lat": 16.796309,
+      "lng": 96.176624
+    },
+    {
+      "id": 194,
+      "name": "Khayae Pin Lan Khawe",
+      "myanmar": "ခရေပင်လမ်းခွဲ",
+      "township": "Mingaladon",
+      "township_mm": "မင်္ဂလာဒုံ",
+      "road": "No. 1 Main Road",
+      "lat": 16.927303,
+      "lng": 96.131706
+    },
+    {
+      "id": 195,
+      "name": "Kone Htate",
+      "myanmar": "ကုန်းထိပ်",
+      "township": "Mingaladon",
+      "township_mm": "မင်္ဂလာဒုံ",
+      "road": "No. 1 Main Road",
+      "lat": 17.004641,
+      "lng": 96.129039
+    },
+    {
+      "id": 196,
+      "name": "Kyaikkalot",
+      "myanmar": "ကျိုက်ကလို့",
+      "township": "Mingaladon",
+      "township_mm": "မင်္ဂလာဒုံ",
+      "road": "No. 1 Main Road",
+      "lat": 16.951129,
+      "lng": 96.127038
+    },
+    {
+      "id": 197,
+      "name": "Mingalardon Zay",
+      "myanmar": "မင်္ဂလာဒုံဈေး",
+      "township": "Mingaladon",
+      "township_mm": "မင်္ဂလာဒုံ",
+      "road": "No. 1 Main Road",
+      "lat": 16.934113,
+      "lng": 96.13039
+    },
+    {
+      "id": 198,
+      "name": "Yangon Intl. Airport Terminal 1",
+      "myanmar": "ရန်ကုန်လေဆိပ် တာမီနယ် (၁)",
+      "township": "Mingaladon",
+      "township_mm": "မင်္ဂလာဒုံ",
+      "road": "Yangon Airport Road",
+      "lat": 16.902771,
+      "lng": 96.136228
+    },
+    {
+      "id": 199,
+      "name": "Palae Lan Sone",
+      "myanmar": "ပုလဲလမ်းဆုံ",
+      "township": "Mingaladon",
+      "township_mm": "မင်္ဂလာဒုံ",
+      "road": "No. 3 Main Road",
+      "lat": 16.981853,
+      "lng": 96.147111
+    },
+    {
+      "id": 200,
+      "name": "Dagon University",
+      "myanmar": "ဒဂုံတက္ကသိုလ်",
+      "township": "North Dagon",
+      "township_mm": "မြောက်ဒဂုံ",
+      "road": "Dagon University",
+      "lat": 16.91305,
+      "lng": 96.211413
+    },
+    {
+      "id": 201,
+      "name": "Thone-sae-ngar Kwae (35 Kwae)",
+      "myanmar": "(၃၅) ကွေ့",
+      "township": "North Dagon",
+      "township_mm": "မြောက်ဒဂုံ",
+      "road": "Pin Lon Road",
+      "lat": 16.868091,
+      "lng": 96.187002
+    },
+    {
+      "id": 202,
+      "name": "Lay-sae-lay Lan Sone (44 Lan Sone)",
+      "myanmar": "(၄၄) လမ်းဆုံ",
+      "township": "North Dagon",
+      "township_mm": "မြောက်ဒဂုံ",
+      "road": "Bo Hmu Ba Htoo Road",
+      "lat": 16.89259,
+      "lng": 96.181006
+    },
+    {
+      "id": 203,
+      "name": "Ba Htoo Zay",
+      "myanmar": "ဗထူးဈေး",
+      "township": "North Dagon",
+      "township_mm": "မြောက်ဒဂုံ",
+      "road": "Bo Hmu Ba Htoo Road",
+      "lat": 16.89564,
+      "lng": 96.187053
+    },
+    {
+      "id": 204,
+      "name": "Pinlon Hospital",
+      "myanmar": "ပင်လုံဆေးရုံ",
+      "township": "North Dagon",
+      "township_mm": "မြောက်ဒဂုံ",
+      "road": "Pin Lon Road",
+      "lat": 16.856,
+      "lng": 96.195
+    },
+    {
+      "id": 205,
+      "name": "Mandalay Lan",
+      "myanmar": "မန္တလေးလမ်း",
+      "township": "North Dagon",
+      "township_mm": "မြောက်ဒဂုံ",
+      "road": "Pin Lon Road",
+      "lat": 16.8744,
+      "lng": 96.198868
+    },
+    {
+      "id": 206,
+      "name": "Hnit Zay (2 Zay)",
+      "myanmar": "(၂) ဈေး",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Thudhamar Road",
+      "lat": 16.878722,
+      "lng": 96.156081
+    },
+    {
+      "id": 207,
+      "name": "Chauk Kwae (6 Kwae)",
+      "myanmar": "(၆) ကွေ့",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Thudhamar Road",
+      "lat": 16.919091,
+      "lng": 96.162873
+    },
+    {
+      "id": 208,
+      "name": "Ga-gyi Zay",
+      "myanmar": "(ဃ) ဈေး",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Thudhamar Road",
+      "lat": 16.896452,
+      "lng": 96.159434
+    },
+    {
+      "id": 209,
+      "name": "Za-myin-zwe Zay",
+      "myanmar": "(ဈ) ဈေး",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Khaymarthi Road",
+      "lat": 16.911714,
+      "lng": 96.161796
+    },
+    {
+      "id": 210,
+      "name": "Myauk Okkalar Awine",
+      "myanmar": "မြောက်ဥက္ကလာ အဝိုင်း",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Thudhamar Road",
+      "lat": 16.89274,
+      "lng": 96.155061
+    },
+    {
+      "id": 211,
+      "name": "Aung Mingalar A Way Pyay",
+      "myanmar": "အောင်မင်္ဂလာ အဝေးပြေး",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Thudhamar Road",
+      "lat": 16.926507,
+      "lng": 96.156078
+    },
+    {
+      "id": 212,
+      "name": "Melamu Pagoda",
+      "myanmar": "မဲလမုဘုရား",
+      "township": "North Okkalapa",
+      "township_mm": "မြောက်ဥက္ကလာပ",
+      "road": "Thudhamar Road",
+      "lat": 16.887,
+      "lng": 96.168
+    },
+    {
+      "id": 213,
+      "name": "Hmaw Bi Zay",
+      "myanmar": "မှော်ဘီဈေး",
+      "township": "Hmawbi",
+      "township_mm": "မှော်ဘီ",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.100933,
+      "lng": 96.042672
+    },
+    {
+      "id": 214,
+      "name": "G.T.C Site Thit",
+      "myanmar": "ဂျီတီစီဆိုက်သစ်",
+      "township": "Hmawbi",
+      "township_mm": "မှော်ဘီ",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.124427,
+      "lng": 96.006639
+    },
+    {
+      "id": 215,
+      "name": "Japan Site",
+      "myanmar": "ဂျပန်ဆိုက်",
+      "township": "Hmawbi",
+      "township_mm": "မှော်ဘီ",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.140421,
+      "lng": 95.999799
+    },
+    {
+      "id": 216,
+      "name": "Htan Ta Pin Tar Sone",
+      "myanmar": "ထန်းတပင်တာဆုံ",
+      "township": "Hmawbi",
+      "township_mm": "မှော်ဘီ",
+      "road": "Yangon-Pyay Main Road",
+      "lat": 17.09799,
+      "lng": 96.035419
+    },
+    {
+      "id": 217,
+      "name": "Kyauk Kone",
+      "myanmar": "ကျောက်ကုန်း",
+      "township": "Yankin",
+      "township_mm": "ရန်ကင်း",
+      "road": "Moe Kaung Road",
+      "lat": 16.831231,
+      "lng": 96.169702
+    },
+    {
+      "id": 218,
+      "name": "Yankin Zay",
+      "myanmar": "ရန်ကင်းဈေး",
+      "township": "Yankin",
+      "township_mm": "ရန်ကင်း",
+      "road": "Yanshin Street",
+      "lat": 16.828822,
+      "lng": 96.159214
+    },
+    {
+      "id": 219,
+      "name": "Moe Kaung",
+      "myanmar": "မိုးကောင်း",
+      "township": "Yankin",
+      "township_mm": "ရန်ကင်း",
+      "road": "Kanbe Road",
+      "lat": 16.837755,
+      "lng": 96.166164
+    },
+    {
+      "id": 220,
+      "name": "Yankin Sar Taik",
+      "myanmar": "ရန်ကင်းစာတိုက်",
+      "township": "Yankin",
+      "township_mm": "ရန်ကင်း",
+      "road": "Yankin Road",
+      "lat": 16.834688,
+      "lng": 96.162728
+    },
+    {
+      "id": 221,
+      "name": "Shwe Pyi Thar Kwae",
+      "myanmar": "ရွှေပြည်သာကွေ့",
+      "township": "Shwepyitha",
+      "township_mm": "ရွှေပြည်သာ",
+      "road": "No. 4 Main Road",
+      "lat": 16.961085,
+      "lng": 96.097016
+    },
+    {
+      "id": 222,
+      "name": "Dagon Ayeyar (Shwepyitha)",
+      "myanmar": "ဒဂုံဧရာ",
+      "township": "Shwepyitha",
+      "township_mm": "ရွှေပြည်သာ",
+      "road": "Hlawga Road",
+      "lat": 16.849593,
+      "lng": 96.236215
+    },
+    {
+      "id": 223,
+      "name": "Computer University (Yangon)",
+      "myanmar": "ကွန်ပျူတာတက္ကသိုလ်",
+      "township": "Shwepyitha",
+      "township_mm": "ရွှေပြည်သာ",
+      "road": "No. 4 Main Road",
+      "lat": 16.998734,
+      "lng": 96.088477
+    },
+    {
+      "id": 224,
+      "name": "Nawarat",
+      "myanmar": "နဝရတ်",
+      "township": "Shwepyitha",
+      "township_mm": "ရွှေပြည်သာ",
+      "road": "Bayint Naung Road",
+      "lat": 16.97258,
+      "lng": 96.075976
+    },
+    {
+      "id": 225,
+      "name": "Thardukan",
+      "myanmar": "သာဓုကန်",
+      "township": "Shwepyitha",
+      "township_mm": "ရွှေပြည်သာ",
+      "road": "No. 4 Main Road",
+      "lat": 16.983793,
+      "lng": 96.093191
+    },
+    {
+      "id": 226,
+      "name": "Say Yon Gyi (Yangon General Hospital)",
+      "myanmar": "ဆေးရုံကြီး",
+      "township": "Latha",
+      "township_mm": "လသာ",
+      "road": "Bogyoke Aung San Road",
+      "lat": 16.779525,
+      "lng": 96.150563
+    },
+    {
+      "id": 227,
+      "name": "Nyaung Pin Lay Zay",
+      "myanmar": "ညောင်ပင်လေးဈေး",
+      "township": "Latha",
+      "township_mm": "လသာ",
+      "road": "Strand Road",
+      "lat": 16.772605,
+      "lng": 96.146209
+    },
+    {
+      "id": 228,
+      "name": "Latha (Strand)",
+      "myanmar": "လသာ",
+      "township": "Latha",
+      "township_mm": "လသာ",
+      "road": "Strand Road",
+      "lat": 16.772114,
+      "lng": 96.15142
+    },
+    {
+      "id": 229,
+      "name": "Sanpya",
+      "myanmar": "စံပြ",
+      "township": "Lanmadaw",
+      "township_mm": "လမ်းမတော်",
+      "road": "Phone Gyi Road",
+      "lat": 16.778647,
+      "lng": 96.144935
+    },
+    {
+      "id": 230,
+      "name": "Bahosi/ Mawtin",
+      "myanmar": "ဗဟိုစည် / မော်တင်",
+      "township": "Lanmadaw",
+      "township_mm": "လမ်းမတော်",
+      "road": "Bogyoke Aung San Road",
+      "lat": 16.780018,
+      "lng": 96.140015
+    },
+    {
+      "id": 231,
+      "name": "Maw Tin",
+      "myanmar": "မော်တင်",
+      "township": "Lanmadaw",
+      "township_mm": "လမ်းမတော်",
+      "road": "Mahabandoola Road",
+      "lat": 16.774862,
+      "lng": 96.142339
+    },
+    {
+      "id": 232,
+      "name": "Parami Junction",
+      "myanmar": "ပါရမီလမ်းဆုံ",
+      "township": "Hlaing",
+      "township_mm": "လှိုင်",
+      "road": "Pyay Road",
+      "lat": 16.84793,
+      "lng": 96.136581
+    },
+    {
+      "id": 233,
+      "name": "Thiri Mingalar Market",
+      "myanmar": "သီရိမင်္ဂလာဈေးသစ်",
+      "township": "Hlaing",
+      "township_mm": "လှိုင်",
+      "road": "Bayint Naung Road",
+      "lat": 16.843603,
+      "lng": 96.112299
+    },
+    {
+      "id": 234,
+      "name": "Thukha",
+      "myanmar": "သုခ",
+      "township": "Hlaing",
+      "township_mm": "လှိုင်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.84047,
+      "lng": 96.127017
+    },
+    {
+      "id": 235,
+      "name": "A.D",
+      "myanmar": "အေဒီ",
+      "township": "Hlaing",
+      "township_mm": "လှိုင်",
+      "road": "Pyay Road",
+      "lat": 16.853071,
+      "lng": 96.140559
+    },
+    {
+      "id": 236,
+      "name": "Oakyin",
+      "myanmar": "အုတ်ကျင်း",
+      "township": "Hlaing",
+      "township_mm": "လှိုင်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.854916,
+      "lng": 96.123917
+    },
+    {
+      "id": 237,
+      "name": "Dagon Ayeyar Highway",
+      "myanmar": "ဒဂုံဧရာ အဝေးပြေး",
+      "township": "Hlaingtharyar",
+      "township_mm": "လှိုင်သာယာ",
+      "road": "No. 5 Main Road",
+      "lat": 16.878048,
+      "lng": 96.024103
+    },
+    {
+      "id": 238,
+      "name": "Nawaday Housing",
+      "myanmar": "နဝဒေးအိမ်ရာ",
+      "township": "Hlaingtharyar",
+      "township_mm": "လှိုင်သာယာ",
+      "road": "No. 5 Main Road",
+      "lat": 16.861391,
+      "lng": 96.068355
+    },
+    {
+      "id": 239,
+      "name": "University of Technology (West Yangon)",
+      "myanmar": "နည်းပညာတက္ကသိုလ်",
+      "township": "Hlaingtharyar",
+      "township_mm": "လှိုင်သာယာ",
+      "road": "University of Technology",
+      "lat": 16.867924,
+      "lng": 96.011427
+    },
+    {
+      "id": 240,
+      "name": "Hlaing Tharyar City Mart",
+      "myanmar": "လှိုင်သာယာ စီးတီးမတ်",
+      "township": "Hlaingtharyar",
+      "township_mm": "လှိုင်သာယာ",
+      "road": "Yangon-Pathein Rd",
+      "lat": 16.853,
+      "lng": 96.065
+    },
+    {
+      "id": 241,
+      "name": "Bogyoke",
+      "myanmar": "ဗိုလ်ချုပ်",
+      "township": "Hlaingtharyar",
+      "township_mm": "လှိုင်သာယာ",
+      "road": "No. 5 Main Road",
+      "lat": 16.858331,
+      "lng": 96.077607
+    },
+    {
+      "id": 242,
+      "name": "Hlegu Zay",
+      "myanmar": "လှည်းကူးဈေး",
+      "township": "Hlegu",
+      "township_mm": "လှည်းကူး",
+      "road": "No. 1 Main Road",
+      "lat": 17.096831,
+      "lng": 96.219037
+    },
+    {
+      "id": 243,
+      "name": "Hlegu Tar Sone",
+      "myanmar": "လှည်းကူးတာဆုံ",
+      "township": "Hlegu",
+      "township_mm": "လှည်းကူး",
+      "road": "Hlegu-Phaung Gyi Road",
+      "lat": 17.099807,
+      "lng": 96.225899
+    },
+    {
+      "id": 244,
+      "name": "Yadanar Myay",
+      "myanmar": "ရတနာမြေ",
+      "township": "Hlegu",
+      "township_mm": "လှည်းကူး",
+      "road": "No. 1 Main Road",
+      "lat": 17.078205,
+      "lng": 96.184119
+    },
+    {
+      "id": 245,
+      "name": "Thaketa Roundabout (Awine)",
+      "myanmar": "သာကေတအဝိုင်း",
+      "township": "Thaketa",
+      "township_mm": "သာကေတ",
+      "road": "Ayar Wun Main Road",
+      "lat": 16.806115,
+      "lng": 96.216272
+    },
+    {
+      "id": 246,
+      "name": "Thanlyin Bridge (Chin Kat Lan)",
+      "myanmar": "သန်လျင်တံတား ချဉ်းကပ်လမ်း",
+      "township": "Thaketa",
+      "township_mm": "သာကေတ",
+      "road": "Thalyin Thada Chin Kat Road",
+      "lat": 16.806431,
+      "lng": 96.218966
+    },
+    {
+      "id": 247,
+      "name": "Shukinthar Myo Pat Road",
+      "myanmar": "ရှုခင်းသာမြို့ပတ်လမ်း",
+      "township": "Thaketa",
+      "township_mm": "သာကေတ",
+      "road": "Shukinthar Myo Pat Road",
+      "lat": 16.793243,
+      "lng": 96.219589
+    },
+    {
+      "id": 248,
+      "name": "Thone Zay (3 Zay)",
+      "myanmar": "(၃) ဈေး",
+      "township": "Thaketa",
+      "township_mm": "သာကေတ",
+      "road": "Myintawthar Road",
+      "lat": 16.781521,
+      "lng": 96.197234
+    },
+    {
+      "id": 249,
+      "name": "Kyauk Taing (Thaketa)",
+      "myanmar": "ကျောက်တိုင်",
+      "township": "Thaketa",
+      "township_mm": "သာကေတ",
+      "road": "Ayar Wun Main Road",
+      "lat": 16.804242,
+      "lng": 96.196145
+    },
+    {
+      "id": 250,
+      "name": "National Races Village (Asean)",
+      "myanmar": "တိုင်းရင်းသားကျေးရွာ (အာဆီယံ)",
+      "township": "Thaketa",
+      "township_mm": "သာကေတ",
+      "road": "National Races Village",
+      "lat": 16.806892,
+      "lng": 96.232577
+    },
+    {
+      "id": 251,
+      "name": "Sanpya Zay/ Nga Moe Yeik",
+      "myanmar": "စံပြဈေး / ငမိုးရိပ်",
+      "township": "Thingangyun",
+      "township_mm": "သင်္ဃန်းကျွန်း",
+      "road": "Thanthumar Road",
+      "lat": 16.843208,
+      "lng": 96.204053
+    },
+    {
+      "id": 252,
+      "name": "Zawana",
+      "myanmar": "ဇဝန",
+      "township": "Thingangyun",
+      "township_mm": "သင်္ဃန်းကျွန်း",
+      "road": "Lay Daung Kan Road",
+      "lat": 16.827762,
+      "lng": 96.187952
+    },
+    {
+      "id": 253,
+      "name": "Thuwunna Stadium",
+      "myanmar": "သုဝဏ္ဏဘောလုံးကွင်း",
+      "township": "Thingangyun",
+      "township_mm": "သင်္ဃန်းကျွန်း",
+      "road": "Waizayanta Road",
+      "lat": 16.820033,
+      "lng": 96.184398
+    },
+    {
+      "id": 254,
+      "name": "Thuwunna Lan Sone",
+      "myanmar": "သုဝဏ္ဏလမ်းဆုံ",
+      "township": "Thingangyun",
+      "township_mm": "သင်္ဃန်းကျွန်း",
+      "road": "Thanthumar Road",
+      "lat": 16.814838,
+      "lng": 96.190871
+    },
+    {
+      "id": 255,
+      "name": "Kyaikkasan Paya",
+      "myanmar": "ကျိုက္ကဆံဘုရား",
+      "township": "Thingangyun",
+      "township_mm": "သင်္ဃန်းကျွန်း",
+      "road": "Yadanar Road",
+      "lat": 16.837687,
+      "lng": 96.18816
+    },
+    {
+      "id": 256,
+      "name": "Pyithaya",
+      "myanmar": "ပြည်သာယာ",
+      "township": "Thingangyun",
+      "township_mm": "သင်္ဃန်းကျွန်း",
+      "road": "Pyithaya Street",
+      "lat": 16.829299,
+      "lng": 96.179507
+    },
+    {
+      "id": 257,
+      "name": "Kyaik Khauk Pagoda",
+      "myanmar": "ကျိုက်ခေါက်ဘုရား",
+      "township": "Thanlyin",
+      "township_mm": "သန်လျင်",
+      "road": "Kyaik Khauk Pagoda Road",
+      "lat": 16.729647,
+      "lng": 96.269416
+    },
+    {
+      "id": 258,
+      "name": "Myanmar Maritime University",
+      "myanmar": "ရေကြောင်းတက္ကသိုလ်",
+      "township": "Thanlyin",
+      "township_mm": "သန်လျင်",
+      "road": "Thanlyin",
+      "lat": 16.705042,
+      "lng": 96.266486
+    },
+    {
+      "id": 259,
+      "name": "Thanlyin Myoma Zay",
+      "myanmar": "သန်လျင်မြို့မဈေး",
+      "township": "Thanlyin",
+      "township_mm": "သန်လျင်",
+      "road": "Bogyoke Nay Win Road",
+      "lat": 16.763618,
+      "lng": 96.24622
+    },
+    {
+      "id": 260,
+      "name": "Mway Paya (Snake Pagoda)",
+      "myanmar": "မြွေဘုရား",
+      "township": "Thanlyin",
+      "township_mm": "သန်လျင်",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.662736,
+      "lng": 96.321136
+    },
+    {
+      "id": 261,
+      "name": "Nee Pyinyar Takke Tho (G.T.U Thanlyin)",
+      "myanmar": "နည်းပညာတက္ကသိုလ် (ဂျီတီယူ)",
+      "township": "Thanlyin",
+      "township_mm": "သန်လျင်",
+      "road": "Thanlyin-Kyauktan Road",
+      "lat": 16.689967,
+      "lng": 96.307434
+    },
+    {
+      "id": 262,
+      "name": "East Yangon University (Taung Dagon)",
+      "myanmar": "အရှေ့ပိုင်းတက္ကသိုလ်",
+      "township": "Thanlyin",
+      "township_mm": "သန်လျင်",
+      "road": "No. 6 Main Road",
+      "lat": 16.733832,
+      "lng": 96.288276
+    },
+    {
+      "id": 263,
+      "name": "Kyo So Par Ei (Welcome)",
+      "myanmar": "ကြိုဆိုပါ၏",
+      "township": "Thongwa",
+      "township_mm": "သုံးခွ",
+      "road": "No. 6 Main Road",
+      "lat": 16.759221,
+      "lng": 96.50995
+    },
+    {
+      "id": 264,
+      "name": "Khun Htate",
+      "myanmar": "ခွန်ထိပ်",
+      "township": "Thongwa",
+      "township_mm": "သုံးခွ",
+      "road": "No. 6 Main Road",
+      "lat": 16.760125,
+      "lng": 96.516387
+    },
+    {
+      "id": 265,
+      "name": "Bar Lan (Thongwa)",
+      "myanmar": "ဘားလမ်း",
+      "township": "Thongwa",
+      "township_mm": "သုံးခွ",
+      "road": "No. 6 Main Road",
+      "lat": 16.761112,
+      "lng": 96.519477
+    },
+    {
+      "id": 266,
+      "name": "Sae-Hnit Gate (12 Gate)",
+      "myanmar": "(၁၂) ဂိတ်",
+      "township": "East Dagon",
+      "township_mm": "အရှေ့ဒဂုံ",
+      "road": "Kyansitthar Road",
+      "lat": 16.893526,
+      "lng": 96.219009
+    },
+    {
+      "id": 267,
+      "name": "Sae-Thone Gate (13 Gate)",
+      "myanmar": "(၁၃) ဂိတ်",
+      "township": "East Dagon",
+      "township_mm": "အရှေ့ဒဂုံ",
+      "road": "Kyansitthar Road",
+      "lat": 16.888208,
+      "lng": 96.226283
+    },
+    {
+      "id": 268,
+      "name": "Si Pin (East Dagon)",
+      "myanmar": "စည်ပင်",
+      "township": "East Dagon",
+      "township_mm": "အရှေ့ဒဂုံ",
+      "road": "Min Ye Kyaw Swar Road",
+      "lat": 16.930661,
+      "lng": 96.235281
+    },
+    {
+      "id": 269,
+      "name": "Kyone Gyi Gate",
+      "myanmar": "ကျုံးကြီးဂိတ်",
+      "township": "Ahlone",
+      "township_mm": "အလုံ",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.777325,
+      "lng": 96.136566
+    },
+    {
+      "id": 270,
+      "name": "Sin Min Zay",
+      "myanmar": "ဆင်မင်းဈေး",
+      "township": "Ahlone",
+      "township_mm": "အလုံ",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.788381,
+      "lng": 96.124349
+    },
+    {
+      "id": 271,
+      "name": "Thakhin Mya Pan Chan",
+      "myanmar": "သခင်မြပန်းခြံ",
+      "township": "Ahlone",
+      "township_mm": "အလုံ",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.778282,
+      "lng": 96.135448
+    },
+    {
+      "id": 272,
+      "name": "Thiri Mingalar Zay (Old)",
+      "myanmar": "သီရိမင်္ဂလာဈေးဟောင်း",
+      "township": "Ahlone",
+      "township_mm": "အလုံ",
+      "road": "Kyee Myin Daing Kannar Road",
+      "lat": 16.793428,
+      "lng": 96.122795
+    },
+    {
+      "id": 273,
+      "name": "Okkan Station",
+      "myanmar": "ဥက္ကံ",
+      "township": "Okkan",
+      "township_mm": "ဥက္ကံ",
+      "road": "Pyay Road",
+      "lat": 17.500193,
+      "lng": 95.85472
+    },
+    {
+      "id": 274,
+      "name": "Insein Pan Chan",
+      "myanmar": "အင်းစိန်ပန်းခြံ",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Min Gyi Road",
+      "lat": 16.887532,
+      "lng": 96.107586
+    },
+    {
+      "id": 275,
+      "name": "Insein Zay",
+      "myanmar": "အင်းစိန်ဈေး",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Hlaing River Road",
+      "lat": 16.886955,
+      "lng": 96.102533
+    },
+    {
+      "id": 276,
+      "name": "Insein Say Yon Gyi",
+      "myanmar": "အင်းစိန်ဆေးရုံကြီး",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Min Gyi Road",
+      "lat": 16.892232,
+      "lng": 96.105865
+    },
+    {
+      "id": 277,
+      "name": "Saw Bwar Gyi Kone",
+      "myanmar": "စော်ဘွားကြီးကုန်း",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Pyay Road",
+      "lat": 16.891841,
+      "lng": 96.120034
+    },
+    {
+      "id": 278,
+      "name": "Danyin Gone Lan Sone",
+      "myanmar": "ဒညင်းကုန်းလမ်းဆုံ",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Lower Mingalardon Road",
+      "lat": 16.933233,
+      "lng": 96.101971
+    },
+    {
+      "id": 279,
+      "name": "Kyoe Kone",
+      "myanmar": "ကြို့ကုန်း",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.878483,
+      "lng": 96.112781
+    },
+    {
+      "id": 280,
+      "name": "B.P.I",
+      "myanmar": "ဘီပီအိုင်",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Yangon-Insein Road",
+      "lat": 16.874841,
+      "lng": 96.116313
+    },
+    {
+      "id": 281,
+      "name": "Pyi Taw Thar/ G.T.I Htate",
+      "myanmar": "ပြည်တော်သာ / ဂျီတီအိုင်ထိပ်",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Lower Mingalardon Road",
+      "lat": 16.900989,
+      "lng": 96.097094
+    },
+    {
+      "id": 282,
+      "name": "Aung San Zay",
+      "myanmar": "အောင်ဆန်းဈေး",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Lower Mingalardon Road",
+      "lat": 16.921587,
+      "lng": 96.09761
+    },
+    {
+      "id": 283,
+      "name": "Oakyin Wa",
+      "myanmar": "အုတ်ကျင်းဝ",
+      "township": "Insein",
+      "township_mm": "အင်းစိန်",
+      "road": "Lan Thit Road",
+      "lat": 16.89041,
+      "lng": 96.111393
+    }
+  ]
+}

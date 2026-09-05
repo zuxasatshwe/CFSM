@@ -1,0 +1,8 @@
+{
+  "name": "Remix Ferry Service Route Dispatcher \u0026 Optimizer MVP",
+  "description": "Logistics dashboard for managing pick-up points and generating optimized route manifests using the OSRM Trip API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
