@@ -1,6 +1,6 @@
 {
   "name": "Remix Ferry Service Route Dispatcher \u0026 Optimizer MVP",
-  "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, and role-based access control with Admin, Manager, and Operator authentication.",
+  "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, role-based access control, cyber attack defense, automated security audit checks, and real-time client IP threat tracing.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
