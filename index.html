@@ -326,23 +326,67 @@
 
             <!-- Depot Configuration -->
             <section class="p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 shadow-sm">
-                <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Depot Configuration</h3>
-                <div class="space-y-2">
-                    <div class="flex flex-col">
-                        <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 ml-1">OFFICE NAME</label>
-                        <input type="text" id="depotName" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-blue-500" placeholder="Depot Name">
+                <div class="flex items-center justify-between mb-2.5">
+                    <h3 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-red-500 ring-2 ring-red-200 dark:ring-red-900/50"></span>
+                        <span>Depot / Office (ဂိတ်ချုပ်/ရုံး)</span>
+                    </h3>
+                    <span class="text-[9px] font-mono text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-950/40 px-1.5 py-0.5 rounded border border-red-200 dark:border-red-900">🏢 Yangon POIs</span>
+                </div>
+
+                <div class="space-y-2.5">
+                    <!-- Office Name & Yangon-wide Autocomplete Search -->
+                    <div class="relative">
+                        <div class="flex items-center justify-between ml-1 mb-1">
+                            <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400">OFFICE / DEPOT NAME (ရုံးအမည် ရှာရန်)</label>
+                            <span id="depotAutoFillBadge" class="hidden text-[9px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Linked</span>
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                                <span>🏢</span>
+                            </div>
+                            <input type="text" id="depotName" class="w-full text-xs pl-7 pr-7 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-red-500 transition text-slate-800 dark:text-slate-100 placeholder:text-slate-400" placeholder="ဥပမာ- City Mart, Times City, MICT..." autocomplete="off">
+                            <button type="button" id="clearDepotNameBtn" class="hidden absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs cursor-pointer" title="Clear name">✕</button>
+                        </div>
+                        <!-- Depot Search Suggestions Dropdown -->
+                        <div id="depotSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white dark:bg-slate-900 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 max-h-72 overflow-y-auto z-50 divide-y divide-slate-100 dark:divide-slate-800"></div>
                     </div>
+
+                    <!-- Coordinates Lat / Lng -->
                     <div class="grid grid-cols-2 gap-2">
                         <div class="flex flex-col">
-                            <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 ml-1">LAT</label>
-                            <input type="number" id="depotLat" step="any" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-blue-500" placeholder="Lat">
+                            <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 ml-1">LAT (လတ္တီတွဒ်)</label>
+                            <input type="number" id="depotLat" step="any" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-red-500 font-mono" placeholder="Lat">
                         </div>
                         <div class="flex flex-col">
-                            <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 ml-1">LNG</label>
-                            <input type="number" id="depotLng" step="any" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-blue-500" placeholder="Lng">
+                            <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 ml-1">LNG (လောင်ဂျီတွဒ်)</label>
+                            <input type="number" id="depotLng" step="any" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-red-500 font-mono" placeholder="Lng">
                         </div>
                     </div>
-                    <button id="saveDepotBtn" class="w-full mt-2 text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 py-2 rounded transition uppercase tracking-wider">Update Depot</button>
+
+                    <!-- Map Pick & Action Buttons -->
+                    <div class="flex items-center gap-1.5 pt-1">
+                        <button type="button" id="pickDepotOnMapBtn" class="flex-1 py-2 px-2 text-[10px] font-bold uppercase tracking-wider rounded border border-red-500 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/50 transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs" title="Click on map to select Depot point">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span id="pickDepotOnMapStatus">Pick on Map</span>
+                        </button>
+                        <button type="button" id="centerDepotMapBtn" class="py-2 px-2.5 text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition border border-slate-200 dark:border-slate-700 cursor-pointer flex items-center gap-1" title="Center Map on Depot Location">
+                            <span>🎯</span>
+                            <span>Locate</span>
+                        </button>
+                        <button type="button" id="saveDepotBtn" class="flex-1 py-2 px-3 text-[10px] font-bold text-white bg-red-600 hover:bg-red-700 active:bg-red-800 rounded transition shadow-sm uppercase tracking-wider flex items-center justify-center gap-1 cursor-pointer">
+                            <span>💾</span>
+                            <span>Save Depot</span>
+                        </button>
+                    </div>
+
+                    <div class="text-[9px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 pt-0.5">
+                        <span>💡</span>
+                        <span>မြေပုံပေါ်ရှိ Depot (HQ) မာကာကို Drag ဆွဲ၍လည်း ရွှေ့နိုင်ပါသည်</span>
+                    </div>
                 </div>
             </section>
 
@@ -362,6 +406,23 @@
 
                 <!-- Form -->
                 <form id="addStopForm" class="space-y-2.5 mb-6 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-300 dark:border-slate-600 relative">
+                    <!-- Township Filter Field -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="stopTownshipFilter" class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                                <span>🏙️ TOWNSHIP (မြို့နယ် ရွေးရန်)</span>
+                            </label>
+                            <span id="townshipStopCountBadge" class="text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400">
+                                ၄၀ မြို့နယ်လုံး
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <select id="stopTownshipFilter" class="w-full text-xs py-2 px-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 rounded outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 font-medium shadow-xs transition cursor-pointer">
+                                <option value="">All Townships (ရန်ကုန်မြို့နယ်အားလုံး - ၄၀ မြို့နယ်)</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Bus Stop Name Search Field -->
                     <div class="relative">
                         <div class="flex items-center justify-between mb-1">
@@ -779,6 +840,12 @@
             </div>
             <form id="editStopForm" class="p-4 space-y-3">
                 <input type="hidden" id="editStopIndex">
+                <div>
+                    <label for="editStopTownshipFilter" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Township (မြို့နယ် ရွေးရန်)</label>
+                    <select id="editStopTownshipFilter" class="w-full text-xs py-2 px-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 font-medium">
+                        <option value="">All Townships (မြို့နယ်အားလုံး)</option>
+                    </select>
+                </div>
                 <div class="relative">
                     <div class="flex items-center justify-between mb-1">
                         <label for="editStopName" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stop Name (အမှတ်ဂိတ်အမည် / မှတ်တိုင် ရှာရန်) *</label>
@@ -1050,6 +1117,8 @@
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Yangon Offices & Commercial POIs Database -->
+    <script src="/yangon_offices_db.js"></script>
 
     <!-- Application Logic -->
     <script>
@@ -1060,6 +1129,7 @@
         let optimizedStops = [];
         let routeGeoJSON = null;
         let isMapClickMode = false;
+        let isDepotMapPickMode = false;
 
         // --- Route Persistence State ---
         let savedRoutes = JSON.parse(localStorage.getItem('ferry_saved_routes')) || null;
@@ -1378,14 +1448,24 @@
             editBusStopSuggestions: document.getElementById('editBusStopSuggestions'),
             clearEditStopNameBtn: document.getElementById('clearEditStopNameBtn'),
             editStopAutoFillBadge: document.getElementById('editStopAutoFillBadge'),
+            editStopTownshipFilter: document.getElementById('editStopTownshipFilter'),
             // Depot Elements
             depotName: document.getElementById('depotName'),
             depotLat: document.getElementById('depotLat'),
             depotLng: document.getElementById('depotLng'),
             saveDepotBtn: document.getElementById('saveDepotBtn'),
+            pickDepotOnMapBtn: document.getElementById('pickDepotOnMapBtn'),
+            pickDepotOnMapStatus: document.getElementById('pickDepotOnMapStatus'),
+            centerDepotMapBtn: document.getElementById('centerDepotMapBtn'),
+            depotSuggestions: document.getElementById('depotSuggestions'),
+            clearDepotNameBtn: document.getElementById('clearDepotNameBtn'),
+            depotAutoFillBadge: document.getElementById('depotAutoFillBadge'),
+            depotQuickChips: document.getElementById('depotQuickChips'),
             mapClickToggle: document.getElementById('mapClickToggle'),
             mapClickStatus: document.getElementById('mapClickStatus'),
             addStopForm: document.getElementById('addStopForm'),
+            stopTownshipFilter: document.getElementById('stopTownshipFilter'),
+            townshipStopCountBadge: document.getElementById('townshipStopCountBadge'),
             stopName: document.getElementById('stopName'),
             busStopSuggestions: document.getElementById('busStopSuggestions'),
             clearStopNameBtn: document.getElementById('clearStopNameBtn'),
@@ -2465,6 +2545,16 @@
             els.editStopLat.value = stop.lat;
             els.editStopLng.value = stop.lng;
 
+            if (els.editStopTownshipFilter) {
+                const pool = (ybsStopsDB && ybsStopsDB.length > 0) ? ybsStopsDB : (typeof YANGON_BUS_STOPS !== 'undefined' ? YANGON_BUS_STOPS : []);
+                const found = pool.find(s => s.name === stop.name || (Math.abs(s.lat - stop.lat) < 0.0005 && Math.abs(s.lng - stop.lng) < 0.0005));
+                if (found && found.township) {
+                    els.editStopTownshipFilter.value = found.township;
+                } else {
+                    els.editStopTownshipFilter.value = '';
+                }
+            }
+
             // Reset search state in edit modal
             if (els.editStopAutoFillBadge) els.editStopAutoFillBadge.classList.add('hidden');
             if (els.clearEditStopNameBtn) {
@@ -2965,24 +3055,85 @@
             });
         }
         
-        // Depot Settings
-        els.saveDepotBtn.addEventListener('click', () => {
-            const lat = parseFloat(els.depotLat.value);
-            const lng = parseFloat(els.depotLng.value);
-            if(isNaN(lat) || isNaN(lng)) return alert("Invalid Depot Coordinates");
-            
-            depot = {
-                name: els.depotName.value || 'HQ Depot',
-                lat, lng
-            };
-            localStorage.setItem('ferry_depot', JSON.stringify(depot));
-            initDepotUI();
-            resetOptimization();
-            map.panTo([lat, lng]);
-        });
+        // --- Depot Settings & Location Handlers ---
+        if (els.saveDepotBtn) {
+            els.saveDepotBtn.addEventListener('click', () => {
+                const lat = parseFloat(els.depotLat.value);
+                const lng = parseFloat(els.depotLng.value);
+                if (isNaN(lat) || isNaN(lng)) return showToast("Invalid Depot Coordinates", 'error');
+                
+                depot = {
+                    name: (els.depotName.value || 'HQ Depot').trim(),
+                    lat, lng
+                };
+                localStorage.setItem('ferry_depot', JSON.stringify(depot));
+                initDepotUI();
+                resetOptimization();
+                map.panTo([lat, lng]);
+                showToast(`💾 Depot Saved: "${depot.name}" [${lat.toFixed(4)}, ${lng.toFixed(4)}]`, 'success');
+            });
+        }
 
-        // Map Click Toggle
+        // Toggle Depot Map Pick Mode
+        const toggleDepotMapPickMode = (enable) => {
+            isDepotMapPickMode = typeof enable === 'boolean' ? enable : !isDepotMapPickMode;
+            if (isDepotMapPickMode) {
+                // Turn off manual stop map click if active
+                if (isMapClickMode) {
+                    isMapClickMode = false;
+                    if (els.mapClickToggle) {
+                        els.mapClickToggle.classList.replace('bg-blue-600', 'bg-blue-50');
+                        els.mapClickToggle.classList.replace('dark:bg-blue-600', 'dark:bg-blue-900/20');
+                        els.mapClickToggle.classList.replace('text-white', 'text-blue-600');
+                        if (els.mapClickStatus) els.mapClickStatus.textContent = "Enable Map Click";
+                    }
+                }
+                if (els.pickDepotOnMapBtn) {
+                    els.pickDepotOnMapBtn.classList.replace('bg-red-50', 'bg-red-600');
+                    els.pickDepotOnMapBtn.classList.replace('dark:bg-red-950/30', 'dark:bg-red-600');
+                    els.pickDepotOnMapBtn.classList.replace('text-red-600', 'text-white');
+                    els.pickDepotOnMapBtn.classList.replace('dark:text-red-400', 'text-white');
+                    if (els.pickDepotOnMapStatus) els.pickDepotOnMapStatus.textContent = "Click Map to Set (Cancel)";
+                }
+                document.getElementById('map').style.cursor = 'crosshair';
+                showToast("🗺️ မြေပုံပေါ်ရှိ နှစ်သက်ရာနေရာကို ထောက်၍ Depot/Office နေရာ သတ်မှတ်ပါ (Click map to set Depot)", "info");
+            } else {
+                if (els.pickDepotOnMapBtn) {
+                    els.pickDepotOnMapBtn.classList.replace('bg-red-600', 'bg-red-50');
+                    els.pickDepotOnMapBtn.classList.replace('dark:bg-red-600', 'dark:bg-red-950/30');
+                    els.pickDepotOnMapBtn.classList.replace('text-white', 'text-red-600');
+                    els.pickDepotOnMapBtn.classList.replace('text-white', 'dark:text-red-400');
+                    if (els.pickDepotOnMapStatus) els.pickDepotOnMapStatus.textContent = "Pick on Map";
+                }
+                document.getElementById('map').style.cursor = '';
+            }
+        };
+
+        if (els.pickDepotOnMapBtn) {
+            els.pickDepotOnMapBtn.addEventListener('click', () => {
+                toggleDepotMapPickMode();
+            });
+        }
+
+        if (els.centerDepotMapBtn) {
+            els.centerDepotMapBtn.addEventListener('click', () => {
+                const lat = parseFloat(els.depotLat.value) || depot.lat;
+                const lng = parseFloat(els.depotLng.value) || depot.lng;
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    map.flyTo([lat, lng], 16, { duration: 0.8 });
+                    setTimeout(() => {
+                        if (depotMarker) depotMarker.openPopup();
+                    }, 850);
+                    showToast(`🎯 Centered on Depot: "${depot.name || 'HQ'}"`, 'info');
+                }
+            });
+        }
+
+        // Map Click Toggle (For adding manual passenger stops)
         els.mapClickToggle.addEventListener('click', () => {
+            if (!isMapClickMode && isDepotMapPickMode) {
+                toggleDepotMapPickMode(false);
+            }
             isMapClickMode = !isMapClickMode;
             if (isMapClickMode) {
                 els.mapClickToggle.classList.replace('bg-blue-50', 'bg-blue-600');
@@ -3000,9 +3151,66 @@
             }
         });
 
-        // Map Click Action
+        // Combined Map Click Action
         map.on('click', (e) => {
-            if (isDraggingMarker || !isMapClickMode) return;
+            if (isDraggingMarker) return;
+
+            // 1. Depot Map Pick Mode (Direct click on map to set Depot location)
+            if (isDepotMapPickMode) {
+                const lat = parseFloat(e.latlng.lat.toFixed(6));
+                const lng = parseFloat(e.latlng.lng.toFixed(6));
+
+                // Smartly suggest nearest landmark or bus stop if user hasn't named custom office
+                let suggestedName = els.depotName ? els.depotName.value.trim() : '';
+                const pool = (window.YANGON_OFFICES_AND_POIS || []).concat(ybsStopsDB || []);
+                if (pool.length > 0) {
+                    let minDist = Infinity;
+                    let best = null;
+                    for (let i = 0; i < pool.length; i++) {
+                        const p = pool[i];
+                        const d = Math.hypot(p.lat - lat, p.lng - lng);
+                        if (d < minDist) {
+                            minDist = d;
+                            best = p;
+                        }
+                    }
+                    if (best && minDist < 0.005) { // within approx ~500m
+                        const cleanName = (best.name || '').replace(' Bus Stop', '');
+                        if (!suggestedName || suggestedName === 'Yangon HQ' || suggestedName === 'HQ Depot') {
+                            suggestedName = `Office near ${cleanName}`;
+                        }
+                    }
+                }
+
+                if (!suggestedName || suggestedName === 'Yangon HQ' || suggestedName === 'HQ Depot') {
+                    suggestedName = `Depot Point [${lat.toFixed(4)}, ${lng.toFixed(4)}]`;
+                }
+
+                if (els.depotName) els.depotName.value = suggestedName;
+                if (els.depotLat) els.depotLat.value = lat;
+                if (els.depotLng) els.depotLng.value = lng;
+
+                depot = {
+                    name: suggestedName,
+                    lat,
+                    lng
+                };
+                localStorage.setItem('ferry_depot', JSON.stringify(depot));
+
+                if (els.depotAutoFillBadge) els.depotAutoFillBadge.classList.remove('hidden');
+                if (els.clearDepotNameBtn) els.clearDepotNameBtn.classList.remove('hidden');
+
+                initDepotUI();
+                resetOptimization();
+                map.panTo([lat, lng]);
+
+                toggleDepotMapPickMode(false);
+                showToast(`📍 Depot location set to: "${suggestedName}" [${lat.toFixed(4)}, ${lng.toFixed(4)}] (ရုံး/ဂိတ်ချုပ် နေရာသတ်မှတ်ပြီးပါပြီ)`, 'success');
+                return;
+            }
+
+            // 2. Regular Manual Stop Add Map Click Mode
+            if (!isMapClickMode) return;
             const lat = e.latlng.lat.toFixed(6);
             const lng = e.latlng.lng.toFixed(6);
             
@@ -3252,17 +3460,23 @@
                 const townships = [...new Set(ybsStopsDB.map(s => s.township).filter(Boolean))].sort();
                 if (els.dbTotalTownshipsCount) els.dbTotalTownshipsCount.textContent = `${townships.length} မြို့နယ်`;
 
-                if (els.dbTownshipFilter) {
-                    const currentVal = els.dbTownshipFilter.value;
-                    const optionsHtml = '<option value="">All Townships (မြို့နယ်အားလုံး)</option>' +
+                const populateTownshipSelect = (selectEl, defaultOptionText = 'All Townships (မြို့နယ်အားလုံး)') => {
+                    if (!selectEl) return;
+                    const currentVal = selectEl.value;
+                    const optionsHtml = `<option value="">${defaultOptionText}</option>` +
                         townships.map(t => {
                             const sample = ybsStopsDB.find(s => s.township === t);
                             const mmName = sample && sample.township_mm ? ` (${sample.township_mm})` : '';
-                            return `<option value="${escapeHTML(t)}">${escapeHTML(t)}${escapeHTML(mmName)}</option>`;
+                            const stopCount = ybsStopsDB.filter(s => s.township === t).length;
+                            return `<option value="${escapeHTML(t)}">${escapeHTML(t)}${escapeHTML(mmName)} (${stopCount} ခု)</option>`;
                         }).join('');
-                    els.dbTownshipFilter.innerHTML = optionsHtml;
-                    els.dbTownshipFilter.value = currentVal;
-                }
+                    selectEl.innerHTML = optionsHtml;
+                    selectEl.value = currentVal;
+                };
+
+                populateTownshipSelect(els.dbTownshipFilter, 'All Townships (မြို့နယ်အားလုံး)');
+                populateTownshipSelect(els.stopTownshipFilter, 'All Townships (ရန်ကုန်မြို့နယ်အားလုံး - ၄၀ မြို့နယ်)');
+                populateTownshipSelect(els.editStopTownshipFilter, 'All Townships (မြို့နယ်အားလုံး)');
             }
         };
 
@@ -3305,12 +3519,49 @@
         };
 
         const initBusStopSearch = () => {
-            // Render Popular Yangon Bus Stop Chips
-            const renderPopularChips = () => {
+            // Populate initial township select options if data is ready
+            const populateInitialTownships = () => {
+                const pool = (ybsStopsDB && ybsStopsDB.length > 0) ? ybsStopsDB : (typeof YANGON_BUS_STOPS !== 'undefined' ? YANGON_BUS_STOPS : []);
+                if (pool && pool.length > 0) {
+                    const townships = [...new Set(pool.map(s => s.township).filter(Boolean))].sort();
+                    const populateSelect = (selectEl, defaultText) => {
+                        if (!selectEl) return;
+                        const cur = selectEl.value;
+                        selectEl.innerHTML = `<option value="">${defaultText}</option>` +
+                            townships.map(t => {
+                                const sample = pool.find(s => s.township === t);
+                                const mmName = sample && sample.township_mm ? ` (${sample.township_mm})` : '';
+                                const count = pool.filter(s => s.township === t).length;
+                                return `<option value="${escapeHTML(t)}">${escapeHTML(t)}${escapeHTML(mmName)} (${count} ခု)</option>`;
+                            }).join('');
+                        selectEl.value = cur;
+                    };
+                    populateSelect(els.stopTownshipFilter, 'All Townships (ရန်ကုန်မြို့နယ်အားလုံး - ၄၀ မြို့နယ်)');
+                    populateSelect(els.editStopTownshipFilter, 'All Townships (မြို့နယ်အားလုံး)');
+                }
+            };
+            populateInitialTownships();
+
+            // Render Popular Yangon Bus Stop Chips (Optionally filtered by Township)
+            const renderPopularChips = (township = '') => {
                 if (!els.popularBusStopChips) return;
-                const pool = (ybsStopsDB && ybsStopsDB.length > 0) ? ybsStopsDB : YANGON_BUS_STOPS;
-                const popularStops = pool.filter(s => s.popular).slice(0, 10);
-                const displayStops = popularStops.length > 0 ? popularStops : pool.slice(0, 8);
+                const pool = (ybsStopsDB && ybsStopsDB.length > 0) ? ybsStopsDB : (typeof YANGON_BUS_STOPS !== 'undefined' ? YANGON_BUS_STOPS : []);
+                
+                let displayStops = [];
+                if (township) {
+                    const tspLower = township.toLowerCase();
+                    const tspStops = pool.filter(s => (s.township || '').toLowerCase().includes(tspLower));
+                    const popInTsp = tspStops.filter(s => s.popular);
+                    displayStops = popInTsp.length >= 3 ? popInTsp.slice(0, 10) : tspStops.slice(0, 10);
+                } else {
+                    const popularStops = pool.filter(s => s.popular).slice(0, 10);
+                    displayStops = popularStops.length > 0 ? popularStops : pool.slice(0, 8);
+                }
+
+                if (displayStops.length === 0) {
+                    els.popularBusStopChips.innerHTML = `<span class="text-[9.5px] text-slate-400 italic">No quick stops found for ${escapeHTML(township)}</span>`;
+                    return;
+                }
 
                 els.popularBusStopChips.innerHTML = displayStops.map((s, idx) => `
                     <button type="button" class="popular-bus-chip px-2 py-0.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 rounded text-[9.5px] font-medium transition flex items-center gap-1 cursor-pointer select-none" data-index="${idx}">
@@ -3331,7 +3582,10 @@
 
             renderPopularChips();
             // Also refresh chips when DB is loaded
-            window.refreshPopularBusStopChips = renderPopularChips;
+            window.refreshPopularBusStopChips = (township = '') => {
+                populateInitialTownships();
+                renderPopularChips(township);
+            };
 
             // Selection Handler for Add Manual Stop Form
             const selectBusStopForAddForm = (stop) => {
@@ -3341,12 +3595,22 @@
                 els.stopLat.value = stop.lat.toFixed(5);
                 els.stopLng.value = stop.lng.toFixed(5);
 
+                // Auto-sync Township Select
+                if (stop.township && els.stopTownshipFilter) {
+                    els.stopTownshipFilter.value = stop.township;
+                    if (els.townshipStopCountBadge) {
+                        const pool = (ybsStopsDB && ybsStopsDB.length > 0) ? ybsStopsDB : (typeof YANGON_BUS_STOPS !== 'undefined' ? YANGON_BUS_STOPS : []);
+                        const count = pool.filter(s => (s.township || '').toLowerCase().includes(stop.township.toLowerCase())).length;
+                        els.townshipStopCountBadge.textContent = `${count} မှတ်တိုင် (${stop.township})`;
+                    }
+                }
+
                 if (els.busStopAutoFillBadge) els.busStopAutoFillBadge.classList.remove('hidden');
                 if (els.clearStopNameBtn) els.clearStopNameBtn.classList.remove('hidden');
                 if (els.busStopSuggestions) els.busStopSuggestions.classList.add('hidden');
 
                 highlightSearchMarkerOnMap(stop.lat, stop.lng, stop.name, `${stop.myanmar || ''} • ${stop.township || ''}`);
-                showToast(`🚏 Selected: "${stop.name}" (${stop.lat.toFixed(4)}, ${stop.lng.toFixed(4)})`, 'info');
+                showToast(`🚏 Selected: "${stop.name}" (${stop.township || 'Yangon'})`, 'info');
 
                 // Shift focus to Pax input for rapid workflow
                 setTimeout(() => {
@@ -3364,6 +3628,10 @@
                 els.editStopName.value = formattedName;
                 els.editStopLat.value = stop.lat.toFixed(5);
                 els.editStopLng.value = stop.lng.toFixed(5);
+
+                if (stop.township && els.editStopTownshipFilter) {
+                    els.editStopTownshipFilter.value = stop.township;
+                }
 
                 if (els.editStopAutoFillBadge) els.editStopAutoFillBadge.classList.remove('hidden');
                 if (els.clearEditStopNameBtn) els.clearEditStopNameBtn.classList.remove('hidden');
@@ -3383,18 +3651,28 @@
             };
 
             // Filter Bus Stops Helper (Queries indexed YBS_Database)
-            const searchBusStops = (query) => {
-                const results = YBS_Database.search(query);
-                return results.slice(0, 15);
+            const searchBusStops = (query = '', township = '') => {
+                const results = YBS_Database.search(query, township);
+                return results.slice(0, 30);
             };
 
             // Setup Autocomplete for a specific input and suggestions dropdown
-            const setupAutocomplete = ({ inputEl, suggestionsEl, clearBtnEl, onSelect }) => {
+            const setupAutocomplete = ({ inputEl, suggestionsEl, clearBtnEl, townshipSelectEl, onSelect }) => {
                 if (!inputEl || !suggestionsEl) return;
                 let activeIndex = -1;
                 let currentMatches = [];
 
-                const renderSuggestions = (matches, query = '') => {
+                const getSelectedTownship = () => {
+                    return (townshipSelectEl && townshipSelectEl.value) ? townshipSelectEl.value : '';
+                };
+
+                const executeSearch = (val = '') => {
+                    const tsp = getSelectedTownship();
+                    const matches = searchBusStops(val, tsp);
+                    renderSuggestions(matches, val, tsp);
+                };
+
+                const renderSuggestions = (matches, query = '', currentTownship = '') => {
                     currentMatches = matches;
                     activeIndex = -1;
 
@@ -3402,8 +3680,10 @@
                         suggestionsEl.innerHTML = `
                             <div class="p-3 text-center text-slate-400">
                                 <div class="text-base mb-1">🚏</div>
-                                <div class="font-medium text-slate-600 dark:text-slate-300">No matching bus stops found</div>
-                                <div class="text-[10px] mt-0.5">Press Enter to use your typed stop name, or search online below</div>
+                                <div class="font-medium text-slate-600 dark:text-slate-300">
+                                    ${currentTownship ? `"${currentTownship}" မြို့နယ်တွင် မှတ်တိုင် ရှာမတွေ့ပါ` : 'No matching bus stops found'}
+                                </div>
+                                <div class="text-[10px] mt-0.5">${currentTownship ? 'မြို့နယ်ပြောင်း၍ ရှာဖွေပါ သို့မဟုတ် ရန်ကုန်တစ်မြို့လုံးအတွက် All Townships ကို ရွေးပါ' : 'Press Enter to use your typed stop name, or search online below'}</div>
                                 ${query ? `
                                     <button type="button" class="search-osm-btn mt-2 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded text-[10px] font-semibold flex items-center justify-center gap-1 w-full border border-blue-200 dark:border-blue-800 transition">
                                         <span>🌐</span>
@@ -3413,6 +3693,19 @@
                             </div>
                         `;
                     } else {
+                        let headerHtml = '';
+                        if (currentTownship) {
+                            headerHtml = `
+                                <div class="px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950/60 text-[9.5px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center justify-between border-b border-blue-100 dark:border-blue-900/50 sticky top-0 z-10 backdrop-blur-xs">
+                                    <span class="flex items-center gap-1">
+                                        <span>🏙️</span>
+                                        <span>${escapeHTML(currentTownship)} မြို့နယ်ရှိ မှတ်တိုင်များ</span>
+                                    </span>
+                                    <span class="font-mono text-[9px] bg-blue-200/80 dark:bg-blue-900 px-1.5 py-0.2 rounded font-semibold">${matches.length} stops</span>
+                                </div>
+                            `;
+                        }
+
                         const itemsHtml = matches.map((s, idx) => `
                             <div class="bus-suggestion-item p-2.5 hover:bg-blue-50 dark:hover:bg-blue-950/50 cursor-pointer transition flex items-start gap-2 select-none" data-index="${idx}">
                                 <span class="text-sm mt-0.5 text-blue-600 dark:text-blue-400">🚏</span>
@@ -3427,7 +3720,7 @@
                                     </div>
                                     <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 flex flex-wrap items-center gap-1.5">
                                         <span class="font-medium text-slate-700 dark:text-slate-300">${highlightMatch(s.myanmar, query)}</span>
-                                        ${s.township ? `<span class="px-1 py-0.2 rounded bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[9px]">${s.township}</span>` : ''}
+                                        ${s.township ? `<span class="px-1 py-0.2 rounded bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[9px] font-medium">${s.township}</span>` : ''}
                                         ${s.road ? `<span class="text-slate-400 text-[9px]">${s.road}</span>` : ''}
                                     </div>
                                 </div>
@@ -3435,7 +3728,7 @@
                         `).join('');
 
                         const onlineSearchFooter = query.trim().length >= 2 ? `
-                            <div class="p-1.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/60">
+                            <div class="p-1.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/60 sticky bottom-0">
                                 <button type="button" class="search-osm-btn px-2 py-1 bg-white dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded text-[10px] font-semibold flex items-center justify-center gap-1 w-full border border-slate-200 dark:border-slate-700 transition">
                                     <span>🌐</span>
                                     <span>Search OpenStreetMap for "${query}"</span>
@@ -3443,7 +3736,7 @@
                             </div>
                         ` : '';
 
-                        suggestionsEl.innerHTML = itemsHtml + onlineSearchFooter;
+                        suggestionsEl.innerHTML = headerHtml + itemsHtml + onlineSearchFooter;
                     }
 
                     // Attach click handlers to rendered items
@@ -3463,19 +3756,20 @@
                             e.stopPropagation();
                             osmBtn.innerHTML = `<span>⏳ Searching OpenStreetMap online...</span>`;
                             try {
-                                const osmUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ' bus stop yangon')}&limit=5&countrycodes=mm`;
+                                const osmQuery = currentTownship ? `${query} bus stop ${currentTownship} yangon` : `${query} bus stop yangon`;
+                                const osmUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(osmQuery)}&limit=5&countrycodes=mm`;
                                 const res = await fetch(osmUrl);
                                 const data = await res.json();
                                 if (data && data.length > 0) {
                                     const parsedStops = data.map(item => ({
                                         name: item.display_name.split(',')[0].trim(),
                                         myanmar: "Online OSM Result",
-                                        township: "Yangon Region",
+                                        township: currentTownship || "Yangon Region",
                                         road: "",
                                         lat: parseFloat(item.lat),
                                         lng: parseFloat(item.lon)
                                     }));
-                                    renderSuggestions(parsedStops, query);
+                                    renderSuggestions(parsedStops, query, currentTownship);
                                 } else {
                                     osmBtn.innerHTML = `<span>❌ No online results for "${query}"</span>`;
                                 }
@@ -3488,6 +3782,27 @@
                     suggestionsEl.classList.remove('hidden');
                 };
 
+                // Township Change Handler
+                if (townshipSelectEl) {
+                    townshipSelectEl.addEventListener('change', () => {
+                        const tsp = townshipSelectEl.value;
+                        if (townshipSelectEl === els.stopTownshipFilter) {
+                            renderPopularChips(tsp);
+                            if (els.townshipStopCountBadge) {
+                                if (tsp) {
+                                    const pool = (ybsStopsDB && ybsStopsDB.length > 0) ? ybsStopsDB : (typeof YANGON_BUS_STOPS !== 'undefined' ? YANGON_BUS_STOPS : []);
+                                    const count = pool.filter(s => (s.township || '').toLowerCase().includes(tsp.toLowerCase())).length;
+                                    els.townshipStopCountBadge.textContent = `${count} မှတ်တိုင် (${tsp})`;
+                                } else {
+                                    els.townshipStopCountBadge.textContent = `၄၀ မြို့နယ်လုံး`;
+                                }
+                            }
+                        }
+                        executeSearch(inputEl.value);
+                        inputEl.focus();
+                    });
+                }
+
                 // Input Event Listener
                 inputEl.addEventListener('input', (e) => {
                     const val = e.target.value;
@@ -3498,15 +3813,12 @@
                             clearBtnEl.classList.add('hidden');
                         }
                     }
-
-                    const matches = searchBusStops(val);
-                    renderSuggestions(matches, val);
+                    executeSearch(val);
                 });
 
                 // Focus Event Listener
                 inputEl.addEventListener('focus', () => {
-                    const matches = searchBusStops(inputEl.value);
-                    renderSuggestions(matches, inputEl.value);
+                    executeSearch(inputEl.value);
                 });
 
                 // Keyboard Navigation (Arrow keys, Enter, Escape)
@@ -3554,19 +3866,21 @@
                 }
             };
 
-            // Initialize search on Add Manual Stop Form
+            // Initialize search on Add Manual Stop Form with Township filtering
             setupAutocomplete({
                 inputEl: els.stopName,
                 suggestionsEl: els.busStopSuggestions,
                 clearBtnEl: els.clearStopNameBtn,
+                townshipSelectEl: els.stopTownshipFilter,
                 onSelect: selectBusStopForAddForm
             });
 
-            // Initialize search on Edit Stop Modal
+            // Initialize search on Edit Stop Modal with Township filtering
             setupAutocomplete({
                 inputEl: els.editStopName,
                 suggestionsEl: els.editBusStopSuggestions,
                 clearBtnEl: els.clearEditStopNameBtn,
+                townshipSelectEl: els.editStopTownshipFilter,
                 onSelect: selectBusStopForEditModal
             });
 
@@ -3577,6 +3891,339 @@
                 }
                 if (els.editBusStopSuggestions && els.editStopForm && !els.editStopForm.contains(e.target)) {
                     els.editBusStopSuggestions.classList.add('hidden');
+                }
+            });
+        };
+
+        // ==========================================
+        // --- Depot & Yangon Offices POI Search Controller ---
+        // ==========================================
+        const initDepotSearch = () => {
+            if (!els.depotName || !els.depotSuggestions) return;
+
+            let activeIndex = -1;
+            let currentDepotMatches = { offices: [], stops: [] };
+
+            // Query Depot locations from Yangon Offices database and Bus stops
+            const searchDepotLocations = (query = '') => {
+                const q = (query || '').trim().toLowerCase();
+                const offices = (typeof window.YANGON_OFFICES_AND_POIS !== 'undefined' && Array.isArray(window.YANGON_OFFICES_AND_POIS)) 
+                    ? window.YANGON_OFFICES_AND_POIS 
+                    : [];
+
+                let officeMatches = [];
+                if (!q) {
+                    // Return top curated offices (including City Mart, major office towers, industrial zones, hospitals)
+                    officeMatches = offices.slice(0, 20);
+                } else {
+                    officeMatches = offices.filter(item => {
+                        const name = (item.name || '').toLowerCase();
+                        const name_mm = (item.name_mm || '').toLowerCase();
+                        const tsp = (item.township || '').toLowerCase();
+                        const tsp_mm = (item.township_mm || '').toLowerCase();
+                        const road = (item.road || '').toLowerCase();
+                        const cat = (item.category || '').toLowerCase();
+                        const tags = (item.tags || []).join(' ').toLowerCase();
+
+                        return name.includes(q) || name_mm.includes(q) || tsp.includes(q) || 
+                               tsp_mm.includes(q) || road.includes(q) || cat.includes(q) || tags.includes(q);
+                    });
+                }
+
+                // Also search 2,093 bus stops if query is provided
+                let stopMatches = [];
+                if (q && typeof YBS_Database !== 'undefined' && YBS_Database.search) {
+                    stopMatches = YBS_Database.search(q).slice(0, 15);
+                }
+
+                return {
+                    offices: officeMatches,
+                    stops: stopMatches
+                };
+            };
+
+            const renderDepotSuggestions = (results, query = '') => {
+                currentDepotMatches = results;
+                activeIndex = -1;
+
+                const { offices, stops } = results;
+                const totalCount = offices.length + stops.length;
+
+                if (totalCount === 0) {
+                    els.depotSuggestions.innerHTML = `
+                        <div class="p-3 text-center text-slate-400">
+                            <div class="text-base mb-1">🏢</div>
+                            <div class="font-medium text-slate-600 dark:text-slate-300">No matching offices or POIs found</div>
+                            <div class="text-[10px] mt-0.5">Press Enter to keep typed name, or search OpenStreetMap below</div>
+                            ${query ? `
+                                <button type="button" class="depot-search-osm-btn mt-2 px-2.5 py-1 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded text-[10px] font-semibold flex items-center justify-center gap-1 w-full border border-red-200 dark:border-red-800 transition cursor-pointer">
+                                    <span>🌐</span>
+                                    <span>Search Yangon on OpenStreetMap for "${escapeHTML(query)}"</span>
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                    els.depotSuggestions.classList.remove('hidden');
+
+                    const osmBtn = els.depotSuggestions.querySelector('.depot-search-osm-btn');
+                    if (osmBtn) {
+                        osmBtn.addEventListener('click', () => searchDepotOSM(query));
+                    }
+                    return;
+                }
+
+                let html = '';
+
+                // Section 1: Yangon Offices, Supermarkets (City Mart), Industrial Zones
+                if (offices.length > 0) {
+                    html += `
+                        <div class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                            <span class="flex items-center gap-1">🏢 Yangon Offices & POIs</span>
+                            <span class="px-1.5 py-0.2 rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 font-semibold">${offices.length} Locations</span>
+                        </div>
+                    `;
+
+                    html += offices.map((item, idx) => {
+                        const icon = item.category.includes('City Mart') ? '🛒' :
+                                     item.category.includes('Hospital') ? '🏥' :
+                                     item.category.includes('Industrial') ? '🏭' :
+                                     item.category.includes('Airport') ? '✈️' : '🏢';
+                        return `
+                            <div class="depot-suggestion-item p-2.5 hover:bg-red-50 dark:hover:bg-red-950/50 cursor-pointer transition flex items-start gap-2.5 select-none" data-type="office" data-idx="${idx}">
+                                <span class="text-base mt-0.5">${icon}</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between gap-1.5">
+                                        <div class="font-bold text-slate-800 dark:text-slate-100 truncate text-[11.5px]">
+                                            ${highlightMatch(item.name, query)}
+                                        </div>
+                                        <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0 font-medium">
+                                            ${item.lat.toFixed(4)}, ${item.lng.toFixed(4)}
+                                        </span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 flex flex-wrap items-center gap-1.5">
+                                        <span class="font-medium text-slate-700 dark:text-slate-200">${highlightMatch(item.name_mm, query)}</span>
+                                        <span class="px-1.5 py-0.2 rounded bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 text-[9px] font-semibold">${item.category}</span>
+                                        <span class="px-1 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[9px]">${item.township} (${item.township_mm})</span>
+                                        ${item.road ? `<span class="text-slate-400 text-[9px]">• ${escapeHTML(item.road)}</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Section 2: Bus Stops as alternative Depot locations
+                if (stops.length > 0) {
+                    html += `
+                        <div class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800/80 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between border-t border-b border-slate-100 dark:border-slate-800">
+                            <span class="flex items-center gap-1">🚏 Yangon Bus Stops Database</span>
+                            <span class="px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-semibold">${stops.length} Stops</span>
+                        </div>
+                    `;
+
+                    html += stops.map((s, idx) => `
+                        <div class="depot-suggestion-item p-2.5 hover:bg-blue-50 dark:hover:bg-blue-950/50 cursor-pointer transition flex items-start gap-2 select-none" data-type="stop" data-idx="${idx}">
+                            <span class="text-sm mt-0.5 text-blue-600 dark:text-blue-400">🚏</span>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-1">
+                                    <div class="font-semibold text-slate-800 dark:text-slate-100 truncate text-[11px]">
+                                        ${highlightMatch(s.name, query)}
+                                    </div>
+                                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0 font-medium">
+                                        ${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}
+                                    </span>
+                                </div>
+                                <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 flex flex-wrap items-center gap-1.5">
+                                    <span class="font-medium text-slate-700 dark:text-slate-300">${highlightMatch(s.myanmar, query)}</span>
+                                    ${s.township ? `<span class="px-1 py-0.2 rounded bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[9px]">${s.township}</span>` : ''}
+                                    ${s.road ? `<span class="text-slate-400 text-[9px]">${s.road}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                if (query.trim().length >= 2) {
+                    html += `
+                        <div class="p-1.5 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-700/60">
+                            <button type="button" class="depot-search-osm-btn px-2 py-1 bg-white dark:bg-slate-900 hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 rounded text-[10px] font-semibold flex items-center justify-center gap-1 w-full border border-slate-200 dark:border-slate-700 transition cursor-pointer">
+                                <span>🌐</span>
+                                <span>Search Yangon on OpenStreetMap for "${escapeHTML(query)}"</span>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                els.depotSuggestions.innerHTML = html;
+                els.depotSuggestions.classList.remove('hidden');
+
+                // Attach click listeners to depot suggestion items
+                els.depotSuggestions.querySelectorAll('.depot-suggestion-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const type = el.getAttribute('data-type');
+                        const idx = parseInt(el.getAttribute('data-idx'), 10);
+                        let selected = null;
+                        if (type === 'office') {
+                            selected = offices[idx];
+                        } else {
+                            selected = stops[idx];
+                        }
+                        if (selected) {
+                            selectDepotLocation(selected);
+                        }
+                    });
+                });
+
+                const osmBtn = els.depotSuggestions.querySelector('.depot-search-osm-btn');
+                if (osmBtn) {
+                    osmBtn.addEventListener('click', () => searchDepotOSM(query));
+                }
+            };
+
+            const selectDepotLocation = (item) => {
+                const name = item.name;
+                const lat = parseFloat(Number(item.lat).toFixed(6));
+                const lng = parseFloat(Number(item.lng).toFixed(6));
+
+                if (els.depotName) els.depotName.value = name;
+                if (els.depotLat) els.depotLat.value = lat;
+                if (els.depotLng) els.depotLng.value = lng;
+
+                depot = {
+                    name,
+                    lat,
+                    lng
+                };
+                localStorage.setItem('ferry_depot', JSON.stringify(depot));
+
+                if (els.depotAutoFillBadge) els.depotAutoFillBadge.classList.remove('hidden');
+                if (els.clearDepotNameBtn) els.clearDepotNameBtn.classList.remove('hidden');
+                if (els.depotSuggestions) els.depotSuggestions.classList.add('hidden');
+
+                initDepotUI();
+                resetOptimization();
+
+                highlightSearchMarkerOnMap(lat, lng, name, `${item.name_mm || item.myanmar || ''} • ${item.township || 'Yangon'}`, true);
+                showToast(`🏢 Depot Set: "${name}" (${item.township || 'Yangon'})`, 'success');
+            };
+
+            const searchDepotOSM = async (query) => {
+                if (!query || !query.trim()) return;
+                const originalQuery = query.trim();
+                showToast(`🔍 Searching OpenStreetMap for "${originalQuery}" in Yangon...`, 'info');
+                try {
+                    const encoded = encodeURIComponent(`${originalQuery}, Yangon, Myanmar`);
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encoded}&limit=5&bounded=1&viewbox=95.9,17.1,96.4,16.6`);
+                    if (!res.ok) throw new Error("OSM Geocoding service unavailable");
+                    const data = await res.json();
+                    if (!data || data.length === 0) {
+                        showToast(`No online location found for "${originalQuery}"`, 'warning');
+                        return;
+                    }
+                    const first = data[0];
+                    const cleanName = first.display_name.split(',')[0].trim() || originalQuery;
+                    selectDepotLocation({
+                        name: cleanName,
+                        name_mm: originalQuery,
+                        lat: parseFloat(first.lat),
+                        lng: parseFloat(first.lon),
+                        township: 'Yangon'
+                    });
+                } catch (err) {
+                    console.error("OSM search error:", err);
+                    showToast("Network error searching online map. You can click 'Pick on Map' instead.", 'error');
+                }
+            };
+
+            // Preset Chips Click Handler
+            if (els.depotQuickChips) {
+                els.depotQuickChips.querySelectorAll('.depot-preset-chip').forEach(chip => {
+                    chip.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const query = chip.getAttribute('data-query');
+                        if (els.depotName) {
+                            els.depotName.value = query;
+                            if (els.clearDepotNameBtn) els.clearDepotNameBtn.classList.remove('hidden');
+                            const results = searchDepotLocations(query);
+                            renderDepotSuggestions(results, query);
+                            els.depotName.focus();
+                        }
+                    });
+                });
+            }
+
+            // Input Event Listeners
+            let debounceTimer = null;
+            els.depotName.addEventListener('input', (e) => {
+                const val = e.target.value;
+                if (els.clearDepotNameBtn) {
+                    if (val.trim()) els.clearDepotNameBtn.classList.remove('hidden');
+                    else els.clearDepotNameBtn.classList.add('hidden');
+                }
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    const results = searchDepotLocations(val);
+                    renderDepotSuggestions(results, val);
+                }, 150);
+            });
+
+            els.depotName.addEventListener('focus', () => {
+                const val = els.depotName.value;
+                const results = searchDepotLocations(val);
+                renderDepotSuggestions(results, val);
+            });
+
+            els.depotName.addEventListener('keydown', (e) => {
+                const items = els.depotSuggestions.querySelectorAll('.depot-suggestion-item');
+                if (els.depotSuggestions.classList.contains('hidden') || items.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % items.length;
+                    items.forEach((it, idx) => {
+                        if (idx === activeIndex) {
+                            it.classList.add('bg-red-100', 'dark:bg-red-900/60');
+                            it.scrollIntoView({ block: 'nearest' });
+                        } else {
+                            it.classList.remove('bg-red-100', 'dark:bg-red-900/60');
+                        }
+                    });
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + items.length) % items.length;
+                    items.forEach((it, idx) => {
+                        if (idx === activeIndex) {
+                            it.classList.add('bg-red-100', 'dark:bg-red-900/60');
+                            it.scrollIntoView({ block: 'nearest' });
+                        } else {
+                            it.classList.remove('bg-red-100', 'dark:bg-red-900/60');
+                        }
+                    });
+                } else if (e.key === 'Enter') {
+                    if (activeIndex >= 0 && activeIndex < items.length) {
+                        e.preventDefault();
+                        items[activeIndex].click();
+                    }
+                } else if (e.key === 'Escape') {
+                    els.depotSuggestions.classList.add('hidden');
+                }
+            });
+
+            // Clear Button Handler
+            if (els.clearDepotNameBtn) {
+                els.clearDepotNameBtn.addEventListener('click', () => {
+                    els.depotName.value = '';
+                    els.clearDepotNameBtn.classList.add('hidden');
+                    if (els.depotAutoFillBadge) els.depotAutoFillBadge.classList.add('hidden');
+                    els.depotSuggestions.classList.add('hidden');
+                    els.depotName.focus();
+                });
+            }
+
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (els.depotSuggestions && !els.depotSuggestions.contains(e.target) && e.target !== els.depotName && !e.target.closest('#depotQuickChips')) {
+                    els.depotSuggestions.classList.add('hidden');
                 }
             });
         };
@@ -4526,6 +5173,7 @@
 
         // Initialize App
         initDepotUI();
+        initDepotSearch();
         initSavedRoutes();
         initBusStopSearch();
 
