@@ -903,12 +903,12 @@
             <div class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 text-xs flex-shrink-0">
                 <div class="flex flex-wrap items-center gap-2 sm:gap-4">
                     <div class="flex items-center gap-1.5">
-                        <span class="text-slate-500 dark:text-slate-400">Total Database Stops:</span>
-                        <span id="dbTotalStopsCount" class="font-bold font-mono px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">2,093</span>
+                        <span class="text-slate-500 dark:text-slate-400">စုစုပေါင်း ဘတ်စ်ကားမှတ်တိုင်:</span>
+                        <span id="dbTotalStopsCount" class="font-bold font-mono px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">၂,၀၉၃ ခု</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-slate-500 dark:text-slate-400">Townships:</span>
-                        <span id="dbTotalTownshipsCount" class="font-bold font-mono px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">40 Townships</span>
+                        <span class="text-slate-500 dark:text-slate-400">ပါဝင်သော မြို့နယ်ပေါင်း:</span>
+                        <span id="dbTotalTownshipsCount" class="font-bold font-mono px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">၄၀ မြို့နယ်</span>
                     </div>
                     <div class="hidden md:flex items-center gap-1.5">
                         <span class="text-slate-500 dark:text-slate-400">Center:</span>
@@ -962,11 +962,13 @@
                 <table class="w-full text-left border-collapse text-xs">
                     <thead class="bg-slate-50 dark:bg-slate-800/80 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider">
                         <tr>
-                            <th class="py-2.5 px-3 w-12 text-center">#</th>
-                            <th class="py-2.5 px-3">မှတ်တိုင်အမည် (Stop Name)</th>
+                            <th class="py-2.5 px-3 w-12 text-center" title="စဉ် (No.)">စဉ် (No.)</th>
+                            <th class="py-2.5 px-3">မှတ်တိုင်အမည် (Bus Stop Name)</th>
                             <th class="py-2.5 px-3">မြို့နယ် (Township)</th>
                             <th class="py-2.5 px-3">လမ်းအမည် (Road Name)</th>
-                            <th class="py-2.5 px-3">Coordinates (Lat, Lng)</th>
+                            <th class="py-2.5 px-3 text-right" title="လတ္တီတွဒ် (Latitude - Lat)">လတ္တီတွဒ် (Lat)</th>
+                            <th class="py-2.5 px-3 text-right" title="လောင်ဂျီတွဒ် (Longitude - Lng)">လောင်ဂျီတွဒ် (Lng)</th>
+                            <th class="py-2.5 px-3 text-center" title="မြေပုံ (Map) - Google Maps Link">မြေပုံ (Map)</th>
                             <th class="py-2.5 px-3 text-right">Actions</th>
                         </tr>
                     </thead>
@@ -3072,8 +3074,8 @@
                     await this.open();
                     let stops = await this.getAllFromIDB();
 
-                    // If IndexedDB is empty, fetch from /ybs_stops_db.json
-                    if (!stops || stops.length === 0) {
+                    // If IndexedDB is empty or has old smaller dataset (< 2093 stops), fetch from /ybs_stops_db.json
+                    if (!stops || stops.length < 2093) {
                         try {
                             const res = await fetch('/ybs_stops_db.json');
                             if (res.ok) {
@@ -3245,15 +3247,19 @@
             updateUI() {
                 const count = ybsStopsDB.length;
                 if (els.headerDbCountBadge) els.headerDbCountBadge.textContent = `${count.toLocaleString()} DB`;
-                if (els.dbTotalStopsCount) els.dbTotalStopsCount.textContent = count.toLocaleString();
+                if (els.dbTotalStopsCount) els.dbTotalStopsCount.textContent = `${count.toLocaleString()} ခု`;
 
                 const townships = [...new Set(ybsStopsDB.map(s => s.township).filter(Boolean))].sort();
-                if (els.dbTotalTownshipsCount) els.dbTotalTownshipsCount.textContent = `${townships.length} Townships`;
+                if (els.dbTotalTownshipsCount) els.dbTotalTownshipsCount.textContent = `${townships.length} မြို့နယ်`;
 
                 if (els.dbTownshipFilter) {
                     const currentVal = els.dbTownshipFilter.value;
                     const optionsHtml = '<option value="">All Townships (မြို့နယ်အားလုံး)</option>' +
-                        townships.map(t => `<option value="${escapeHTML(t)}">${escapeHTML(t)}</option>`).join('');
+                        townships.map(t => {
+                            const sample = ybsStopsDB.find(s => s.township === t);
+                            const mmName = sample && sample.township_mm ? ` (${sample.township_mm})` : '';
+                            return `<option value="${escapeHTML(t)}">${escapeHTML(t)}${escapeHTML(mmName)}</option>`;
+                        }).join('');
                     els.dbTownshipFilter.innerHTML = optionsHtml;
                     els.dbTownshipFilter.value = currentVal;
                 }
@@ -4614,28 +4620,38 @@
 
                 els.dbStopsTableBody.innerHTML = pageItems.map((s, idx) => {
                     const rowNum = startIdx + idx + 1;
+                    const latFormatted = (typeof s.lat === 'number' ? s.lat : parseFloat(s.lat) || 0).toFixed(6);
+                    const lngFormatted = (typeof s.lng === 'number' ? s.lng : parseFloat(s.lng) || 0).toFixed(6);
+                    const gmapUrl = s.google_maps_url || `https://www.google.com/maps?q=${latFormatted},${lngFormatted}`;
                     return `
                         <tr class="hover:bg-blue-50/50 dark:hover:bg-slate-800/60 transition border-b border-slate-100 dark:border-slate-800/80">
-                            <td class="py-2.5 px-3 text-center font-mono text-[11px] text-slate-400 font-semibold">${rowNum}</td>
+                            <td class="py-2.5 px-3 text-center font-mono text-[11px] text-slate-400 font-semibold">${s.no || rowNum}</td>
                             <td class="py-2.5 px-3">
                                 <div class="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                                     <span class="text-blue-600 dark:text-blue-400">🚏</span>
-                                    <span>${escapeHTML(s.name)}</span>
+                                    <span>${escapeHTML(s.myanmar || s.name)}</span>
                                 </div>
-                                ${s.myanmar ? `<div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">${escapeHTML(s.myanmar)}</div>` : ''}
+                                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium font-mono">${escapeHTML(s.name || '-')}</div>
                             </td>
                             <td class="py-2.5 px-3">
-                                <span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-[10.5px] border border-slate-200 dark:border-slate-700">
-                                    ${escapeHTML(s.township || 'Yangon')}
-                                </span>
+                                <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs">${escapeHTML(s.township_mm || s.township || 'ရန်ကုန်')}</div>
+                                <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium">${escapeHTML(s.township || 'Yangon')}</div>
                             </td>
                             <td class="py-2.5 px-3">
-                                <span class="text-slate-600 dark:text-slate-300 font-medium text-[11px]">${escapeHTML(s.road || '-')}</span>
+                                <div class="font-medium text-slate-800 dark:text-slate-200 text-xs">${escapeHTML(s.road_mm || s.road || '-')}</div>
+                                <div class="text-[10.5px] text-slate-500 dark:text-slate-400">${escapeHTML(s.road || '-')}</div>
                             </td>
-                            <td class="py-2.5 px-3">
-                                <span class="font-mono text-[10px] text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/60 font-medium">
-                                    ${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}
-                                </span>
+                            <td class="py-2.5 px-3 text-right">
+                                <span class="font-mono text-[11px] text-slate-600 dark:text-slate-300 font-semibold">${latFormatted}</span>
+                            </td>
+                            <td class="py-2.5 px-3 text-right">
+                                <span class="font-mono text-[11px] text-slate-600 dark:text-slate-300 font-semibold">${lngFormatted}</span>
+                            </td>
+                            <td class="py-2.5 px-3 text-center">
+                                <a href="${escapeHTML(gmapUrl)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-400 rounded text-[10.5px] font-semibold transition border border-blue-200 dark:border-blue-800/60" title="Google Maps တွင် တိုက်ရိုက်ကြည့်ရှုရန်">
+                                    <span>🗺️</span>
+                                    <span>Google Maps ↗</span>
+                                </a>
                             </td>
                             <td class="py-2.5 px-3 text-right">
                                 <div class="flex items-center justify-end gap-1">
@@ -4863,34 +4879,68 @@
                 });
             }
 
-            // Export Database to CSV
+            // Export Database to CSV (Exact 11 Columns matching user specification)
             if (els.exportDbCsvBtn) {
                 els.exportDbCsvBtn.addEventListener('click', () => {
-                    const headers = ["id", "name", "myanmar", "township", "road", "lat", "lng"];
+                    const headers = [
+                        "No", "ID", "Bus_Stop_Name_MM", "Bus_Stop_Name_EN",
+                        "Township_MM", "Township_EN", "Road_MM", "Road_EN",
+                        "Latitude", "Longitude", "Google_Maps_URL"
+                    ];
                     const csvRows = [headers.join(',')];
 
-                    ybsStopsDB.forEach(s => {
-                        const row = [
-                            s.id,
-                            `"${(s.name || '').replace(/"/g, '""')}"`,
-                            `"${(s.myanmar || '').replace(/"/g, '""')}"`,
-                            `"${(s.township || '').replace(/"/g, '""')}"`,
-                            `"${(s.road || '').replace(/"/g, '""')}"`,
-                            s.lat,
-                            s.lng
-                        ];
-                        csvRows.push(row.join(','));
+                    ybsStopsDB.forEach((s, idx) => {
+                        const no = s.no || (idx + 1);
+                        const id = s.id || no;
+                        const nameMM = `"${(s.myanmar || '').replace(/"/g, '""')}"`;
+                        const nameEN = `"${(s.name || '').replace(/"/g, '""')}"`;
+                        const townMM = `"${(s.township_mm || s.township || '').replace(/"/g, '""')}"`;
+                        const townEN = `"${(s.township || '').replace(/"/g, '""')}"`;
+                        const roadMM = `"${(s.road_mm || s.road || '').replace(/"/g, '""')}"`;
+                        const roadEN = `"${(s.road || '').replace(/"/g, '""')}"`;
+                        const latVal = (typeof s.lat === 'number' ? s.lat : parseFloat(s.lat) || 0).toFixed(6);
+                        const lngVal = (typeof s.lng === 'number' ? s.lng : parseFloat(s.lng) || 0).toFixed(6);
+                        const gmapUrl = `"${s.google_maps_url || `https://www.google.com/maps?q=${latVal},${lngVal}`}"`;
+
+                        csvRows.push([
+                            no, id, nameMM, nameEN, townMM, townEN, roadMM, roadEN, latVal, lngVal, gmapUrl
+                        ].join(','));
                     });
 
                     const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = `ybs_stops_database_${Date.now()}.csv`;
+                    a.download = `ybs_2093_stops_database_${Date.now()}.csv`;
                     a.click();
                     URL.revokeObjectURL(url);
-                    showToast(`Exported ${ybsStopsDB.length} bus stops to CSV`, 'info');
+                    showToast(`Exported ${ybsStopsDB.length} bus stops to CSV (11 Columns)`, 'info');
                 });
+            }
+
+            // Robust CSV line parser respecting quotes
+            function parseCsvLine(line) {
+                const row = [];
+                let inQuote = false;
+                let entry = '';
+                for (let i = 0; i < line.length; i++) {
+                    const ch = line[i];
+                    if (ch === '"') {
+                        if (inQuote && line[i + 1] === '"') {
+                            entry += '"';
+                            i++;
+                        } else {
+                            inQuote = !inQuote;
+                        }
+                    } else if (ch === ',' && !inQuote) {
+                        row.push(entry.trim());
+                        entry = '';
+                    } else {
+                        entry += ch;
+                    }
+                }
+                row.push(entry.trim());
+                return row;
             }
 
             // Import File (JSON or CSV)
@@ -4909,29 +4959,63 @@
                                 const parsed = JSON.parse(content);
                                 importedStops = Array.isArray(parsed) ? parsed : (parsed.stops || []);
                             } else {
-                                // CSV Parsing
+                                // CSV Parsing supporting standard 11-column format and legacy format
                                 const lines = content.split(/\r?\n/).filter(line => line.trim());
                                 if (lines.length > 1) {
-                                    const headerLine = lines[0].toLowerCase();
-                                    const hasHeader = headerLine.includes('name') || headerLine.includes('lat');
-                                    const dataLines = hasHeader ? lines.slice(1) : lines;
+                                    const headerRow = parseCsvLine(lines[0]).map(h => h.toLowerCase().replace(/[\s_-]/g, ''));
+                                    const has11Col = headerRow.includes('busstopnamemm') || headerRow.includes('townshipmm') || headerRow.includes('googlemapsurl');
+                                    const dataLines = lines.slice(1);
 
                                     dataLines.forEach((line, idx) => {
-                                        const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                                        const cols = parseCsvLine(line);
                                         if (cols.length >= 3) {
-                                            const name = cols[1] || cols[0];
-                                            const lat = parseFloat(cols[cols.length - 2]);
-                                            const lng = parseFloat(cols[cols.length - 1]);
-                                            if (!isNaN(lat) && !isNaN(lng)) {
-                                                importedStops.push({
-                                                    id: Date.now() + idx,
-                                                    name: name || `Stop ${idx + 1}`,
-                                                    myanmar: cols[2] || '',
-                                                    township: cols[3] || 'Yangon',
-                                                    road: cols[4] || '',
-                                                    lat,
-                                                    lng
-                                                });
+                                            if (has11Col && cols.length >= 10) {
+                                                const no = parseInt(cols[0], 10) || (idx + 1);
+                                                const id = parseInt(cols[1], 10) || no;
+                                                const myanmar = cols[2] || '';
+                                                const name = cols[3] || myanmar || `Stop ${idx + 1}`;
+                                                const township_mm = cols[4] || '';
+                                                const township = cols[5] || township_mm || 'Yangon';
+                                                const road_mm = cols[6] || '';
+                                                const road = cols[7] || road_mm || '';
+                                                const lat = parseFloat(cols[8]);
+                                                const lng = parseFloat(cols[9]);
+                                                const gmap = cols[10] || (isNaN(lat) || isNaN(lng) ? '' : `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`);
+
+                                                if (!isNaN(lat) && !isNaN(lng)) {
+                                                    importedStops.push({
+                                                        no,
+                                                        id,
+                                                        name,
+                                                        myanmar,
+                                                        township,
+                                                        township_mm,
+                                                        road,
+                                                        road_mm,
+                                                        lat: parseFloat(lat.toFixed(6)),
+                                                        lng: parseFloat(lng.toFixed(6)),
+                                                        google_maps_url: gmap
+                                                    });
+                                                }
+                                            } else {
+                                                const name = cols[1] || cols[0];
+                                                const lat = parseFloat(cols[cols.length - 2]);
+                                                const lng = parseFloat(cols[cols.length - 1]);
+                                                if (!isNaN(lat) && !isNaN(lng)) {
+                                                    importedStops.push({
+                                                        no: idx + 1,
+                                                        id: Date.now() + idx,
+                                                        name: name || `Stop ${idx + 1}`,
+                                                        myanmar: cols[2] || '',
+                                                        township: cols[3] || 'Yangon',
+                                                        township_mm: cols[3] || 'ရန်ကုန်',
+                                                        road: cols[4] || '',
+                                                        road_mm: cols[4] || '',
+                                                        lat: parseFloat(lat.toFixed(6)),
+                                                        lng: parseFloat(lng.toFixed(6)),
+                                                        google_maps_url: `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`
+                                                    });
+                                                }
                                             }
                                         }
                                     });
@@ -4943,9 +5027,8 @@
                             }
 
                             if (confirm(`Found ${importedStops.length} bus stops in file. Do you want to merge these into the database?`)) {
-                                for (const st of importedStops) {
-                                    await YBS_Database.add(st);
-                                }
+                                await YBS_Database.bulkInsert(importedStops);
+                                ybsStopsDB = await YBS_Database.getAll();
                                 renderDbStopsTable();
                                 if (window.refreshPopularBusStopChips) window.refreshPopularBusStopChips();
                                 showToast(`Successfully imported ${importedStops.length} bus stops!`, 'success');
