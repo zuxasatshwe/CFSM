@@ -1,6 +1,6 @@
 {
   "name": "Route Management Optimizer MVP",
-  "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, simultaneous multi-route map visualization (up to 30 routes), fleet logistics overview, cyber security defenses, and enriched Yangon bus stop directory with 3,154 points.",
+  "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, capacity-based route planning with up to 6-township corridor combining, single vehicle auto-plan, fleet auto-splitter (CVRP), interactive hybrid stop packing, simultaneous multi-route map visualization (up to 30 routes), and enriched Yangon bus stop directory with 3,154 points.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

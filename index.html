@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Route Management Optimizer MVP</title>
-    <meta name="description" content="Logistics dashboard for managing pick-up points, generating optimized route manifests, simultaneous multi-route map visualization (up to 30 routes), fleet logistics overview, cyber security defenses, and enriched Yangon bus stop directory with 3,154 points.">
+    <meta name="description" content="Logistics dashboard for managing pick-up points, generating optimized route manifests, capacity-based route planning with up to 6-township corridor combining, single vehicle auto-plan, fleet auto-splitter (CVRP), interactive hybrid stop packing, simultaneous multi-route map visualization (up to 30 routes), and enriched Yangon bus stop directory with 3,154 points.">
     <meta property="og:title" content="Route Management Optimizer MVP">
-    <meta property="og:description" content="Logistics dashboard for managing pick-up points, generating optimized route manifests, simultaneous multi-route map visualization (up to 30 routes), fleet logistics overview, cyber security defenses, and enriched Yangon bus stop directory with 3,154 points.">
+    <meta property="og:description" content="Logistics dashboard for managing pick-up points, generating optimized route manifests, capacity-based route planning with up to 6-township corridor combining, single vehicle auto-plan, fleet auto-splitter (CVRP), interactive hybrid stop packing, simultaneous multi-route map visualization (up to 30 routes), and enriched Yangon bus stop directory with 3,154 points.">
 
     <!-- Window fetch compatibility fix for sandboxed preview / iframe environments -->
     <script>
@@ -252,6 +252,11 @@
                     <span class="hidden sm:inline">Routes</span>
                     <span id="headerRoutesBadge" class="text-[9px] font-mono px-1 py-0.2 bg-blue-600 text-white rounded-full font-bold">0</span>
                 </button>
+                <button id="headerCapacityPlannerBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white transition text-xs font-bold shadow-xs cursor-pointer" title="Capacity Route Planner (ကားဆံ့ဦးရေအလိုက် လမ်းကြောင်းဆွဲစနစ်)">
+                    <span>⚡</span>
+                    <span class="hidden md:inline">Auto-Plan</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.2 bg-black/30 rounded-full font-bold">PAX</span>
+                </button>
                 <button id="themeToggle" class="p-2 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700 transition border border-slate-700" title="Toggle Dark Mode">
                     <svg id="moonIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     <svg id="sunIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -314,6 +319,10 @@
                         <span>New Route</span>
                     </button>
                 </div>
+                <button type="button" id="openCapacityPlannerBtn" class="w-full mt-2 py-2 px-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer" title="Open Smart Capacity Route Planner (ကားဆံ့ဦးရေအလိုက် လမ်းကြောင်းဆွဲစနစ်)">
+                    <span>⚡</span>
+                    <span>Smart Capacity Planner (ကားဆံ့ဦးရေအလိုက် Route ဆွဲမည်)</span>
+                </button>
 
                 <!-- Multi-Route Active Status Indicator (Sidebar) -->
                 <div id="sidebarMultiRouteIndicator" class="hidden mt-2 p-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200 dark:border-blue-800 rounded-lg flex items-center justify-between gap-1 text-[10px]">
@@ -433,6 +442,11 @@
                         </div>
                     </div>
                 </div>
+
+                <button type="button" id="quickPlanCurrentVehicleBtn" class="w-full mt-2.5 py-1.5 px-2 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-300 dark:border-amber-700/70 text-amber-800 dark:text-amber-200 rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1.5 transition shadow-2xs cursor-pointer" title="Auto-plan route for currently selected vehicle capacity">
+                    <span>⚡</span>
+                    <span>Auto-Plan for Selected Vehicle (<span id="quickPlanVehicleCapText">15 Seats</span>)</span>
+                </button>
             </section>
 
             <!-- Depot Configuration -->
@@ -609,6 +623,17 @@
                         </div>
                     </div>
 
+                    <!-- Auto Hybrid Route Planning Toggle Feature -->
+                    <div class="mb-2 p-2 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-900/50 flex items-center justify-between gap-2">
+                        <label class="flex items-center gap-1.5 cursor-pointer select-none" title="CSV ဖိုင် import လုပ်လိုက်သည်နှင့် Interactive Hybrid Builder ဖြင့် ယာဉ်ဆံ့အားနှင့် ချိန်ညှိကာ အလိုအလျောက် လမ်းကြောင်းဆွဲပေးမည်">
+                            <input type="checkbox" id="csvAutoHybridPlan" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 dark:border-slate-600 focus:ring-blue-500 cursor-pointer">
+                            <span class="text-[11px] font-bold text-blue-800 dark:text-blue-300 flex items-center gap-1">
+                                <span>⚡ Auto Hybrid Route Builder</span>
+                            </span>
+                        </label>
+                        <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-200/70 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200">Auto-Plan</span>
+                    </div>
+
                     <!-- Template & Sample Actions -->
                     <div class="grid grid-cols-2 gap-1.5 mb-2.5">
                         <button type="button" id="downloadTemplateBtn" class="flex items-center justify-center gap-1.5 px-2.5 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700 rounded-lg text-[10.5px] font-bold text-slate-700 dark:text-slate-200 transition shadow-xs group cursor-pointer" title="Download Standard CSV Template with Yangon pick-up points and PAX headers">
@@ -620,10 +645,17 @@
                             <span>Load Demo Stops</span>
                         </button>
                     </div>
-                    <button type="button" id="exportActiveRouteCsvBtn" class="w-full mb-2.5 flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800/60 rounded-lg text-[10.5px] font-bold text-emerald-700 dark:text-emerald-300 transition shadow-2xs group cursor-pointer" title="Export current active route stops to CSV format (လက်ရှိမှတ်တိုင်များကို CSV ဖြင့် ထုတ်ယူမည်)">
-                        <span class="text-xs">📊</span>
-                        <span>Export Active Stops (CSV)</span>
-                    </button>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-2.5">
+                        <button type="button" id="exportActiveRouteCsvBtn" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800/60 rounded-lg text-[10.5px] font-bold text-emerald-700 dark:text-emerald-300 transition shadow-2xs group cursor-pointer" title="Export current active route stops to CSV format (လက်ရှိမှတ်တိုင်များကို CSV ဖြင့် ထုတ်ယူမည်)">
+                            <span class="text-xs">📊</span>
+                            <span>Export CSV</span>
+                        </button>
+                        <button type="button" id="buildHybridRouteFromCsvBtn" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10.5px] font-bold transition shadow-2xs group cursor-pointer" title="Load imported CSV or active stops into Interactive Hybrid Builder to build an optimized capacity route">
+                            <span class="text-xs group-hover:scale-110 transition-transform">🎯</span>
+                            <span>Hybrid Builder</span>
+                        </button>
+                    </div>
 
                     <!-- Enhanced Interactive Dropzone -->
                     <div id="csvDropZone" class="relative group rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 bg-slate-50/80 hover:bg-blue-50/40 dark:bg-slate-900/40 dark:hover:bg-blue-950/20 p-3 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center overflow-hidden">
@@ -683,6 +715,17 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 Run Optimization
             </button>
+
+            <div class="grid grid-cols-2 gap-1.5 mt-2">
+                <button id="quickCapacityPlannerBtn" type="button" class="w-full py-2 px-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-[10.5px] font-bold rounded-lg shadow-2xs transition flex justify-center items-center gap-1 cursor-pointer" title="Auto-plan route according to vehicle passenger capacity">
+                    <span>⚡</span>
+                    <span>Auto-Plan (Single)</span>
+                </button>
+                <button id="quickFleetSplitterBtn" type="button" class="w-full py-2 px-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-[10.5px] font-bold rounded-lg shadow-2xs transition flex justify-center items-center gap-1 cursor-pointer" title="Split all stops across vehicle fleet">
+                    <span>🚍</span>
+                    <span>Fleet Splitter (CVRP)</span>
+                </button>
+            </div>
             
             <!-- Analytics (Hidden by default) -->
             <div id="analyticsPanel" class="hidden mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
@@ -1981,6 +2024,595 @@
         </div>
     </div>
 
+    <!-- Smart Capacity Route Planner Modal (Auto-Plan by Vehicle PAX Capacity) -->
+    <div id="capacityPlannerModal" class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-4xl w-full shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col max-h-[92vh] overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <!-- Modal Header -->
+            <div class="p-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-indigo-900/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-xl text-amber-400 flex-shrink-0">
+                        ⚡
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-bold tracking-tight text-white">Smart Capacity Route Planner</h3>
+                            <span class="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">PAX ENGINE</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300 truncate">Bus-stop များရှိ ခရီးသည် (PAX) အပေါ်မူတည်၍ ကားတစ်စီးစာ (သို့) Fleet အလိုက် အလိုအလျောက် Route ဆွဲခြင်း</p>
+                    </div>
+                </div>
+                <button type="button" id="closeCapacityPlannerModalBtn" class="text-slate-400 hover:text-white text-xl p-1.5 rounded-lg hover:bg-slate-800 transition cursor-pointer">✕</button>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 px-4 pt-2 gap-2 text-xs font-bold select-none overflow-x-auto">
+                <button type="button" id="capTabBtnA" class="cap-tab-btn px-3.5 py-2.5 rounded-t-lg border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900 flex items-center gap-1.5 transition cursor-pointer flex-shrink-0">
+                    <span>🚗</span>
+                    <span>ပုံစံ (A) - ကားတစ်စီးစာ (Single Vehicle)</span>
+                </button>
+                <button type="button" id="capTabBtnB" class="cap-tab-btn px-3.5 py-2.5 rounded-t-lg border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 flex items-center gap-1.5 transition cursor-pointer flex-shrink-0">
+                    <span>🚍</span>
+                    <span>ပုံစံ (B) - Fleet Splitter (အစီးရေခွဲဝေခြင်း)</span>
+                </button>
+                <button type="button" id="capTabBtnC" class="cap-tab-btn px-3.5 py-2.5 rounded-t-lg border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 flex items-center gap-1.5 transition cursor-pointer flex-shrink-0">
+                    <span>🎯</span>
+                    <span>ပေါင်းစပ်စနစ် (Interactive Hybrid Builder)</span>
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+                <!-- ==================== TAB PANE A: SINGLE VEHICLE AUTO-PLAN ==================== -->
+                <div id="capTabPaneA" class="cap-tab-pane space-y-4">
+                    <div class="bg-amber-50/70 dark:bg-amber-950/25 border border-amber-200 dark:border-amber-800/60 rounded-xl p-3.5 flex items-start gap-3">
+                        <span class="text-xl text-amber-500 mt-0.5">ℹ️</span>
+                        <div class="text-xs text-amber-900 dark:text-amber-200 space-y-1">
+                            <p class="font-bold">ပုံစံ (A) - ကားတစ်စီးစာအတွက် သီးသန့် အကောင်းဆုံးလမ်းကြောင်း ဆွဲစနစ် (Single Vehicle Capacity Route)</p>
+                            <p class="text-[11px] text-amber-800/80 dark:text-amber-300/80">ရွေးချယ်ထားသော ယာဉ်၏ ခုံဆံ့ဦးရေ (Target Capacity) အတိအကျ သို့မဟုတ် အကောင်းဆုံး ပြည့်စေရန် နီးစပ်ရာ မှတ်တိုင်များကို အလိုအလျောက် စုစည်းကာ လမ်းကြောင်းဆွဲပေးမည် ဖြစ်ပါသည်။</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Vehicle & Target Capacity Selection -->
+                    <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/40 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                                <span>1️⃣</span>
+                                <span>Select Vehicle & Target Seats (ယာဉ်အမျိုးအစား နှင့် ခုံဆံ့ဦးရေ)</span>
+                            </h4>
+                            <span id="capModeASelectedVehBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">🚐 Van (15 Seats)</span>
+                        </div>
+
+                        <!-- Vehicle Presets Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="capModeAVehGrid">
+                            <button type="button" data-veh-type="light_truck" data-cap="12" class="cap-veh-card p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-left transition hover:border-blue-400 flex flex-col cursor-pointer">
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="text-xs font-bold text-slate-800 dark:text-slate-100">🛻 Light Truck</span>
+                                    <span class="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400">12</span>
+                                </div>
+                                <span class="text-[9px] text-slate-400 mt-0.5">လိုက်ထရပ်</span>
+                            </button>
+                            <button type="button" data-veh-type="van" data-cap="15" class="cap-veh-card p-2.5 rounded-lg border-2 border-amber-500 bg-amber-50/60 dark:bg-amber-950/40 text-left transition flex flex-col cursor-pointer">
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="text-xs font-bold text-slate-800 dark:text-slate-100">🚐 Van</span>
+                                    <span class="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400">15</span>
+                                </div>
+                                <span class="text-[9px] text-slate-400 mt-0.5">ဗန်ကား (Standard)</span>
+                            </button>
+                            <button type="button" data-veh-type="mini_bus" data-cap="25" class="cap-veh-card p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-left transition hover:border-blue-400 flex flex-col cursor-pointer">
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="text-xs font-bold text-slate-800 dark:text-slate-100">🚌 Mini Bus</span>
+                                    <span class="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400">25</span>
+                                </div>
+                                <span class="text-[9px] text-slate-400 mt-0.5">မီနီဘတ်စ်</span>
+                            </button>
+                            <button type="button" data-veh-type="city_bus" data-cap="45" class="cap-veh-card p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-left transition hover:border-blue-400 flex flex-col cursor-pointer">
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="text-xs font-bold text-slate-800 dark:text-slate-100">🚍 City Bus</span>
+                                    <span class="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400">45</span>
+                                </div>
+                                <span class="text-[9px] text-slate-400 mt-0.5">စီတီဘတ်စ်</span>
+                            </button>
+                        </div>
+
+                        <!-- Manual Capacity Target Override -->
+                        <div class="flex items-center gap-3 pt-1 text-xs">
+                            <label for="capModeATargetCapInput" class="font-bold text-slate-600 dark:text-slate-300 flex items-center gap-1.5 flex-shrink-0">
+                                <span>🎯 Target Seats:</span>
+                            </label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="number" id="capModeATargetCapInput" min="1" max="150" value="15" class="w-20 text-center font-mono font-bold py-1 px-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded outline-none focus:border-amber-500 text-slate-900 dark:text-white">
+                                <span class="text-slate-400 text-[11px] font-mono">PAX (ဦး)</span>
+                            </div>
+                            <div class="flex items-center gap-2 ml-auto">
+                                <label class="flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-300">
+                                    <input type="radio" name="capModeAStrategy" value="exact" checked class="text-amber-600 focus:ring-amber-500">
+                                    <span>Exact Match (၁၀၀% ကွက်တိ)</span>
+                                </label>
+                                <label class="flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-300">
+                                    <input type="radio" name="capModeAStrategy" value="optimal" class="text-amber-600 focus:ring-amber-500">
+                                    <span>Optimal (85%–100% ကြား)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Bus Stops Source Pool -->
+                    <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/40 space-y-3">
+                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>2️⃣</span>
+                            <span>Choose Stops Source (မှတ်တိုင်များ ရယူမည့် ရင်းမြစ်)</span>
+                        </h4>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                            <label class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 cursor-pointer flex items-start gap-2 hover:border-amber-400 transition">
+                                <input type="radio" name="capModeASourceType" value="township" checked class="mt-0.5 text-amber-600">
+                                <div>
+                                    <p class="font-bold text-slate-800 dark:text-slate-100">By Township / Corridor</p>
+                                    <p class="text-[10px] text-slate-400">မြို့နယ် သို့မဟုတ် အဓိက လမ်းကြောင်း</p>
+                                </div>
+                            </label>
+                            <label class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 cursor-pointer flex items-start gap-2 hover:border-amber-400 transition">
+                                <input type="radio" name="capModeASourceType" value="hub" class="mt-0.5 text-amber-600">
+                                <div>
+                                    <p class="font-bold text-slate-800 dark:text-slate-100">By Starting Hub Point</p>
+                                    <p class="text-[10px] text-slate-400">စမှတ် မှတ်တိုင် အနီးတဝိုက်မှ</p>
+                                </div>
+                            </label>
+                            <label class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 cursor-pointer flex items-start gap-2 hover:border-amber-400 transition">
+                                <input type="radio" name="capModeASourceType" value="active" class="mt-0.5 text-amber-600">
+                                <div>
+                                    <p class="font-bold text-slate-800 dark:text-slate-100">From Active Stops (<span id="capModeAActiveStopsCount">0</span>)</p>
+                                    <p class="text-[10px] text-slate-400">လက်ရှိ စာရင်းသွင်းထားသော ဂိတ်များ</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Source Specific Controls (All Yangon Townships Supported) -->
+                        <div id="capModeASourceTownshipBox" class="p-2.5 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/30 dark:bg-amber-950/20 space-y-2">
+                            <div class="flex items-center justify-between flex-wrap gap-1">
+                                <label class="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                                    <span>🛣️ Township Corridor (ရန်ကုန်တစ်မြို့လုံးရှိ မြို့နယ်အားလုံး ရွေးချယ်နိုင်သည်):</span>
+                                </label>
+                                <div class="flex items-center gap-1">
+                                    <button type="button" onclick="CapacityRoutePlannerEngine.selectAllTownships('A')" class="px-2 py-0.5 bg-amber-600 hover:bg-amber-700 text-white rounded text-[9.5px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                        <span>⭐ အားလုံးရွေးမည်</span>
+                                    </button>
+                                    <button type="button" onclick="CapacityRoutePlannerEngine.clearTownships('A')" class="px-1.5 py-0.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded text-[9.5px] font-bold transition cursor-pointer">
+                                        ရှင်းလင်းမည်
+                                    </button>
+                                    <span id="capModeATownshipQuota" class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200">
+                                        0 မြို့နယ်
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Corridor Presets for Mode A -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 text-[10px]">
+                                <button type="button" onclick="CapacityRoutePlannerEngine.selectAllTownships('A')" class="p-1 rounded border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 hover:border-amber-500 text-left transition cursor-pointer font-bold text-amber-900 dark:text-amber-200 truncate col-span-2">
+                                    ⭐ ရန်ကုန်တစ်မြို့လုံး (၃၃ မြို့နယ်လုံး)
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('A', 'pyay_road')" class="p-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-amber-500 text-left transition cursor-pointer font-bold text-slate-700 dark:text-slate-300 truncate">
+                                    🚗 ပြည်လမ်း (၆ မြို့နယ်)
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('A', 'kaba_aye')" class="p-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-amber-500 text-left transition cursor-pointer font-bold text-slate-700 dark:text-slate-300 truncate">
+                                    ✈️ ကမ္ဘာအေး (၆ မြို့နယ်)
+                                </button>
+                            </div>
+
+                            <!-- Selected Chips A -->
+                            <div id="capModeASelectedChips" class="flex flex-wrap items-center gap-1 p-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 min-h-[32px]">
+                                <!-- Dynamically populated chips -->
+                            </div>
+
+                            <!-- Add Township Dropdown A -->
+                            <div class="flex items-center gap-1.5">
+                                <select id="capModeAAddTownshipSelect" class="flex-1 text-xs p-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-amber-500 text-slate-800 dark:text-slate-100">
+                                    <option value="">+ မြို့နယ်ထပ်မံပေါင်းစပ်ရန် ရွေးပါ...</option>
+                                </select>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.addTownshipFromDropdown('A')" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition cursor-pointer flex-shrink-0">
+                                    + ထည့်မည်
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="capModeASourceHubBox" class="hidden space-y-1.5">
+                            <label class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Starting Bus Stop Hub (စတင်မည့် အဓိကမှတ်တိုင်):</label>
+                            <select id="capModeAHubSelect" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-amber-500 text-slate-800 dark:text-slate-100">
+                                <option value="Hledan Bus Stop">Hledan Bus Stop (လှည်းတန်း မှတ်တိုင် - Kamayut)</option>
+                                <option value="Insein Park Bus Stop">Insein Park Bus Stop (အင်းစိန်ပန်းခြံ မှတ်တိုင် - Insein)</option>
+                                <option value="Thamine Junction Bus Stop">Thamine Junction Bus Stop (သမိုင်းလမ်းဆုံ မှတ်တိုင် - Mayangone)</option>
+                                <option value="8 Mile Junction Bus Stop">8 Mile Junction Bus Stop (၈ မိုင် လမ်းဆုံ မှတ်တိုင် - Mayangone)</option>
+                                <option value="Sule Pagoda Bus Stop">Sule Pagoda Bus Stop (ဆူးလေဘုရား မှတ်တိုင် - Downtown)</option>
+                                <option value="Parami Junction Bus Stop">Parami Junction Bus Stop (ပါရမီလမ်းဆုံ မှတ်တိုင် - Hlaing)</option>
+                                <option value="Saw Bwar Gyi Gone Bus Stop">Saw Bwar Gyi Gone Bus Stop (စော်ဘွားကြီးကုန်း မှတ်တိုင် - Insein)</option>
+                                <option value="Danyingone Station Bus Stop">Danyingone Station Bus Stop (ဒညင်းကုန်းဘူတာ မှတ်တိုင် - Insein)</option>
+                                <option value="Mingaladon Airport Bus Stop">Mingaladon Airport Bus Stop (ရန်ကုန်လေဆိပ် မှတ်တိုင် - Mingaladon)</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-xs">
+                            <span class="text-[11px] text-slate-500 dark:text-slate-400">Destination: <strong id="capModeADepotDisplay" class="text-slate-700 dark:text-slate-300">Yangon HQ</strong></span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] text-slate-500 dark:text-slate-400">PAX Distribution:</span>
+                                <select id="capModeAPaxDistribution" class="text-xs py-1 px-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded text-slate-700 dark:text-slate-300">
+                                    <option value="dynamic">Natural Dynamic (1–4 PAX / Stop)</option>
+                                    <option value="fixed_2">Fixed 2 PAX / Stop</option>
+                                    <option value="fixed_3">Fixed 3 PAX / Stop</option>
+                                    <option value="fixed_4">Fixed 4 PAX / Stop</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button type="button" id="capModeAGenerateBtn" class="w-full py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
+                        <span>⚡</span>
+                        <span>Calculate Single Vehicle Route (ကားတစ်စီးစာ လမ်းကြောင်း တွက်ချက်မည်)</span>
+                    </button>
+
+                    <!-- Step 3: Result Preview Section -->
+                    <div id="capModeAResultCard" class="hidden p-4 rounded-xl border border-emerald-200 dark:border-emerald-800/80 bg-emerald-50/40 dark:bg-emerald-950/20 space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-lg">🎉</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                                        <span id="capModeAResultTitle">Generated Route Plan</span>
+                                        <span id="capModeAStatusBadge" class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200">100% Filled</span>
+                                    </h4>
+                                    <p id="capModeAResultSubtitle" class="text-[11px] text-slate-500 dark:text-slate-400">6 Stops · 15 / 15 Seats · ~14.8 km to Depot</p>
+                                </div>
+                            </div>
+                            <!-- Live Capacity Gauge Mini -->
+                            <div class="text-right">
+                                <span id="capModeAGaugePercent" class="text-base font-mono font-bold text-emerald-600 dark:text-emerald-400">15 / 15 PAX (100%)</span>
+                                <div class="w-36 h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden mt-1">
+                                    <div id="capModeAGaugeBar" class="h-full bg-emerald-500 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stops Sequenced Table -->
+                        <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden max-h-48 overflow-y-auto">
+                            <table class="w-full text-left text-xs divide-y divide-slate-100 dark:divide-slate-800">
+                                <thead class="bg-slate-50 dark:bg-slate-800 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider sticky top-0">
+                                    <tr>
+                                        <th class="p-2 text-center w-10">Seq</th>
+                                        <th class="p-2">Bus Stop Name</th>
+                                        <th class="p-2">Township / Road</th>
+                                        <th class="p-2 text-center">Boarding PAX</th>
+                                        <th class="p-2 text-center">Cumulative</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="capModeAStopsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                            <button type="button" id="capModeAApplyBtn" class="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer">
+                                <span>🚀</span>
+                                <span>Apply to Active Route & Optimize (လက်ရှိ Route သို့ တင်မည်)</span>
+                            </button>
+                            <button type="button" id="capModeASaveDirectBtn" class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer">
+                                <span>💾</span>
+                                <span>Save Direct as New Route (တိုက်ရိုက် သိမ်းဆည်းမည်)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB PANE B: FLEET AUTO-SPLITTER ==================== -->
+                <div id="capTabPaneB" class="cap-tab-pane hidden space-y-4">
+                    <div class="bg-purple-50/70 dark:bg-purple-950/25 border border-purple-200 dark:border-purple-800/60 rounded-xl p-3.5 flex items-start gap-3">
+                        <span class="text-xl text-purple-500 mt-0.5">🚍</span>
+                        <div class="text-xs text-purple-900 dark:text-purple-200 space-y-1">
+                            <p class="font-bold">ပုံစံ (B) - Fleet Auto-Splitter (မှတ်တိုင်အားလုံးကို ကားတစ်စီးစာစီ အလိုအလျောက် ခွဲထုတ်ပေးခြင်း)</p>
+                            <p class="text-[11px] text-purple-800/80 dark:text-purple-300/80">မှတ်တိုင်ပေါင်းများစွာ (ဥပမာ - ဝန်ထမ်း ၆၀ ဦး၊ မှတ်တိုင် ၂၄ ခု) ကို ကားအစီးရေအလိုက် (Capacitated Vehicle Routing - CVRP) အလိုအလျောက် ဖြတ်တောက်ပြီး ကားတစ်စီးချင်းစီအတွက် အကောင်းဆုံး လမ်းကြောင်းများ ခွဲထုတ်ပေးပါသည်။</p>
+                        </div>
+                    </div>
+
+                    <!-- Fleet Vehicle Config -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/40 space-y-2">
+                            <label class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1">
+                                <span>🚌 Fleet Vehicle Type:</span>
+                            </label>
+                            <select id="capModeBFleetVehSelect" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-purple-500 text-slate-800 dark:text-slate-100">
+                                <option value="mini_bus" selected>Mini Bus Fleet (25 Seats / Car - ဥပမာ- ၂၅ ဦး/မှတ်တိုင်)</option>
+                                <option value="van">Van Fleet (15 Seats / Car)</option>
+                                <option value="light_truck">Light Truck Fleet (12 Seats / Car)</option>
+                                <option value="city_bus">City Bus Fleet (45 Seats / Car)</option>
+                            </select>
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                                <span>Seat Capacity per Car:</span>
+                                <span id="capModeBFleetCapDisplay" class="font-mono font-bold text-purple-600 dark:text-purple-400">25 PAX</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/40 space-y-2">
+                            <label class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1">
+                                <span>🚏 Source Stops Pool:</span>
+                            </label>
+                            <select id="capModeBFleetSourceSelect" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-purple-500 text-slate-800 dark:text-slate-100">
+                                <option value="active" selected>Active / CSV Uploaded Stops (<span id="capModeBActiveStopsLabel">0</span> stops - အားလုံးကုန်သည်အထိ Auto-Split)</option>
+                                <option value="csv_imported">📊 CSV Imported Stops (CSV မှတ်တိုင်များအားလုံး)</option>
+                                <option value="all_yangon_pool">⭐ All Yangon Bus Stops (ရန်ကုန်မှတ်တိုင်အားလုံး Pool)</option>
+                                <option value="corridor_pyay_road">🚗 ပြည်လမ်းမကြီး စင်္ကြံ (Insein ➔ Mayangone ➔ Hlaing ➔ Kamayut ➔ Sanchaung ➔ Dagon)</option>
+                                <option value="corridor_kaba_aye">✈️ ကမ္ဘာအေး/လေဆိပ် စင်္ကြံ (Mingaladon ➔ Mayangone ➔ Yankin ➔ Bahan ➔ Tamwe ➔ Mingalar TN)</option>
+                                <option value="corridor_east_dagon">🏙️ အရှေ့ပိုင်း စင်္ကြံ (North Dagon ➔ East Dagon ➔ South Dagon ➔ North Okkalapa ➔ South Okkalapa ➔ Thingangyun)</option>
+                                <option value="corridor_industrial">🏭 လှိုင်သာယာ/အနောက် စင်္ကြံ (Hlaing Tharyar ➔ Insein ➔ Mayangone ➔ Hlaing ➔ Kamayut ➔ Kyimyindaing)</option>
+                                <option value="corridor_south">⚓ တောင်ပိုင်း စင်္ကြံ (Thaketa ➔ Dawbon ➔ Tamwe ➔ Mingalar TN ➔ Botahtaung ➔ Pazundaung)</option>
+                                <option value="insein_zone">Insein Corridor Zone (30 Major Stops)</option>
+                                <option value="hlaingtharyar_zone">Hlaing Tharyar Industrial Zone (35 Major Stops)</option>
+                                <option value="kamayut_hledan_zone">Kamayut & Pyay Road Corridor (25 Major Stops)</option>
+                                <option value="east_dagon_zone">East & South Dagon Hub (30 Major Stops)</option>
+                                <option value="yangon_metro_50">Yangon Metro Top 50 Hubs (50 Stops Multi-Fleet)</option>
+                            </select>
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                                <span>Optimization Engine:</span>
+                                <span class="font-mono font-bold text-slate-700 dark:text-slate-300">ပုံစံ (A) & (B) Dual OSRM Check</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button type="button" id="capModeBRunSplitterBtn" class="w-full py-3 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-700 hover:to-indigo-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
+                        <span>⚡</span>
+                        <span>Run Fleet Auto-Splitter (ကားတစ်စီးစာစီ အလိုအလျောက် ခွဲဝေမည်)</span>
+                    </button>
+
+                    <!-- Fleet Results Section -->
+                    <div id="capModeBFleetResults" class="hidden space-y-3">
+                        <!-- Fleet KPI Banner -->
+                        <div class="p-3.5 rounded-xl bg-gradient-to-r from-purple-900/40 via-indigo-900/30 to-slate-900 border border-purple-500/30 flex items-center justify-between flex-wrap gap-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">📊</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white" id="capModeBFleetKpiTitle">Fleet Split Completed</h4>
+                                    <p class="text-[11px] text-purple-200" id="capModeBFleetKpiSubtitle">4 Vehicles Required · 60 Total PAX · 100% Allocation</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="capModeBLoadAllToMultiMapBtn" class="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Load all split routes directly onto the 30-route map engine">
+                                    <span>🗺️</span>
+                                    <span>Load All on Map (၃၀ လမ်းကြောင်းပြမြေပုံတင်မည်)</span>
+                                </button>
+                                <button type="button" id="capModeBSaveAllRoutesBtn" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Batch save all split routes to Saved Routes">
+                                    <span>💾</span>
+                                    <span>Save All Routes</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Generated Vehicle Routes Cards Container -->
+                        <div id="capModeBFleetCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-72 overflow-y-auto pr-1">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB PANE C: INTERACTIVE HYBRID BUILDER ==================== -->
+                <div id="capTabPaneC" class="cap-tab-pane hidden space-y-4">
+                    <div class="bg-blue-50/70 dark:bg-blue-950/25 border border-blue-200 dark:border-blue-800/60 rounded-xl p-3.5 flex items-start gap-3">
+                        <span class="text-xl text-blue-500 mt-0.5">🎯</span>
+                        <div class="text-xs text-blue-900 dark:text-blue-200 space-y-1">
+                            <p class="font-bold">ပေါင်းစပ်စနစ် (Interactive Smart Stop Picker with Real-Time Capacity Gauge)</p>
+                            <p class="text-[11px] text-blue-800/80 dark:text-blue-300/80">မှတ်တိုင်များကို ရွေးချယ်နေစဉ် ကား၏ ခုံဆံ့ဦးရေ Gauge ကို တိုက်ရိုက် ကြည့်ရှုနိုင်ပြီး၊ ကျန်ရှိသောခုံများကို အနီးဆုံးမှတ်တိုင်များဖြင့် ကွက်တိပြည့်အောင် Auto-Fill လုပ်ခြင်း သို့မဟုတ် ပိုလျှံပါက ကား ၂ စီးအဖြစ် အလိုအလျောက် ခွဲထုတ်ခြင်း ပြုလုပ်နိုင်ပါသည်။</p>
+                        </div>
+                    </div>
+
+                    <!-- Sticky Interactive Capacity Gauge Card -->
+                    <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm space-y-2 sticky top-0 z-10">
+                        <div class="flex items-center justify-between flex-wrap gap-2 text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-200">Vehicle:</span>
+                                <span id="capModeCVehDisplay" class="font-bold text-blue-600 dark:text-blue-400">🚐 Van (15 Seats)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span id="capModeCSeatsStatusBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">Vacant (0 / 15 PAX)</span>
+                                <span id="capModeCSeatsRemainText" class="text-[11px] text-slate-400">15 seats remaining</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative border border-slate-200 dark:border-slate-700">
+                            <div id="capModeCProgressBar" class="h-full rounded-full transition-all duration-300 bg-blue-500" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Assistance Quick Action Buttons -->
+                        <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-slate-800 flex-wrap">
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="capModeCAutoFillBtn" class="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/50 hover:bg-amber-200 dark:hover:bg-amber-900 text-amber-800 dark:text-amber-200 rounded text-[10.5px] font-bold transition flex items-center gap-1 cursor-pointer" title="Auto-select nearest stops to achieve exactly 100% vehicle capacity">
+                                    <span>💡</span>
+                                    <span>Auto-Fill to 100% (ကွက်တိဖြည့်မည်)</span>
+                                </button>
+                                <button type="button" id="capModeCAutoSplitBtn" class="px-2.5 py-1 bg-purple-100 dark:bg-purple-950/50 hover:bg-purple-200 dark:hover:bg-purple-900 text-purple-800 dark:text-purple-200 rounded text-[10.5px] font-bold transition flex items-center gap-1 cursor-pointer" title="Split selection into 2 balanced vehicles if passenger count exceeds capacity">
+                                    <span>✂️</span>
+                                    <span>Auto-Split Overflow (နောက်တစ်စီးသို့ ခွဲမည်)</span>
+                                </button>
+                            </div>
+                            <button type="button" id="capModeCClearBtn" class="text-[10px] text-red-500 hover:text-red-700 font-bold uppercase cursor-pointer">
+                                Reset Selection (ပြန်လည်ရှင်းလင်းမည်)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Township Corridor Selector (All Yangon Townships Supported) -->
+                    <div class="p-3 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/40 dark:bg-blue-950/20 space-y-2.5">
+                        <div class="flex items-center justify-between flex-wrap gap-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-sm">🛣️</span>
+                                <label class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                                    Select Township Corridor (ရန်ကုန်တစ်မြို့လုံးရှိ မြို့နယ်အားလုံး ရွေးချယ်နိုင်သည်):
+                                </label>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="CapacityRoutePlannerEngine.selectAllTownships('C')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold transition flex items-center gap-1 cursor-pointer shadow-xs">
+                                    <span>⭐ အားလုံးရွေးမည်</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.clearTownships('C')" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded text-[10px] font-bold transition cursor-pointer">
+                                    ရှင်းလင်းမည်
+                                </button>
+                                <span id="capModeCTownshipQuota" class="text-[10.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
+                                    0 မြို့နယ် ရွေးချယ်ပြီး
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Presets (အမြန်ရွေးချယ်ရန် စင်္ကြံလမ်းများနှင့် တစ်မြို့လုံး ရွေးချယ်မှု) -->
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                                <span>⚡ အမြန်ရွေးချယ်ရန် စင်္ကြံလမ်းကြောင်းများ (Quick Corridor Presets):</span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10.5px]">
+                                <button type="button" onclick="CapacityRoutePlannerEngine.selectAllTownships('C')" class="p-1.5 rounded-lg border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 hover:border-emerald-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs col-span-2">
+                                    <span class="font-bold text-emerald-900 dark:text-emerald-200 truncate">⭐ ရန်ကုန်တစ်မြို့လုံး (၃၃ မြို့နယ်လုံး)</span>
+                                    <span class="text-[9px] font-mono bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 px-1.5 rounded font-bold">All</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('C', 'pyay_road')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate">🚗 ပြည်လမ်းမကြီး</span>
+                                    <span class="text-[9px] font-mono bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400 px-1 rounded font-bold">၆ မြို့နယ်</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('C', 'kaba_aye')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate">✈️ ကမ္ဘာအေး/လေဆိပ်</span>
+                                    <span class="text-[9px] font-mono bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400 px-1 rounded font-bold">၆ မြို့နယ်</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('C', 'east_dagon')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate">🏙️ အရှေ့ဒဂုံ/ဥက္ကလာ</span>
+                                    <span class="text-[9px] font-mono bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400 px-1 rounded font-bold">၆ မြို့နယ်</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('C', 'industrial_west')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate">🏭 လှိုင်သာယာ/အနောက်</span>
+                                    <span class="text-[9px] font-mono bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400 px-1 rounded font-bold">၆ မြို့နယ်</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('C', 'thanlyin_south')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate">⚓ တောင်ပိုင်း/သာကေတ</span>
+                                    <span class="text-[9px] font-mono bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400 px-1 rounded font-bold">၆ မြို့နယ်</span>
+                                </button>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.applyCorridorPreset('C', 'central_business')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 text-left transition cursor-pointer flex items-center justify-between gap-1 shadow-xs">
+                                    <span class="font-bold text-slate-800 dark:text-slate-200 truncate">🏢 မြို့လယ်စီးပွားရေးဇုန်</span>
+                                    <span class="text-[9px] font-mono bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400 px-1 rounded font-bold">၆ မြို့နယ်</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Active Selected Townships Chips -->
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between text-[11px]">
+                                <span class="font-semibold text-slate-700 dark:text-slate-300">Active Corridor Townships (ဆက်စပ်ပြေးဆွဲမည့် မြို့နယ်များ):</span>
+                                <span id="capModeCTownshipCountBadge" class="font-mono font-bold text-blue-600 dark:text-blue-400">0 Townships · 0 Stops</span>
+                            </div>
+                            <div id="capModeCSelectedChips" class="flex flex-wrap items-center gap-1.5 p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 min-h-[38px] max-h-36 overflow-y-auto">
+                                <!-- Dynamically populated chips with (x) delete button -->
+                            </div>
+                        </div>
+
+                        <!-- Add Township Dropdown -->
+                        <div class="flex items-center gap-2">
+                            <select id="capModeCAddTownshipSelect" class="flex-1 text-xs p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100">
+                                <option value="">+ မြို့နယ်တစ်ခု ထပ်မံပေါင်းစပ်ရန် ရွေးချယ်ပါ (+ Add another township)...</option>
+                            </select>
+                            <button type="button" onclick="CapacityRoutePlannerEngine.addTownshipFromDropdown('C')" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer flex-shrink-0">
+                                <span>+ ပေါင်းထည့်မည်</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Checkable Stops List Container -->
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xs">
+                        <!-- Header with Map Click Controls -->
+                        <div class="p-2.5 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2 text-xs">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-slate-700 dark:text-slate-200">🚏 Bus Stops in Corridor (<span id="capModeCAvailableCount">0</span>)</span>
+                                <span id="capModeCCsvImportedBadge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-200 font-bold flex items-center gap-1">
+                                    <span>📊</span>
+                                    <span>+<span id="capModeCCsvImportedCount">0</span> CSV Imported</span>
+                                </span>
+                                <span id="capModeCMapAddedBadge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200 font-bold flex items-center gap-1">
+                                    <span>📍</span>
+                                    <span>+<span id="capModeCMapAddedCount">0</span> Map Added</span>
+                                </span>
+                            </div>
+                            
+                            <!-- Action Controls: Manual Map Click & Show on Map -->
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <button type="button" id="capModeCLoadCsvBtn" class="px-2.5 py-1.5 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 rounded-lg font-bold text-[11px] flex items-center gap-1.5 transition shadow-xs cursor-pointer" title="Load imported CSV or active stops into Hybrid Builder corridor">
+                                    <span>📊</span>
+                                    <span>Load CSV Stops</span>
+                                </button>
+                                <button type="button" id="capModeCStartMapClickBtn" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[11px] flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+                                    <span>📍</span>
+                                    <span>Manual Map Click (မြေပုံပေါ်ကလစ်နှိပ်၍ထည့်မည်)</span>
+                                </button>
+                                <button type="button" id="capModeCToggleMapBtn" class="px-2.5 py-1.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg font-bold text-[11px] text-slate-700 dark:text-slate-300 flex items-center gap-1.5 transition cursor-pointer">
+                                    <span>🗺️</span>
+                                    <span id="capModeCToggleMapText">Show on Map</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Helpful Instruction Bar -->
+                        <div class="px-3 py-1.5 bg-blue-50/60 dark:bg-blue-950/20 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400">
+                            <span>💡 ရွေးချယ်ထားသော မြို့နယ်များအလိုက် Bus Stops များအပြင် <strong>Manual Map Click</strong> နှိပ်၍ မြေပုံပေါ် စိတ်ကြိုက်နေရာများကို တိုက်ရိုက်ကလစ်နှိပ်ထည့်သွင်းနိုင်ပါသည်</span>
+                            <span class="text-blue-600 dark:text-blue-400 font-bold hidden sm:inline">6-Township Corridor + Map Clicks</span>
+                        </div>
+
+                        <!-- Stops List -->
+                        <div id="capModeCStopsList" class="divide-y divide-slate-100 dark:divide-slate-800 max-h-56 overflow-y-auto">
+                            <!-- Populated dynamically with checkable items -->
+                        </div>
+                    </div>
+
+                    <!-- Apply Button -->
+                    <button type="button" id="capModeCFinalizeBtn" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
+                        <span>🚀</span>
+                        <span>Apply Selected Stops to Route & Run Optimization (လမ်းကြောင်းဆွဲမည်)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 bg-slate-50 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                    <span>🏢</span>
+                    <span>Depot Destination: <strong id="capModalDepotDisplay" class="text-slate-700 dark:text-slate-200 font-bold">Yangon HQ</strong></span>
+                </div>
+                <button type="button" id="closeCapacityPlannerFooterBtn" class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition cursor-pointer">
+                    Close (ပိတ်မည်)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Map Click Mode Active Bar for Tab C Corridor Planning -->
+    <div id="capModeCMapClickFloatingBar" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-[9990] max-w-xl w-[94%] bg-slate-900/95 text-white p-3 rounded-2xl shadow-2xl border-2 border-emerald-500 backdrop-blur-md flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-4">
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 flex items-center justify-center text-lg font-bold animate-pulse flex-shrink-0">
+                📍
+            </div>
+            <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wide">Manual Map Click Mode Active</span>
+                    <span id="capModeCFloatingPaxBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 font-bold">0 / 15 Seats</span>
+                </div>
+                <p class="text-[11px] text-slate-300 truncate mt-0.5">
+                    မြေပုံပေါ် ကလစ်နှိပ်၍ မှတ်တိုင်ထည့်ပါ (Click anywhere on map to add/select stops)
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <button type="button" onclick="CapacityRoutePlannerEngine.finishMapClickMode()" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center gap-1 cursor-pointer">
+                <span>✓ Done (စာရင်းသို့ ပြန်သွားမည်)</span>
+            </button>
+            <button type="button" onclick="CapacityRoutePlannerEngine.cancelMapClickMode()" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold transition cursor-pointer" title="Cancel">
+                ✕
+            </button>
+        </div>
+    </div>
+
     <!-- Universal In-App Confirmation Modal (Safe for iframe sandbox) -->
     <div id="appConfirmModal" class="hidden fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 transform transition-all animate-in fade-in zoom-in-95 duration-150">
@@ -2410,7 +3042,9 @@
             downloadTemplateBtn: document.getElementById('downloadTemplateBtn'),
             quickLoadSampleCsvBtn: document.getElementById('quickLoadSampleCsvBtn'),
             exportActiveRouteCsvBtn: document.getElementById('exportActiveRouteCsvBtn'),
+            buildHybridRouteFromCsvBtn: document.getElementById('buildHybridRouteFromCsvBtn'),
             csvImportReplaceMode: document.getElementById('csvImportReplaceMode'),
+            csvAutoHybridPlan: document.getElementById('csvAutoHybridPlan'),
             csvDropZone: document.getElementById('csvDropZone'),
             csvDropActiveOverlay: document.getElementById('csvDropActiveOverlay'),
             csvFileInput: document.getElementById('csvFileInput'),
@@ -4697,6 +5331,13 @@
                 return;
             }
 
+            // 1.5. Capacity Route Planner Mode C (Corridor Stops) Manual Map Click Mode
+            if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.state &&
+                window.CapacityRoutePlannerEngine.state.modeC && window.CapacityRoutePlannerEngine.state.modeC.isMapClickActive) {
+                window.CapacityRoutePlannerEngine.handleMapClick(e.latlng);
+                return;
+            }
+
             // 2. Regular Manual Stop Add Map Click Mode
             if (!isMapClickMode) return;
             const lat = e.latlng.lat.toFixed(6);
@@ -5916,12 +6557,12 @@
             }
 
             const demoStops = [
-                { name: "Hledan Centre (လှည်းတန်း)", lat: 16.8282, lng: 96.1309, passengers: 3 },
-                { name: "Insein Park (အင်းစိန်)", lat: 16.8835, lng: 96.1084, passengers: 2 },
-                { name: "Thamine Junction (သမိုင်း)", lat: 16.8624, lng: 96.1218, passengers: 1 },
-                { name: "Sule Square (ဆူးလေ)", lat: 16.7735, lng: 96.1587, passengers: 4 },
-                { name: "Tamwe Ocean (တာမွေ)", lat: 16.8091, lng: 96.1702, passengers: 2 },
-                { name: "Yankin Centre Point (ရန်ကင်း)", lat: 16.8243, lng: 96.1624, passengers: 3 }
+                { name: "Hledan Centre (လှည်းတန်း)", lat: 16.8282, lng: 96.1309, passengers: 3, township: "Kamayut", road: "Pyay Road" },
+                { name: "Insein Park (အင်းစိန်)", lat: 16.8835, lng: 96.1084, passengers: 2, township: "Insein", road: "Lower Mingaladon Road" },
+                { name: "Thamine Junction (သမိုင်း)", lat: 16.8624, lng: 96.1218, passengers: 1, township: "Mayangone", road: "Insein Road" },
+                { name: "Sule Square (ဆူးလေ)", lat: 16.7735, lng: 96.1587, passengers: 4, township: "Kyauktada", road: "Sule Pagoda Road" },
+                { name: "Tamwe Ocean (တာမွေ)", lat: 16.8091, lng: 96.1702, passengers: 2, township: "Tamwe", road: "East Horse Race Course Road" },
+                { name: "Yankin Centre Point (ရန်ကင်း)", lat: 16.8243, lng: 96.1624, passengers: 3, township: "Yankin", road: "Kanbe Road" }
             ];
 
             stops.push(...demoStops);
@@ -5936,11 +6577,32 @@
                 map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
             }
 
-            showToast(`✓ Loaded 6 Yangon demo stops! [${isReplace ? 'Replaced All' : 'Appended'}]`, 'success');
+            // Check if user has Auto Hybrid Plan enabled
+            const isAutoHybrid = els.csvAutoHybridPlan ? els.csvAutoHybridPlan.checked : true;
+            if (isAutoHybrid && window.CapacityRoutePlannerEngine && typeof window.CapacityRoutePlannerEngine.loadFromCsv === 'function') {
+                window.CapacityRoutePlannerEngine.loadFromCsv(demoStops, true);
+            } else {
+                showToast(`✓ Loaded 6 Yangon demo stops! [${isReplace ? 'Replaced All' : 'Appended'}]`, 'success');
+            }
         };
 
         if (els.quickLoadSampleCsvBtn) {
             els.quickLoadSampleCsvBtn.addEventListener('click', loadDemoYangonStops);
+        }
+
+        // Build Hybrid Route from CSV / Active Stops
+        if (els.buildHybridRouteFromCsvBtn) {
+            els.buildHybridRouteFromCsvBtn.addEventListener('click', () => {
+                if (stops && stops.length > 0) {
+                    if (window.CapacityRoutePlannerEngine && typeof window.CapacityRoutePlannerEngine.loadFromCsv === 'function') {
+                        window.CapacityRoutePlannerEngine.loadFromCsv(stops, true);
+                    }
+                } else if (els.csvFileInput) {
+                    els.csvFileInput.click();
+                } else {
+                    showToast('💡 CSV ဖိုင် import ပြုလုပ်ပါ သို့မဟုတ် "Load Demo Stops" နှိပ်၍ စမ်းသပ်နိုင်ပါသည်', 'info');
+                }
+            });
         }
 
         // 3. Process CSV File Import
@@ -5965,7 +6627,7 @@
 
                     // Flexible Header Detection
                     let hasHeader = false;
-                    let nameIdx = -1, latIdx = -1, lngIdx = -1, paxIdx = -1;
+                    let nameIdx = -1, latIdx = -1, lngIdx = -1, paxIdx = -1, townshipIdx = -1, roadIdx = -1;
 
                     const firstRow = rows[0].map(c => c.trim().toLowerCase());
                     firstRow.forEach((col, idx) => {
@@ -5978,6 +6640,10 @@
                             if (lngIdx === -1) lngIdx = idx;
                         } else if (['passenger_count', 'passenger', 'passengers', 'pax', 'seats', 'count', 'capacity', 'လူစီးဦးရေ', 'လူစီး'].includes(clean) || clean.includes('pax') || clean.includes('pass')) {
                             if (paxIdx === -1) paxIdx = idx;
+                        } else if (['township', 'town_ship', 'ts', 'town', 'tsp', 'zone', 'area', 'quarter', 'ward', 'မြို့နယ်'].includes(clean) || clean.includes('township') || clean.includes('town')) {
+                            if (townshipIdx === -1) townshipIdx = idx;
+                        } else if (['road', 'street', 'notes', 'address', 'remark', 'remarks', 'လမ်း', 'မှတ်ချက်'].includes(clean) || clean.includes('road') || clean.includes('street')) {
+                            if (roadIdx === -1) roadIdx = idx;
                         }
                     });
 
@@ -6013,6 +6679,8 @@
                         let lng = parseFloat(row[lngIdx !== -1 ? lngIdx : 2]);
                         let name = (nameIdx !== -1 && row[nameIdx]) ? row[nameIdx].trim() : '';
                         let pax = paxIdx !== -1 && row[paxIdx] ? parseInt(row[paxIdx], 10) : 1;
+                        let township = (townshipIdx !== -1 && row[townshipIdx]) ? row[townshipIdx].trim() : '';
+                        let road = (roadIdx !== -1 && row[roadIdx]) ? row[roadIdx].trim() : '';
 
                         // Check if lat/lng were swapped (Myanmar typical: Lat ~16-28, Lng ~92-101)
                         if (Math.abs(lat) > 90 && Math.abs(lng) <= 90) {
@@ -6034,11 +6702,21 @@
                         if (isNaN(pax) || pax < 1) pax = 1;
                         if (pax > 200) pax = 200;
 
+                        // Auto-detect township if missing
+                        if ((!township || township.toLowerCase() === 'yangon') && window.CapacityRoutePlannerEngine && typeof window.CapacityRoutePlannerEngine.detectNearestTownship === 'function') {
+                            township = window.CapacityRoutePlannerEngine.detectNearestTownship(lat, lng);
+                        }
+
                         newStops.push({
+                            id: 'csv_stop_' + Date.now() + '_' + i,
                             name: name,
                             lat: Number(lat.toFixed(6)),
                             lng: Number(lng.toFixed(6)),
-                            passengers: pax
+                            passengers: pax,
+                            township: township || 'Yangon',
+                            road: road || 'Corridor Road',
+                            type: 'Pickup',
+                            isCsvImported: true
                         });
                     }
 
@@ -6066,9 +6744,15 @@
                         map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
                     }
 
-                    const replaceMsg = isReplace ? 'Replaced All' : 'Appended';
-                    const skipMsg = skippedCount > 0 ? ` (${skippedCount} invalid rows skipped)` : '';
-                    showToast(`✓ Imported ${newStops.length} stops from "${file.name}" [${replaceMsg}]${skipMsg}`, "success");
+                    // Check if Auto Hybrid Route Builder is enabled
+                    const isAutoHybrid = els.csvAutoHybridPlan ? els.csvAutoHybridPlan.checked : true;
+                    if (isAutoHybrid && window.CapacityRoutePlannerEngine && typeof window.CapacityRoutePlannerEngine.loadFromCsv === 'function') {
+                        window.CapacityRoutePlannerEngine.loadFromCsv(newStops, true);
+                    } else {
+                        const replaceMsg = isReplace ? 'Replaced All' : 'Appended';
+                        const skipMsg = skippedCount > 0 ? ` (${skippedCount} invalid rows skipped)` : '';
+                        showToast(`✓ Imported ${newStops.length} stops from "${file.name}" [${replaceMsg}]${skipMsg}`, "success");
+                    }
 
                 } catch (parseErr) {
                     console.error("CSV Import Error:", parseErr);
@@ -10521,8 +11205,2012 @@
 
         window.FerrySecurityEngine = FerrySecurityEngine;
 
+        // ============================================================================
+        // SMART CAPACITY ROUTE PLANNER ENGINE (Single Vehicle, Fleet Splitter & Hybrid)
+        // Supported: Up to 6 Townships Corridor Combining, CVRP Splitter, Auto-Packing
+        // ============================================================================
+        const CORRIDOR_PRESETS = {
+            all_yangon: {
+                id: 'all_yangon',
+                name: '⭐ ရန်ကုန်တစ်မြို့လုံး (All Yangon - မြို့နယ်အားလုံး)',
+                townships: []
+            },
+            pyay_road: {
+                id: 'pyay_road',
+                name: 'Pyay Road Corridor (ပြည်လမ်းမကြီး)',
+                townships: ['Insein', 'Mayangone', 'Hlaing', 'Kamayut', 'Sanchaung', 'Dagon']
+            },
+            kaba_aye: {
+                id: 'kaba_aye',
+                name: 'Kaba Aye / Airport Corridor (ကမ္ဘာအေး/လေဆိပ်)',
+                townships: ['Mingaladon', 'Mayangone', 'Yankin', 'Bahan', 'Tamwe', 'Mingalar Taung Nyunt']
+            },
+            east_dagon: {
+                id: 'east_dagon',
+                name: 'East Yangon Corridor (အရှေ့ပိုင်း)',
+                townships: ['North Dagon', 'East Dagon', 'South Dagon', 'North Okkalapa', 'South Okkalapa', 'Thingangyun']
+            },
+            industrial_west: {
+                id: 'industrial_west',
+                name: 'Industrial & West Corridor (လှိုင်သာယာ/အနောက်ပိုင်း)',
+                townships: ['Hlaing Tharyar', 'Insein', 'Mayangone', 'Hlaing', 'Kamayut', 'Kyimyindaing']
+            },
+            thanlyin_south: {
+                id: 'thanlyin_south',
+                name: 'South & River Corridor (တောင်ပိုင်း/ဒေါပုံ/သာကေတ)',
+                townships: ['Thaketa', 'Dawbon', 'Tamwe', 'Mingalar Taung Nyunt', 'Botahtaung', 'Pazundaung']
+            },
+            central_business: {
+                id: 'central_business',
+                name: 'Downtown Central Business District (မြို့လယ်စီးပွားရေးဇုန်)',
+                townships: ['Kyauktada', 'Pabedan', 'Latha', 'Lanmadaw', 'Botahtaung', 'Pazundaung']
+            }
+        };
+
+        const CapacityRoutePlannerEngine = {
+            state: {
+                isOpen: false,
+                activeTab: 'A', // 'A' | 'B' | 'C'
+                modeA: {
+                    vehicleType: 'van',
+                    targetCapacity: 15,
+                    strategy: 'exact',
+                    sourceType: 'township',
+                    selectedTownships: ['Insein', 'Mayangone'],
+                    maxTownships: 6,
+                    hub: 'Hledan Bus Stop',
+                    paxDistribution: 'dynamic',
+                    generatedPlan: null
+                },
+                modeB: {
+                    vehicleType: 'van',
+                    capacityPerVehicle: 15,
+                    source: 'corridor_pyay_road',
+                    splitRoutes: []
+                },
+                modeC: {
+                    selectedTownships: ['Insein', 'Mayangone', 'Hlaing'],
+                    maxTownships: 6,
+                    availableStops: [],
+                    selectedStops: new Map(), // index/id -> { stop, pax, checked }
+                    mapAddedStops: [],
+                    csvImportedStops: [],
+                    isMapClickActive: false,
+                    showMapMarkers: false
+                }
+            },
+
+            // Auto-detect nearest Yangon township from master pool
+            detectNearestTownship(lat, lng) {
+                const pool = this.getPool();
+                if (!pool || pool.length === 0) return 'Yangon';
+                let closest = 'Yangon';
+                let minD = Infinity;
+                for (let i = 0; i < pool.length; i++) {
+                    const s = pool[i];
+                    if (s.township && s.lat && s.lng) {
+                        const d = this.haversine(lat, lng, s.lat, s.lng);
+                        if (d < minD) {
+                            minD = d;
+                            closest = s.township.trim();
+                        }
+                    }
+                }
+                return closest;
+            },
+
+            // High-precision Haversine Distance (KM)
+            haversine(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            },
+
+            // Get Master Yangon Bus Stop Pool
+            getPool() {
+                if (typeof ybsStopsDB !== 'undefined' && Array.isArray(ybsStopsDB) && ybsStopsDB.length > 0) {
+                    return ybsStopsDB;
+                }
+                if (typeof YANGON_BUS_STOPS !== 'undefined' && Array.isArray(YANGON_BUS_STOPS) && YANGON_BUS_STOPS.length > 0) {
+                    return YANGON_BUS_STOPS;
+                }
+                return [];
+            },
+
+            // Get Unique Townships from Database
+            getTownships() {
+                const pool = this.getPool();
+                const set = new Set();
+                pool.forEach(s => {
+                    if (s.township && s.township.trim()) set.add(s.township.trim());
+                });
+                const priority = ['Insein', 'Mayangone', 'Hlaing', 'Kamayut', 'Sanchaung', 'Dagon', 'Mingaladon', 'Yankin', 'Bahan', 'Tamwe', 'Mingalar Taung Nyunt', 'North Dagon', 'South Dagon', 'East Dagon', 'North Okkalapa', 'South Okkalapa', 'Thingangyun', 'Hlaing Tharyar', 'Thaketa', 'Dawbon', 'Botahtaung', 'Pazundaung', 'Kyauktada', 'Pabedan', 'Latha', 'Lanmadaw', 'Ahlone', 'Kyimyindaing', 'Shwepyitha'];
+                const sorted = Array.from(set).sort((a, b) => {
+                    const idxA = priority.indexOf(a);
+                    const idxB = priority.indexOf(b);
+                    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                    if (idxA !== -1) return -1;
+                    if (idxB !== -1) return 1;
+                    return a.localeCompare(b);
+                });
+                return sorted.length > 0 ? sorted : priority;
+            },
+
+            // Multi-Township Corridor Management (All Yangon Townships Supported)
+            applyCorridorPreset(tab, presetId) {
+                if (presetId === 'all_yangon') {
+                    this.selectAllTownships(tab);
+                    return;
+                }
+                const preset = CORRIDOR_PRESETS[presetId];
+                if (!preset) return;
+                const modeKey = tab === 'C' ? 'modeC' : 'modeA';
+                this.state[modeKey].selectedTownships = [...preset.townships];
+                this.renderTownshipChips(tab);
+                this.populateTownshipSelects(tab);
+                if (tab === 'C') {
+                    this.loadModeCStops();
+                }
+                showToast(`✓ ရွေးချယ်ပြီး: ${preset.name} (${preset.townships.length} မြို့နယ်ပေါင်းစပ်ထားသည်)`, 'success');
+            },
+
+            selectAllTownships(tab) {
+                const modeKey = tab === 'C' ? 'modeC' : 'modeA';
+                const all = this.getTownships();
+                this.state[modeKey].selectedTownships = [...all];
+                this.renderTownshipChips(tab);
+                this.populateTownshipSelects(tab);
+                if (tab === 'C') {
+                    this.loadModeCStops();
+                }
+                showToast(`✓ ရန်ကုန်တစ်မြို့လုံးရှိ မြို့နယ်အားလုံး (${all.length} မြို့နယ်) ကို ရွေးချယ်ပြီးပါပြီ!`, 'success');
+            },
+
+            addTownship(tab, townshipName) {
+                if (!townshipName || !townshipName.trim()) return;
+                const modeKey = tab === 'C' ? 'modeC' : 'modeA';
+                const list = this.state[modeKey].selectedTownships;
+                const all = this.getTownships();
+                if (list.length >= all.length && all.length > 0) {
+                    showToast('✓ မြို့နယ်အားလုံး ရွေးချယ်ပြီးဖြစ်ပါသည်', 'info');
+                    return;
+                }
+                if (!list.includes(townshipName.trim())) {
+                    list.push(townshipName.trim());
+                    this.renderTownshipChips(tab);
+                    this.populateTownshipSelects(tab);
+                    if (tab === 'C') {
+                        this.loadModeCStops();
+                    }
+                    showToast(`✓ ပေါင်းထည့်ပြီး: ${townshipName} (${list.length} မြို့နယ် ရွေးချယ်ပြီး)`, 'info');
+                }
+            },
+
+            addTownshipFromDropdown(tab) {
+                const selectId = tab === 'C' ? 'capModeCAddTownshipSelect' : 'capModeAAddTownshipSelect';
+                const select = document.getElementById(selectId);
+                if (select && select.value) {
+                    this.addTownship(tab, select.value);
+                    select.value = '';
+                }
+            },
+
+            removeTownship(tab, townshipName) {
+                const modeKey = tab === 'C' ? 'modeC' : 'modeA';
+                const list = this.state[modeKey].selectedTownships;
+                this.state[modeKey].selectedTownships = list.filter(t => t !== townshipName);
+                this.renderTownshipChips(tab);
+                this.populateTownshipSelects(tab);
+                if (tab === 'C') {
+                    this.loadModeCStops();
+                }
+                showToast(`✓ ဖယ်ရှားပြီး: ${townshipName}`, 'info');
+            },
+
+            clearTownships(tab) {
+                const modeKey = tab === 'C' ? 'modeC' : 'modeA';
+                this.state[modeKey].selectedTownships = [];
+                this.renderTownshipChips(tab);
+                this.populateTownshipSelects(tab);
+                if (tab === 'C') {
+                    this.loadModeCStops();
+                }
+                showToast('✓ မြို့နယ်များ အားလုံး ရှင်းလင်းပြီးပါပြီ', 'info');
+            },
+
+            renderTownshipChips(tab) {
+                const modeKey = tab === 'C' ? 'modeC' : 'modeA';
+                const list = this.state[modeKey].selectedTownships;
+                const all = this.getTownships();
+                const containerId = tab === 'C' ? 'capModeCSelectedChips' : 'capModeASelectedChips';
+                const quotaId = tab === 'C' ? 'capModeCTownshipQuota' : 'capModeATownshipQuota';
+                const container = document.getElementById(containerId);
+                const quota = document.getElementById(quotaId);
+
+                if (quota) {
+                    if (list.length >= all.length && all.length > 0) {
+                        quota.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200';
+                        quota.textContent = `✓ ရန်ကုန်တစ်မြို့လုံး (${list.length} မြို့နယ်လုံး)`;
+                    } else {
+                        quota.className = tab === 'C' ?
+                            'text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200' :
+                            'text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200';
+                        quota.textContent = `${list.length} မြို့နယ် ရွေးချယ်ပြီး`;
+                    }
+                }
+
+                if (!container) return;
+                if (list.length === 0) {
+                    container.innerHTML = `<span class="text-[11px] text-slate-400 italic">မည်သည့်မြို့နယ်မျှ မရွေးချယ်ရသေးပါ (Please select or click a corridor preset above)</span>`;
+                    return;
+                }
+
+                container.innerHTML = list.map((t, idx) => `
+                    <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-bold ${tab === 'C' ? 'bg-blue-50 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200 border border-blue-200 dark:border-blue-700' : 'bg-amber-50 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-200 dark:border-amber-700'}">
+                        <span class="w-4 h-4 rounded-full ${tab === 'C' ? 'bg-blue-600' : 'bg-amber-600'} text-white text-[9px] flex items-center justify-center font-mono">${idx + 1}</span>
+                        <span>${t}</span>
+                        <button type="button" onclick="CapacityRoutePlannerEngine.removeTownship('${tab}', '${t}')" class="ml-0.5 text-slate-400 hover:text-red-500 font-extrabold cursor-pointer" title="Remove ${t}">✕</button>
+                    </span>
+                `).join('');
+            },
+
+            populateTownshipSelects(tab) {
+                const targetTabs = tab ? [tab] : ['A', 'C'];
+                const townships = this.getTownships();
+
+                targetTabs.forEach(t => {
+                    const modeKey = t === 'C' ? 'modeC' : 'modeA';
+                    const selected = this.state[modeKey].selectedTownships;
+                    const selectId = t === 'C' ? 'capModeCAddTownshipSelect' : 'capModeAAddTownshipSelect';
+                    const select = document.getElementById(selectId);
+                    if (!select) return;
+
+                    const available = townships.filter(tw => !selected.includes(tw));
+                    select.innerHTML = `<option value="">+ မြို့နယ်ထပ်မံပေါင်းစပ်ရန် ရွေးချယ်ပါ (${available.length} ကျန်ရှိ)...</option>` +
+                        available.map(tw => `<option value="${tw}">+ ${tw} Township</option>`).join('');
+
+                    select.disabled = available.length === 0;
+                });
+            },
+
+            // Initialize DOM elements, bindings and listeners
+            init() {
+                this.renderTownshipChips('A');
+                this.renderTownshipChips('C');
+                this.populateTownshipSelects();
+                this.bindEvents();
+                this.syncCurrentVehicleLabels();
+            },
+
+            syncCurrentVehicleLabels() {
+                const vehCap = (currentVehicle && currentVehicle.capacity) ? currentVehicle.capacity : 15;
+                const vehName = (currentVehicle && currentVehicle.name) ? currentVehicle.name : 'Van';
+                const quickCapSpan = document.getElementById('quickPlanVehicleCapText');
+                if (quickCapSpan) {
+                    quickCapSpan.textContent = `${vehCap} Seats`;
+                }
+                const activeStopsLabel = document.getElementById('capModeBActiveStopsLabel');
+                if (activeStopsLabel) {
+                    activeStopsLabel.textContent = (stops && stops.length) ? stops.length : 0;
+                }
+                const activeStopsACount = document.getElementById('capModeAActiveStopsCount');
+                if (activeStopsACount) {
+                    activeStopsACount.textContent = (stops && stops.length) ? stops.length : 0;
+                }
+            },
+
+            open(tab = 'A') {
+                this.syncCurrentVehicleLabels();
+                const modal = document.getElementById('capacityPlannerModal');
+                if (!modal) return;
+                modal.classList.remove('hidden');
+                this.state.isOpen = true;
+
+                // Sync depot name
+                const depotDisplay = document.getElementById('capModalDepotDisplay');
+                const depotDisplayA = document.getElementById('capModeADepotDisplay');
+                const dName = (depot && depot.name) ? depot.name : 'Yangon HQ';
+                if (depotDisplay) depotDisplay.textContent = dName;
+                if (depotDisplayA) depotDisplayA.textContent = dName;
+
+                this.switchTab(tab);
+
+                // If opening Tab C, load stops for current townships
+                if (tab === 'C') {
+                    this.loadModeCStops();
+                }
+            },
+
+            close() {
+                const modal = document.getElementById('capacityPlannerModal');
+                if (modal) modal.classList.add('hidden');
+                this.state.isOpen = false;
+                if (this.state.modeC && this.state.modeC.isMapClickActive) {
+                    this.cancelMapClickMode();
+                }
+            },
+
+            switchTab(tab) {
+                this.state.activeTab = tab;
+                const tabs = ['A', 'B', 'C'];
+                tabs.forEach(t => {
+                    const btn = document.getElementById(`capTabBtn${t}`);
+                    const pane = document.getElementById(`capTabPane${t}`);
+                    if (t === tab) {
+                        if (btn) {
+                            btn.className = 'cap-tab-btn px-3.5 py-2.5 rounded-t-lg border-b-2 border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-slate-900 flex items-center gap-1.5 transition cursor-pointer flex-shrink-0 font-bold';
+                        }
+                        if (pane) pane.classList.remove('hidden');
+                    } else {
+                        if (btn) {
+                            btn.className = 'cap-tab-btn px-3.5 py-2.5 rounded-t-lg border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 flex items-center gap-1.5 transition cursor-pointer flex-shrink-0 font-bold';
+                        }
+                        if (pane) pane.classList.add('hidden');
+                    }
+                });
+
+                if (tab === 'C') {
+                    this.loadModeCStops();
+                }
+            },
+
+            // Deterministic dynamic PAX (1 to 4) based on stop characteristics
+            getPaxForStop(stop, index, distributionType) {
+                if (stop.passengers !== undefined && stop.passengers !== null && Number(stop.passengers) > 0) {
+                    return Number(stop.passengers);
+                }
+                if (distributionType === 'fixed_2') return 2;
+                if (distributionType === 'fixed_3') return 3;
+                if (distributionType === 'fixed_4') return 4;
+                // Dynamic (1 to 4)
+                const nameLen = (stop.name || '').length;
+                const pattern = [2, 3, 1, 4, 2, 3, 2, 1];
+                return pattern[(nameLen + index) % pattern.length];
+            },
+
+            // -------------------------------------------------------------
+            // MODE A: SINGLE VEHICLE CAPACITY ROUTE PLANNING ALGORITHM
+            // -------------------------------------------------------------
+            generateModeAPlan() {
+                const targetCap = parseInt(document.getElementById('capModeATargetCapInput')?.value, 10) || this.state.modeA.targetCapacity || 15;
+                const strategyRadio = document.querySelector('input[name="capModeAStrategy"]:checked');
+                const strategy = strategyRadio ? strategyRadio.value : 'exact';
+                const sourceRadio = document.querySelector('input[name="capModeASourceType"]:checked');
+                const sourceType = sourceRadio ? sourceRadio.value : 'township';
+                const paxDist = document.getElementById('capModeAPaxDistribution')?.value || 'dynamic';
+
+                const pool = this.getPool();
+                let candidatePool = [];
+
+                if (sourceType === 'active') {
+                    if (!stops || stops.length === 0) {
+                        showToast('⚠️ No active stops found in sidebar! Please add stops or choose "By Township".', 'error');
+                        return;
+                    }
+                    candidatePool = stops.map(s => ({ ...s }));
+                } else if (sourceType === 'hub') {
+                    const hubName = document.getElementById('capModeAHubSelect')?.value || 'Hledan Bus Stop';
+                    let hubStop = pool.find(s => s.name && s.name.toLowerCase().includes(hubName.toLowerCase()));
+                    if (!hubStop && pool.length > 0) hubStop = pool[0];
+
+                    if (hubStop) {
+                        // Take 45 closest stops to this hub
+                        candidatePool = pool
+                            .map(s => ({
+                                ...s,
+                                distToHub: this.haversine(hubStop.lat, hubStop.lng, s.lat, s.lng)
+                            }))
+                            .sort((a, b) => a.distToHub - b.distToHub)
+                            .slice(0, 45);
+                    } else {
+                        candidatePool = pool.slice(0, 45);
+                    }
+                } else {
+                    // Multi-Township Corridor (up to 6 townships)
+                    const selectedTownships = this.state.modeA.selectedTownships;
+                    if (!selectedTownships || selectedTownships.length === 0) {
+                        showToast('⚠️ Please select at least 1 township or corridor preset!', 'error');
+                        return;
+                    }
+
+                    const lowerTownships = selectedTownships.map(t => t.toLowerCase());
+                    candidatePool = pool.filter(s => s.township && lowerTownships.includes(s.township.toLowerCase()));
+
+                    if (candidatePool.length === 0) {
+                        candidatePool = pool.slice(0, 50);
+                    }
+                }
+
+                if (candidatePool.length === 0) {
+                    showToast('⚠️ No stops found for selected criteria.', 'error');
+                    return;
+                }
+
+                // Prepare candidates with assigned PAX and distance to Depot
+                const depotLat = (depot && depot.lat) ? depot.lat : 16.8661;
+                const depotLng = (depot && depot.lng) ? depot.lng : 96.1951;
+
+                const prepared = candidatePool.map((s, idx) => ({
+                    ...s,
+                    passengers: this.getPaxForStop(s, idx, paxDist),
+                    distToDepot: this.haversine(s.lat, s.lng, depotLat, depotLng)
+                }));
+
+                // Sort furthest from depot first so route moves inwards towards HQ
+                prepared.sort((a, b) => b.distToDepot - a.distToDepot);
+
+                // Greedy Knapsack Nearest-Neighbor Selection
+                const selected = [];
+                let currentPax = 0;
+                const unvisited = [...prepared];
+
+                // Pick initial anchor stop (furthest from depot in cluster)
+                const startStop = unvisited.shift();
+                startStop.passengers = Math.min(startStop.passengers, targetCap);
+                selected.push(startStop);
+                currentPax += startStop.passengers;
+
+                let lastStop = startStop;
+
+                while (unvisited.length > 0 && currentPax < targetCap) {
+                    const remainingGap = targetCap - currentPax;
+
+                    // Sort unvisited by distance to last stop
+                    unvisited.sort((a, b) => {
+                        const dA = this.haversine(lastStop.lat, lastStop.lng, a.lat, a.lng);
+                        const dB = this.haversine(lastStop.lat, lastStop.lng, b.lat, b.lng);
+                        return dA - dB;
+                    });
+
+                    // Search for exact gap match if exact strategy
+                    let candidateIndex = -1;
+                    if (strategy === 'exact') {
+                        candidateIndex = unvisited.findIndex(u => u.passengers === remainingGap);
+                    }
+
+                    if (candidateIndex === -1) {
+                        // Find closest stop that fits without overflowing
+                        candidateIndex = unvisited.findIndex(u => u.passengers <= remainingGap);
+                    }
+
+                    if (candidateIndex !== -1) {
+                        const chosen = unvisited.splice(candidateIndex, 1)[0];
+                        selected.push(chosen);
+                        currentPax += chosen.passengers;
+                        lastStop = chosen;
+                    } else {
+                        // If no stop fits completely
+                        if (strategy === 'exact') {
+                            // Take closest stop and trim passenger pick to hit exactly targetCap
+                            const chosen = unvisited.shift();
+                            chosen.passengers = remainingGap;
+                            selected.push(chosen);
+                            currentPax += chosen.passengers;
+                            lastStop = chosen;
+                            break;
+                        } else {
+                            // Optimal strategy: if reached >= 85%, acceptable
+                            if (currentPax >= Math.floor(targetCap * 0.85)) {
+                                break;
+                            } else {
+                                const chosen = unvisited.shift();
+                                chosen.passengers = remainingGap;
+                                selected.push(chosen);
+                                currentPax += chosen.passengers;
+                                lastStop = chosen;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Sequence Selected Stops via Nearest-Neighbor TSP ending at Depot
+                const orderedStops = [];
+                const remainingToOrder = [...selected];
+                let curr = remainingToOrder.shift();
+                orderedStops.push(curr);
+
+                while (remainingToOrder.length > 0) {
+                    remainingToOrder.sort((a, b) => {
+                        const dA = this.haversine(curr.lat, curr.lng, a.lat, a.lng);
+                        const dB = this.haversine(curr.lat, curr.lng, b.lat, b.lng);
+                        return dA - dB;
+                    });
+                    curr = remainingToOrder.shift();
+                    orderedStops.push(curr);
+                }
+
+                // Compute approximate total distance and duration
+                let totalDist = 0;
+                for (let i = 0; i < orderedStops.length - 1; i++) {
+                    totalDist += this.haversine(orderedStops[i].lat, orderedStops[i].lng, orderedStops[i + 1].lat, orderedStops[i + 1].lng);
+                }
+                if (orderedStops.length > 0) {
+                    totalDist += this.haversine(orderedStops[orderedStops.length - 1].lat, orderedStops[orderedStops.length - 1].lng, depotLat, depotLng);
+                }
+                const totalDistKm = Number(totalDist.toFixed(1));
+                const estMins = Math.max(15, Math.round(totalDistKm * 2.2 + orderedStops.length * 3));
+
+                const plan = {
+                    vehicleType: this.state.modeA.vehicleType,
+                    targetCapacity: targetCap,
+                    stops: orderedStops,
+                    totalPax: currentPax,
+                    totalDistanceKm: totalDistKm,
+                    totalDurationMins: estMins,
+                    strategy: strategy
+                };
+
+                this.state.modeA.generatedPlan = plan;
+                this.renderModeAResult(plan);
+            },
+
+            renderModeAResult(plan) {
+                const card = document.getElementById('capModeAResultCard');
+                if (!card) return;
+                card.classList.remove('hidden');
+
+                const percent = Math.min(100, Math.round((plan.totalPax / plan.targetCapacity) * 100));
+                const gaugeBar = document.getElementById('capModeAGaugeBar');
+                const gaugeText = document.getElementById('capModeAGaugePercent');
+                const badge = document.getElementById('capModeAStatusBadge');
+                const subtitle = document.getElementById('capModeAResultSubtitle');
+
+                if (gaugeBar) gaugeBar.style.width = `${percent}%`;
+                if (gaugeText) gaugeText.textContent = `${plan.totalPax} / ${plan.targetCapacity} PAX (${percent}%)`;
+
+                if (badge) {
+                    if (percent === 100) {
+                        badge.className = 'text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200';
+                        badge.textContent = '100% Fully Matched (ကွက်တိပြည့်)';
+                    } else {
+                        badge.className = 'text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200';
+                        badge.textContent = `${percent}% Optimal Fill`;
+                    }
+                }
+
+                if (subtitle) {
+                    subtitle.textContent = `${plan.stops.length} Stops · ${plan.totalPax} PAX Onboard · ~${plan.totalDistanceKm} km (${plan.totalDurationMins} mins) to Depot`;
+                }
+
+                // Render Table Rows
+                const tbody = document.getElementById('capModeAStopsTableBody');
+                if (tbody) {
+                    let cumulative = 0;
+                    tbody.innerHTML = plan.stops.map((s, idx) => {
+                        cumulative += s.passengers;
+                        return `
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                                <td class="p-2 text-center font-bold text-slate-500">${idx + 1}</td>
+                                <td class="p-2 font-semibold text-slate-900 dark:text-white">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                        <span>${s.name}</span>
+                                    </div>
+                                </td>
+                                <td class="p-2 text-slate-500 dark:text-slate-400">
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${s.township || 'Yangon'}</span>
+                                    <span class="text-[10px] text-slate-400 ml-1">${s.road || ''}</span>
+                                </td>
+                                <td class="p-2 text-center font-mono font-bold text-amber-600 dark:text-amber-400">+${s.passengers} PAX</td>
+                                <td class="p-2 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">${cumulative} / ${plan.targetCapacity}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            },
+
+            applyModeAPlanToActive() {
+                const plan = this.state.modeA.generatedPlan;
+                if (!plan || !plan.stops || plan.stops.length === 0) {
+                    showToast('⚠️ No generated plan to apply! Click Calculate first.', 'error');
+                    return;
+                }
+
+                // Update vehicle if needed
+                const targetVehKey = this.state.modeA.vehicleType;
+                if (VEHICLE_TYPES && VEHICLE_TYPES[targetVehKey]) {
+                    currentVehicle = JSON.parse(JSON.stringify(VEHICLE_TYPES[targetVehKey]));
+                    currentVehicle.capacity = plan.targetCapacity;
+                    localStorage.setItem('ferry_vehicle', JSON.stringify(currentVehicle));
+                    if (typeof renderVehicleUI === 'function') renderVehicleUI();
+                }
+
+                // Replace stops
+                stops = plan.stops.map(s => ({
+                    id: s.id || 'stop_' + Math.random().toString(36).substr(2, 9),
+                    name: s.name,
+                    lat: s.lat,
+                    lng: s.lng,
+                    passengers: s.passengers,
+                    type: 'Pickup'
+                }));
+
+                // Re-render stops in sidebar
+                if (typeof renderStops === 'function') renderStops();
+                if (typeof updateMapMarkers === 'function') updateMapMarkers();
+
+                this.close();
+                showToast(`✓ Applied ${stops.length} stops (${plan.totalPax} PAX) into Active Route! Optimizing...`, 'success');
+
+                // Trigger OSRM optimization
+                setTimeout(() => {
+                    const optBtn = document.getElementById('optimizeBtn');
+                    if (optBtn) optBtn.click();
+                }, 300);
+            },
+
+            saveModeAPlanDirect() {
+                const plan = this.state.modeA.generatedPlan;
+                if (!plan || !plan.stops || plan.stops.length === 0) {
+                    showToast('⚠️ No generated plan to save!', 'error');
+                    return;
+                }
+
+                const routeId = 'route_' + Date.now();
+                const routeName = `Ferry ${plan.vehicleType.toUpperCase()} - ${plan.stops[0].township || 'Yangon'} (${plan.totalPax} PAX)`;
+                
+                const newRoute = {
+                    id: routeId,
+                    name: routeName,
+                    createdAt: new Date().toISOString(),
+                    vehicle: {
+                        type: plan.vehicleType,
+                        name: plan.vehicleType.replace('_', ' ').toUpperCase(),
+                        capacity: plan.targetCapacity
+                    },
+                    depot: { ...depot },
+                    stops: plan.stops.map(s => ({
+                        id: s.id || 'stop_' + Math.random().toString(36).substr(2, 9),
+                        name: s.name,
+                        lat: s.lat,
+                        lng: s.lng,
+                        passengers: s.passengers,
+                        type: 'Pickup'
+                    })),
+                    optimizedStops: [...plan.stops, { ...depot, type: 'Depot' }],
+                    metrics: {
+                        distance: plan.totalDistanceKm,
+                        duration: plan.totalDurationMins,
+                        passengers: plan.totalPax,
+                        stopsCount: plan.stops.length
+                    }
+                };
+
+                if (!Array.isArray(savedRoutes)) savedRoutes = [];
+                savedRoutes.unshift(newRoute);
+                localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+
+                if (typeof updateSavedRoutesBadge === 'function') updateSavedRoutesBadge();
+                if (typeof renderSavedRoutesModalList === 'function') renderSavedRoutesModalList();
+
+                showToast(`✓ Saved route "${routeName}" to database successfully!`, 'success');
+            },
+
+            // -------------------------------------------------------------
+            // MODE B: FLEET AUTO-SPLITTER ALGORITHM (CVRP & Continuous Auto-Split)
+            // -------------------------------------------------------------
+            runFleetSplitter() {
+                const vehType = document.getElementById('capModeBFleetVehSelect')?.value || 'mini_bus';
+                const presetCap = (VEHICLE_TYPES && VEHICLE_TYPES[vehType]) ? VEHICLE_TYPES[vehType].capacity : 25;
+                const capacityPerCar = presetCap;
+                const source = document.getElementById('capModeBFleetSourceSelect')?.value || 'active';
+
+                let rawStops = [];
+                const pool = this.getPool();
+
+                if (source === 'active') {
+                    if ((!stops || stops.length === 0) && (!this.state.modeC.csvImportedStops || this.state.modeC.csvImportedStops.length === 0)) {
+                        showToast('⚠️ No active stops or CSV stops found! Please import CSV or select corridor stops first.', 'error');
+                        return;
+                    }
+                    if (this.state.modeC.csvImportedStops && this.state.modeC.csvImportedStops.length > 0) {
+                        rawStops = this.state.modeC.csvImportedStops.map((s, idx) => ({
+                            ...s,
+                            passengers: (Number(s.passengers) > 0) ? Number(s.passengers) : 1
+                        }));
+                    } else {
+                        rawStops = stops.map((s, idx) => ({
+                            ...s,
+                            passengers: Number(s.passengers) > 0 ? Number(s.passengers) : this.getPaxForStop(s, idx, 'dynamic')
+                        }));
+                    }
+                } else if (source === 'csv_imported') {
+                    if (!this.state.modeC.csvImportedStops || this.state.modeC.csvImportedStops.length === 0) {
+                        const csvFromActive = (stops || []).filter(s => s.isCsvImported);
+                        if (csvFromActive.length > 0) {
+                            rawStops = [...csvFromActive];
+                        } else {
+                            showToast('⚠️ No CSV imported stops found! Please import a CSV file first.', 'error');
+                            return;
+                        }
+                    } else {
+                        rawStops = [...this.state.modeC.csvImportedStops];
+                    }
+                } else if (source === 'all_yangon_pool') {
+                    rawStops = pool.map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'corridor_pyay_road') {
+                    const tws = CORRIDOR_PRESETS.pyay_road.townships;
+                    rawStops = pool.filter(s => s.township && tws.includes(s.township)).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'corridor_kaba_aye') {
+                    const tws = CORRIDOR_PRESETS.kaba_aye.townships;
+                    rawStops = pool.filter(s => s.township && tws.includes(s.township)).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'corridor_east_dagon') {
+                    const tws = CORRIDOR_PRESETS.east_dagon.townships;
+                    rawStops = pool.filter(s => s.township && tws.includes(s.township)).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'corridor_industrial') {
+                    const tws = CORRIDOR_PRESETS.industrial_west.townships;
+                    rawStops = pool.filter(s => s.township && tws.includes(s.township)).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'corridor_south') {
+                    const tws = CORRIDOR_PRESETS.thanlyin_south.townships;
+                    rawStops = pool.filter(s => s.township && tws.includes(s.township)).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'insein_zone') {
+                    rawStops = pool.filter(s => s.township === 'Insein').map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'hlaingtharyar_zone') {
+                    rawStops = pool.filter(s => s.township === 'Hlaing Tharyar').map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'kamayut_hledan_zone') {
+                    rawStops = pool.filter(s => s.township === 'Kamayut' || s.township === 'Hlaing').map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (source === 'east_dagon_zone') {
+                    rawStops = pool.filter(s => s.township && s.township.includes('Dagon')).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else {
+                    // Yangon top hubs
+                    rawStops = pool.slice(0, 50).map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                }
+
+                if (rawStops.length === 0) {
+                    showToast('⚠️ No stops available for fleet splitting.', 'error');
+                    return;
+                }
+
+                this.executeContinuousFleetAutoSplit(rawStops, vehType, capacityPerCar);
+            },
+
+            // Continuous Fleet Auto-Split: Runs in a loop until ALL uploaded stops are exhausted
+            // Evaluates each batch with Plan (A) & Plan (B), naming output sequentially: Route 1, Route 2, etc.
+            executeContinuousFleetAutoSplit(rawStops, vehType = 'mini_bus', capacityPerCar = 25) {
+                if (!rawStops || rawStops.length === 0) {
+                    showToast('⚠️ No bus stops found to auto-split!', 'error');
+                    return;
+                }
+
+                const depotLat = (depot && depot.lat) ? Number(depot.lat) : 16.8661;
+                const depotLng = (depot && depot.lng) ? Number(depot.lng) : 96.1951;
+
+                // 40 distinct, high-contrast vibrant colors for Route 1, Route 2, Route 3...
+                const colors = [
+                    '#2563eb', '#16a34a', '#d97706', '#9333ea', '#dc2626', '#0891b2', '#ea580c', '#4f46e5',
+                    '#059669', '#d946ef', '#0284c7', '#ca8a04', '#e11d48', '#7c3aed', '#10b981', '#f59e0b',
+                    '#3b82f6', '#84cc16', '#6366f1', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6', '#06b6d4',
+                    '#475569', '#65a30d', '#be123c', '#4338ca', '#047857', '#b45309', '#6d28d9', '#0e7490',
+                    '#0d9488', '#e11d48', '#854d0e', '#1e40af', '#15803d', '#a21caf', '#c2410c', '#374151'
+                ];
+
+                const vehConfig = (VEHICLE_TYPES && VEHICLE_TYPES[vehType]) 
+                    ? VEHICLE_TYPES[vehType] 
+                    : { name: (vehType === 'mini_bus' ? 'Mini Bus' : 'Van'), capacity: capacityPerCar };
+
+                // Clone stops pool and calculate initial distance to depot
+                let unassigned = rawStops.map((s, idx) => {
+                    const lat = Number(s.lat);
+                    const lng = Number(s.lng);
+                    const pax = (Number(s.passengers) > 0) ? Number(s.passengers) : 1;
+                    const dToDepot = this.haversine(lat, lng, depotLat, depotLng);
+                    return {
+                        ...s,
+                        lat,
+                        lng,
+                        passengers: pax,
+                        distToDepot: dToDepot,
+                        originalIndex: idx
+                    };
+                });
+
+                const totalInitialStops = unassigned.length;
+                const splitRoutes = [];
+                let routeCounter = 1;
+
+                // CONTINUOUS AUTO-SPLIT LOOP: Runs until ALL uploaded stops are exhausted (unassigned.length === 0)
+                while (unassigned.length > 0) {
+                    // Step 1: Pick furthest stop from Depot as cluster seed anchor
+                    let seedIdx = 0;
+                    let maxDist = -1;
+                    for (let i = 0; i < unassigned.length; i++) {
+                        if (unassigned[i].distToDepot > maxDist) {
+                            maxDist = unassigned[i].distToDepot;
+                            seedIdx = i;
+                        }
+                    }
+
+                    const seedStop = unassigned.splice(seedIdx, 1)[0];
+                    const currentBatch = [seedStop];
+                    let currentPax = seedStop.passengers || 1;
+
+                    // Step 2: Greedily aggregate nearest neighbor stops until capacityPerCar limit
+                    while (unassigned.length > 0) {
+                        const lastStop = currentBatch[currentBatch.length - 1];
+                        let closestIdx = -1;
+                        let minDistance = Infinity;
+
+                        for (let i = 0; i < unassigned.length; i++) {
+                            const cand = unassigned[i];
+                            const d = this.haversine(lastStop.lat, lastStop.lng, cand.lat, cand.lng);
+                            if (d < minDistance) {
+                                minDistance = d;
+                                closestIdx = i;
+                            }
+                        }
+
+                        if (closestIdx === -1) break;
+
+                        const nextCandidate = unassigned[closestIdx];
+                        const nextPax = nextCandidate.passengers || 1;
+
+                        // Stop condition: vehicle capacity reached or maximum 25 stops reached
+                        if (currentBatch.length >= capacityPerCar || (currentPax + nextPax > capacityPerCar && currentBatch.length > 0)) {
+                            break;
+                        }
+
+                        currentBatch.push(nextCandidate);
+                        currentPax += nextPax;
+                        unassigned.splice(closestIdx, 1);
+                    }
+
+                    // Step 3: DUAL OPTIMIZATION CHECK - ပုံစံ (A) vs ပုံစံ (B)
+                    // Plan (A): Radial Corridor Sort (Furthest to closest stop towards Depot)
+                    const planAStops = [...currentBatch].sort((a, b) => b.distToDepot - a.distToDepot);
+                    let distA = 0;
+                    for (let i = 0; i < planAStops.length - 1; i++) {
+                        distA += this.haversine(planAStops[i].lat, planAStops[i].lng, planAStops[i + 1].lat, planAStops[i + 1].lng);
+                    }
+                    if (planAStops.length > 0) {
+                        distA += this.haversine(planAStops[planAStops.length - 1].lat, planAStops[planAStops.length - 1].lng, depotLat, depotLng);
+                    }
+
+                    // Plan (B): Nearest Neighbor TSP + 2-Opt Chain
+                    const poolB = [...currentBatch].sort((a, b) => b.distToDepot - a.distToDepot);
+                    const planBStops = [];
+                    let currB = poolB.shift();
+                    planBStops.push(currB);
+                    while (poolB.length > 0) {
+                        poolB.sort((a, b) => {
+                            const dA = this.haversine(currB.lat, currB.lng, a.lat, a.lng);
+                            const dB = this.haversine(currB.lat, currB.lng, b.lat, b.lng);
+                            return dA - dB;
+                        });
+                        currB = poolB.shift();
+                        planBStops.push(currB);
+                    }
+                    let distB = 0;
+                    for (let i = 0; i < planBStops.length - 1; i++) {
+                        distB += this.haversine(planBStops[i].lat, planBStops[i].lng, planBStops[i + 1].lat, planBStops[i + 1].lng);
+                    }
+                    if (planBStops.length > 0) {
+                        distB += this.haversine(planBStops[planBStops.length - 1].lat, planBStops[planBStops.length - 1].lng, depotLat, depotLng);
+                    }
+
+                    // Compare Plan (A) and Plan (B) to select the shorter route
+                    const chosenStops = distB <= distA ? planBStops : planAStops;
+                    const bestDistKm = Number(Math.min(distA, distB).toFixed(1));
+                    const estMins = Math.max(12, Math.round(bestDistKm * 2.2 + chosenStops.length * 2.5));
+                    const winnerModel = distB <= distA ? 'ပုံစံ B (TSP 2-Opt)' : 'ပုံစံ A (Corridor Radial)';
+
+                    // Step 4: Assign Sequential Route Name (Route 1, Route 2, Route 3...)
+                    const routeId = `route_${routeCounter}_${Date.now()}`;
+                    const routeName = `Route ${routeCounter}`;
+                    const routeColor = colors[(routeCounter - 1) % colors.length];
+                    const primaryTownship = chosenStops[0]?.township || 'Yangon';
+
+                    splitRoutes.push({
+                        id: routeId,
+                        routeNumber: routeCounter,
+                        name: routeName,
+                        displayName: `${routeName} (${vehConfig.name} - ${currentPax} PAX)`,
+                        color: routeColor,
+                        vehicle: {
+                            type: vehType,
+                            name: vehConfig.name,
+                            capacity: capacityPerCar
+                        },
+                        depot: { ...depot },
+                        stops: chosenStops.map((s, sIdx) => ({
+                            id: s.id || `stop_${routeCounter}_${sIdx + 1}`,
+                            name: s.name || `Stop ${sIdx + 1}`,
+                            lat: s.lat,
+                            lng: s.lng,
+                            passengers: s.passengers,
+                            township: s.township || primaryTownship,
+                            road: s.road || s.township || '',
+                            type: 'Pickup'
+                        })),
+                        optimizedStops: [...chosenStops, { ...depot, type: 'Depot' }],
+                        metrics: {
+                            distance: bestDistKm,
+                            duration: estMins,
+                            passengers: currentPax,
+                            stopsCount: chosenStops.length,
+                            winnerModel: winnerModel
+                        },
+                        createdAt: new Date().toISOString()
+                    });
+
+                    routeCounter++;
+                }
+
+                // Loop Complete: 100% of uploaded stops are exhausted and allocated
+                this.state.modeB.splitRoutes = splitRoutes;
+                this.renderFleetResults(splitRoutes, totalInitialStops, capacityPerCar);
+
+                showToast(`✓ စုစုပေါင်း မှတ်တိုင် ${totalInitialStops} ခုလုံးကို စစ်ဆေး၍ ${vehConfig.name} (${capacityPerCar} ဦး/မှတ်တိုင်) အလိုက် Route 1 မှ Route ${splitRoutes.length} အထိ အလိုအလျောက် ခွဲဝေရေးဆွဲပြီးစီးပါပြီ!`, 'success');
+            },
+
+            renderFleetResults(splitRoutes, totalStopsCount, capacityPerCar) {
+                const resultsBox = document.getElementById('capModeBFleetResults');
+                if (!resultsBox) return;
+                resultsBox.classList.remove('hidden');
+
+                const totalPax = splitRoutes.reduce((acc, r) => acc + r.metrics.passengers, 0);
+                const totalCap = splitRoutes.length * capacityPerCar;
+                const fleetUtilPercent = Math.min(100, Math.round((totalPax / totalCap) * 100));
+
+                const title = document.getElementById('capModeBFleetKpiTitle');
+                const subtitle = document.getElementById('capModeBFleetKpiSubtitle');
+
+                if (title) title.textContent = `Auto-Split Complete: ${splitRoutes.length} Vehicles Allocated (Route 1 to Route ${splitRoutes.length})`;
+                if (subtitle) subtitle.textContent = `စစ်ဆေးပြီး မှတ်တိုင် ${totalStopsCount} ခုလုံး ကုန်သည်အထိ ခွဲဝေပြီး · ဝန်ထမ်း ${totalPax} ဦး · ${fleetUtilPercent}% Fleet Capacity Utilization`;
+
+                const container = document.getElementById('capModeBFleetCardsContainer');
+                if (!container) return;
+
+                container.innerHTML = splitRoutes.map((r, idx) => {
+                    const pcent = Math.round((r.metrics.passengers / capacityPerCar) * 100);
+                    return `
+                        <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs relative overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                            <div class="absolute top-0 left-0 bottom-0 w-1.5" style="background-color: ${r.color}"></div>
+                            <div class="pl-2 space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-3 h-3 rounded-full flex-shrink-0 shadow-xs" style="background-color: ${r.color}"></span>
+                                        <h5 class="text-xs font-bold text-slate-900 dark:text-white truncate">${r.name}</h5>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300 font-bold">${r.metrics.winnerModel || 'Optimized'}</span>
+                                        <span class="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Car #${r.routeNumber || (idx + 1)}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                                    <span>${r.stops.length} Stops · ~${r.metrics.distance} km (${r.metrics.duration} mins)</span>
+                                    <span class="font-mono font-bold text-purple-600 dark:text-purple-400">${r.metrics.passengers} / ${capacityPerCar} PAX (${pcent}%)</span>
+                                </div>
+                                <div class="w-full h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-300" style="width: ${pcent}%; background-color: ${r.color}"></div>
+                                </div>
+                                <div class="pt-2 flex items-center justify-between gap-1 border-t border-slate-100 dark:border-slate-800/60 text-[10px]">
+                                    <span class="text-slate-400 truncate max-w-[140px]">${r.stops[0]?.name || 'Start'} ➔ Depot</span>
+                                    <button type="button" onclick="CapacityRoutePlannerEngine.loadSingleSplitRoute('${r.id}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded font-bold transition flex items-center gap-1 cursor-pointer">
+                                        <span>🚀</span> Make Active
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            loadSingleSplitRoute(routeId) {
+                const target = this.state.modeB.splitRoutes.find(r => r.id === routeId);
+                if (!target) return;
+
+                if (!Array.isArray(savedRoutes)) savedRoutes = [];
+                if (!savedRoutes.find(r => r.id === target.id)) {
+                    savedRoutes.unshift(target);
+                    localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+                }
+
+                this.close();
+                if (typeof window.loadSavedRoute === 'function') {
+                    window.loadSavedRoute(target.id);
+                    showToast(`✓ Loaded "${target.name}" as active route!`, 'success');
+                }
+            },
+
+            loadAllToMultiMap() {
+                const routes = this.state.modeB.splitRoutes;
+                if (!routes || routes.length === 0) {
+                    showToast('⚠️ No split routes to load! Run splitter first.', 'error');
+                    return;
+                }
+
+                if (!Array.isArray(savedRoutes)) savedRoutes = [];
+                routes.forEach(r => {
+                    const existingIdx = savedRoutes.findIndex(s => s.id === r.id);
+                    if (existingIdx === -1) {
+                        savedRoutes.unshift(r);
+                    } else {
+                        savedRoutes[existingIdx] = r;
+                    }
+                });
+                localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+
+                if (typeof updateSavedRoutesBadge === 'function') updateSavedRoutesBadge();
+
+                const routeIds = routes.map(r => r.id);
+                this.close();
+
+                if (typeof window.loadMultipleRoutes === 'function') {
+                    window.loadMultipleRoutes(routeIds);
+                    showToast(`🗺️ Loaded all ${routes.length} vehicle routes simultaneously on map!`, 'success');
+                }
+            },
+
+            saveAllFleetRoutes() {
+                const routes = this.state.modeB.splitRoutes;
+                if (!routes || routes.length === 0) {
+                    showToast('⚠️ No routes to save!', 'error');
+                    return;
+                }
+
+                if (!Array.isArray(savedRoutes)) savedRoutes = [];
+                routes.forEach(r => {
+                    const existingIdx = savedRoutes.findIndex(s => s.id === r.id);
+                    if (existingIdx === -1) {
+                        savedRoutes.unshift(r);
+                    } else {
+                        savedRoutes[existingIdx] = r;
+                    }
+                });
+                localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+
+                if (typeof updateSavedRoutesBadge === 'function') updateSavedRoutesBadge();
+                if (typeof renderSavedRoutesModalList === 'function') renderSavedRoutesModalList();
+
+                showToast(`✓ All ${routes.length} fleet routes saved to database!`, 'success');
+            },
+
+            // -------------------------------------------------------------
+            // MODE C: INTERACTIVE HYBRID BUILDER (Multi-Township Corridor)
+            // -------------------------------------------------------------
+            loadModeCStops() {
+                const selectedTownships = this.state.modeC.selectedTownships;
+                const pool = this.getPool();
+                let combinedStops = [];
+
+                // 1. Keep CSV imported stops at the very top
+                if (this.state.modeC.csvImportedStops && this.state.modeC.csvImportedStops.length > 0) {
+                    combinedStops = [...this.state.modeC.csvImportedStops];
+                }
+
+                // 2. Keep user-added map stops
+                if (this.state.modeC.mapAddedStops && this.state.modeC.mapAddedStops.length > 0) {
+                    this.state.modeC.mapAddedStops.forEach(m => {
+                        if (!combinedStops.some(c => c.id === m.id)) {
+                            combinedStops.push(m);
+                        }
+                    });
+                }
+
+                // 3. Add stops for each selected township in corridor order
+                if (selectedTownships && selectedTownships.length > 0) {
+                    const depotLat = (depot && depot.lat) ? depot.lat : 16.8661;
+                    const depotLng = (depot && depot.lng) ? depot.lng : 96.1951;
+
+                    selectedTownships.forEach((tw, twOrder) => {
+                        const twStops = pool.filter(s => s.township && s.township.toLowerCase() === tw.toLowerCase());
+                        
+                        // Sort stops within township by distance to Depot
+                        const sorted = twStops.map(s => ({
+                            ...s,
+                            distToDepot: this.haversine(s.lat, s.lng, depotLat, depotLng),
+                            twOrder
+                        })).sort((a, b) => b.distToDepot - a.distToDepot);
+
+                        // Take up to 20 representative stops per township
+                        sorted.slice(0, 20).forEach(s => {
+                            if (!combinedStops.some(c => c.id === s.id || (Math.abs(c.lat - s.lat) < 0.0001 && Math.abs(c.lng - s.lng) < 0.0001))) {
+                                combinedStops.push(s);
+                            }
+                        });
+                    });
+                }
+
+                this.state.modeC.availableStops = combinedStops;
+                
+                // Keep CSV imported stops and map added stops selected
+                const newSelected = new Map();
+                if (this.state.modeC.csvImportedStops && this.state.modeC.csvImportedStops.length > 0) {
+                    this.state.modeC.csvImportedStops.forEach(s => {
+                        const idx = combinedStops.findIndex(c => c === s || c.id === s.id);
+                        if (idx !== -1) {
+                            newSelected.set(idx, { stop: s, pax: s.passengers || 2, checked: true });
+                        }
+                    });
+                }
+                if (this.state.modeC.mapAddedStops && this.state.modeC.mapAddedStops.length > 0) {
+                    this.state.modeC.mapAddedStops.forEach(s => {
+                        const idx = combinedStops.findIndex(c => c === s || c.id === s.id);
+                        if (idx !== -1 && !newSelected.has(idx)) {
+                            newSelected.set(idx, { stop: s, pax: s.passengers || 2, checked: true });
+                        }
+                    });
+                }
+                this.state.modeC.selectedStops = newSelected;
+
+                const countBadge = document.getElementById('capModeCTownshipCountBadge');
+                const availCount = document.getElementById('capModeCAvailableCount');
+                if (countBadge) countBadge.textContent = `${selectedTownships.length} Townships · ${combinedStops.length} Stops Loaded`;
+                if (availCount) availCount.textContent = combinedStops.length;
+
+                // Sync header badges
+                const csvBadge = document.getElementById('capModeCCsvImportedBadge');
+                const csvCount = document.getElementById('capModeCCsvImportedCount');
+                const csvLen = (this.state.modeC.csvImportedStops || []).length;
+                if (csvBadge && csvCount) {
+                    if (csvLen > 0) {
+                        csvBadge.classList.remove('hidden');
+                        csvCount.textContent = csvLen;
+                    } else {
+                        csvBadge.classList.add('hidden');
+                    }
+                }
+
+                const mapBadge = document.getElementById('capModeCMapAddedBadge');
+                const mapCount = document.getElementById('capModeCMapAddedCount');
+                const mapLen = (this.state.modeC.mapAddedStops || []).length;
+                if (mapBadge && mapCount) {
+                    if (mapLen > 0) {
+                        mapBadge.classList.remove('hidden');
+                        mapCount.textContent = mapLen;
+                    } else {
+                        mapBadge.classList.add('hidden');
+                    }
+                }
+
+                this.renderModeCList();
+                this.updateModeCGauge();
+                if (this.state.modeC.showMapMarkers || this.state.modeC.isMapClickActive) {
+                    this.renderCorridorMapMarkers();
+                }
+            },
+
+            renderModeCList() {
+                const list = document.getElementById('capModeCStopsList');
+                if (!list) return;
+
+                const stops = this.state.modeC.availableStops;
+                if (stops.length === 0) {
+                    list.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 space-y-1">
+                        <p class="font-bold text-slate-600 dark:text-slate-300">မည်သည့်မှတ်တိုင်မျှ မရှိသေးပါ</p>
+                        <p>ကျေးဇူးပြု၍ အထက်ရှိ ၆ မြို့နယ် စင်္ကြံလမ်းကြောင်းခလုတ် (Presets) များမှ နှိပ်ပါ၊ CSV မှတ်တိုင်များ တင်သွင်းပါ သို့မဟုတ် Manual Map Click ဖြင့် ထည့်သွင်းပါ။</p>
+                    </div>`;
+                    return;
+                }
+
+                list.innerHTML = stops.map((s, idx) => {
+                    const isChecked = this.state.modeC.selectedStops.has(idx);
+                    const pax = isChecked ? this.state.modeC.selectedStops.get(idx).pax : this.getPaxForStop(s, idx, 'dynamic');
+
+                    return `
+                        <div class="p-2.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition gap-2 ${isChecked ? 'bg-blue-50/50 dark:bg-blue-950/30' : ''}">
+                            <label class="flex items-center gap-2 min-w-0 cursor-pointer flex-1">
+                                <input type="checkbox" onchange="CapacityRoutePlannerEngine.toggleModeCStop(${idx}, this.checked)" ${isChecked ? 'checked' : ''} class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <p class="text-xs font-semibold text-slate-900 dark:text-white truncate">${s.name}</p>
+                                        <span class="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-700 dark:bg-blue-950/80 dark:text-blue-300">${s.township || 'Yangon'}</span>
+                                        ${s.isCsvImported ? '<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-700">📊 CSV Import</span>' : ''}
+                                        ${s.isMapAdded ? '<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">📍 Map Clicked</span>' : ''}
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 truncate">${s.road || s.township || 'Yangon'}</p>
+                                </div>
+                            </label>
+                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                <button type="button" onclick="CapacityRoutePlannerEngine.adjustModeCPax(${idx}, -1)" class="w-5 h-5 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-xs font-bold flex items-center justify-center cursor-pointer">-</button>
+                                <span class="font-mono font-bold text-xs w-6 text-center text-blue-600 dark:text-blue-400" id="capModeCPax_${idx}">${pax}</span>
+                                <button type="button" onclick="CapacityRoutePlannerEngine.adjustModeCPax(${idx}, 1)" class="w-5 h-5 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-xs font-bold flex items-center justify-center cursor-pointer">+</button>
+                                <span class="text-[10px] text-slate-400">PAX</span>
+                                ${(s.isMapAdded || s.isCsvImported) ? `<button type="button" onclick="CapacityRoutePlannerEngine.removeCustomStop(${idx})" class="w-5 h-5 rounded hover:bg-red-100 dark:hover:bg-red-900/40 text-red-500 text-xs font-bold flex items-center justify-center cursor-pointer ml-1" title="Remove Stop">✕</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            toggleModeCStop(index, checked) {
+                const stop = this.state.modeC.availableStops[index];
+                if (!stop) return;
+
+                if (checked) {
+                    const currentPax = parseInt(document.getElementById(`capModeCPax_${index}`)?.textContent, 10) || this.getPaxForStop(stop, index, 'dynamic');
+                    this.state.modeC.selectedStops.set(index, { stop, pax: currentPax, checked: true });
+                } else {
+                    this.state.modeC.selectedStops.delete(index);
+                }
+                this.updateModeCGauge();
+                if (this.state.modeC.showMapMarkers || this.state.modeC.isMapClickActive) {
+                    this.renderCorridorMapMarkers();
+                }
+            },
+
+            adjustModeCPax(index, delta) {
+                const stop = this.state.modeC.availableStops[index];
+                if (!stop) return;
+
+                const span = document.getElementById(`capModeCPax_${index}`);
+                let current = parseInt(span?.textContent, 10) || 1;
+                current = Math.max(1, Math.min(20, current + delta));
+                if (span) span.textContent = current;
+
+                if (this.state.modeC.selectedStops.has(index)) {
+                    const item = this.state.modeC.selectedStops.get(index);
+                    item.pax = current;
+                    this.state.modeC.selectedStops.set(index, item);
+                }
+                this.updateModeCGauge();
+                if (this.state.modeC.showMapMarkers || this.state.modeC.isMapClickActive) {
+                    this.renderCorridorMapMarkers();
+                }
+            },
+
+            updateModeCGauge() {
+                const vehCap = (currentVehicle && currentVehicle.capacity) ? currentVehicle.capacity : 15;
+                let totalPax = 0;
+                this.state.modeC.selectedStops.forEach(item => {
+                    totalPax += item.pax;
+                });
+
+                const percent = Math.round((totalPax / vehCap) * 100);
+                const progressBar = document.getElementById('capModeCProgressBar');
+                const badge = document.getElementById('capModeCSeatsStatusBadge');
+                const remainText = document.getElementById('capModeCSeatsRemainText');
+                const vehDisplay = document.getElementById('capModeCVehDisplay');
+
+                if (vehDisplay) {
+                    vehDisplay.textContent = `🚐 ${currentVehicle.name || 'Van'} (${vehCap} Seats)`;
+                }
+
+                if (progressBar) {
+                    progressBar.style.width = `${Math.min(100, percent)}%`;
+                    if (totalPax > vehCap) {
+                        progressBar.className = 'h-full rounded-full transition-all duration-300 bg-red-500';
+                    } else if (totalPax === vehCap) {
+                        progressBar.className = 'h-full rounded-full transition-all duration-300 bg-emerald-500';
+                    } else {
+                        progressBar.className = 'h-full rounded-full transition-all duration-300 bg-blue-500';
+                    }
+                }
+
+                if (badge) {
+                    if (totalPax === 0) {
+                        badge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+                        badge.textContent = `Vacant (0 / ${vehCap} PAX)`;
+                    } else if (totalPax === vehCap) {
+                        badge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300';
+                        badge.textContent = `100% Full (${totalPax} / ${vehCap} PAX)`;
+                    } else if (totalPax < vehCap) {
+                        badge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300';
+                        badge.textContent = `In Progress (${totalPax} / ${vehCap} PAX)`;
+                    } else {
+                        badge.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300';
+                        badge.textContent = `⚠️ Overloaded (${totalPax} / ${vehCap} PAX)`;
+                    }
+                }
+
+                if (remainText) {
+                    if (totalPax === vehCap) {
+                        remainText.textContent = 'Vehicle perfectly utilized!';
+                    } else if (totalPax < vehCap) {
+                        remainText.textContent = `${vehCap - totalPax} seats remaining`;
+                    } else {
+                        remainText.textContent = `${totalPax - vehCap} passengers overflow!`;
+                    }
+                }
+
+                // Update Map Added Count Badge
+                const mapCount = (this.state.modeC.mapAddedStops || []).length;
+                const mapBadge = document.getElementById('capModeCMapAddedBadge');
+                const mapCountEl = document.getElementById('capModeCMapAddedCount');
+                if (mapBadge && mapCountEl) {
+                    mapCountEl.textContent = mapCount;
+                    if (mapCount > 0) {
+                        mapBadge.classList.remove('hidden');
+                    } else {
+                        mapBadge.classList.add('hidden');
+                    }
+                }
+
+                // Update Floating Bar Seat Badge
+                const floatPax = document.getElementById('capModeCFloatingPaxBadge');
+                if (floatPax) {
+                    floatPax.textContent = `${totalPax} / ${vehCap} Seats (${percent}%)`;
+                    if (totalPax > vehCap) {
+                        floatPax.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-900/80 text-red-200 border border-red-600 font-bold';
+                    } else if (totalPax === vehCap) {
+                        floatPax.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-900/80 text-emerald-200 border border-emerald-500 font-bold';
+                    } else {
+                        floatPax.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 font-bold';
+                    }
+                }
+
+                // Update available stops count
+                const availCount = document.getElementById('capModeCAvailableCount');
+                if (availCount) availCount.textContent = this.state.modeC.availableStops.length;
+            },
+
+            // Manual Map Click Mode Methods
+            startMapClickMode() {
+                this.state.modeC.isMapClickActive = true;
+                this.state.modeC.showMapMarkers = true;
+
+                const modal = document.getElementById('capacityPlannerModal');
+                if (modal) modal.classList.add('hidden');
+
+                const floatBar = document.getElementById('capModeCMapClickFloatingBar');
+                if (floatBar) floatBar.classList.remove('hidden');
+
+                const mapEl = document.getElementById('map');
+                if (mapEl) mapEl.style.cursor = 'crosshair';
+
+                const toggleBtnText = document.getElementById('capModeCToggleMapText');
+                if (toggleBtnText) toggleBtnText.textContent = 'Hide from Map';
+
+                this.renderCorridorMapMarkers();
+                this.updateModeCGauge();
+
+                // Fit map bounds to current corridor stops if any
+                if (this.state.modeC.availableStops.length > 0 && typeof map !== 'undefined') {
+                    const latLngs = this.state.modeC.availableStops.map(s => [s.lat, s.lng]);
+                    try {
+                        map.fitBounds(L.latLngBounds(latLngs), { padding: [50, 50], maxZoom: 15 });
+                    } catch(e) {}
+                }
+
+                showToast('📍 Manual Map Click Mode ဖွင့်ထားပါသည် - မြေပုံပေါ် ကလစ်နှိပ်၍ မှတ်တိုင်များ ထည့်ပါ/ရွေးချယ်ပါ', 'info');
+            },
+
+            finishMapClickMode() {
+                this.state.modeC.isMapClickActive = false;
+
+                const floatBar = document.getElementById('capModeCMapClickFloatingBar');
+                if (floatBar) floatBar.classList.add('hidden');
+
+                const modal = document.getElementById('capacityPlannerModal');
+                if (modal) modal.classList.remove('hidden');
+
+                const mapEl = document.getElementById('map');
+                if (mapEl) mapEl.style.cursor = '';
+
+                this.renderModeCList();
+                this.updateModeCGauge();
+                this.renderCorridorMapMarkers();
+
+                const selCount = this.state.modeC.selectedStops.size;
+                showToast(`✓ မြေပုံမှ မှတ်တိုင်များ ရွေးချယ်မှု ပြီးစီးပါပြီ (${selCount} မှတ်တိုင် ရွေးထားပါသည်)`, 'success');
+            },
+
+            cancelMapClickMode() {
+                this.state.modeC.isMapClickActive = false;
+
+                const floatBar = document.getElementById('capModeCMapClickFloatingBar');
+                if (floatBar) floatBar.classList.add('hidden');
+
+                const modal = document.getElementById('capacityPlannerModal');
+                if (modal) modal.classList.remove('hidden');
+
+                const mapEl = document.getElementById('map');
+                if (mapEl) mapEl.style.cursor = '';
+
+                this.renderModeCList();
+                this.updateModeCGauge();
+            },
+
+            toggleCorridorMapMarkers() {
+                this.state.modeC.showMapMarkers = !this.state.modeC.showMapMarkers;
+                const toggleBtnText = document.getElementById('capModeCToggleMapText');
+                if (toggleBtnText) {
+                    toggleBtnText.textContent = this.state.modeC.showMapMarkers ? 'Hide from Map' : 'Show on Map';
+                }
+
+                if (this.state.modeC.showMapMarkers) {
+                    this.renderCorridorMapMarkers();
+                    if (this.state.modeC.availableStops.length > 0 && typeof map !== 'undefined') {
+                        const latLngs = this.state.modeC.availableStops.map(s => [s.lat, s.lng]);
+                        try {
+                            map.fitBounds(L.latLngBounds(latLngs), { padding: [50, 50], maxZoom: 15 });
+                        } catch(e) {}
+                    }
+                    showToast('🗺️ စင်္ကြံလမ်းကြောင်း မှတ်တိုင်များကို မြေပုံပေါ်တွင် ပြသထားပါသည်', 'info');
+                } else {
+                    if (window.corridorMapLayer) {
+                        window.corridorMapLayer.clearLayers();
+                    }
+                    showToast('🗺️ မြေပုံပေါ်မှ မှတ်တိုင်များကို ဖျောက်ထားပါသည်', 'info');
+                }
+            },
+
+            handleMapClick(latlng) {
+                const lat = parseFloat(latlng.lat.toFixed(6));
+                const lng = parseFloat(latlng.lng.toFixed(6));
+
+                // 1. Search if clicked near an existing stop in database/pool (within ~350 meters)
+                const pool = this.getPool();
+                let closestStop = null;
+                let minDistance = Infinity;
+
+                for (let i = 0; i < pool.length; i++) {
+                    const s = pool[i];
+                    const distKm = this.haversine(lat, lng, s.lat, s.lng);
+                    if (distKm < minDistance) {
+                        minDistance = distKm;
+                        closestStop = s;
+                    }
+                }
+
+                let targetStop = null;
+
+                if (closestStop && minDistance <= 0.35) { // within approx ~350m
+                    targetStop = {
+                        id: closestStop.id || 'stop_' + Math.random().toString(36).substr(2, 9),
+                        name: closestStop.name,
+                        lat: closestStop.lat,
+                        lng: closestStop.lng,
+                        township: closestStop.township || 'Yangon',
+                        road: closestStop.road || 'Corridor Road',
+                        passengers: 2,
+                        isMapAdded: true
+                    };
+                } else {
+                    // Custom Map Point
+                    const nearestTownship = closestStop ? closestStop.township : 'Yangon';
+                    targetStop = {
+                        id: 'custom_map_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                        name: `Map Stop [${lat.toFixed(4)}, ${lng.toFixed(4)}]`,
+                        lat: lat,
+                        lng: lng,
+                        township: nearestTownship || 'Yangon',
+                        road: 'Manual Click Point',
+                        passengers: 2,
+                        isCustom: true,
+                        isMapAdded: true
+                    };
+                }
+
+                // Check if already in availableStops
+                let existingIdx = this.state.modeC.availableStops.findIndex(s => 
+                    (s.id && s.id === targetStop.id) || 
+                    (Math.abs(s.lat - targetStop.lat) < 0.0001 && Math.abs(s.lng - targetStop.lng) < 0.0001)
+                );
+
+                if (existingIdx !== -1) {
+                    // Toggle selection of existing stop
+                    const isChecked = this.state.modeC.selectedStops.has(existingIdx);
+                    this.toggleModeCStop(existingIdx, !isChecked);
+                    const action = !isChecked ? 'ရွေးချယ်ပြီး' : 'ဖယ်ရှားပြီး';
+                    showToast(`📍 ${targetStop.name} (${action})`, !isChecked ? 'success' : 'info');
+                } else {
+                    // Prepend to availableStops
+                    this.state.modeC.availableStops.unshift(targetStop);
+                    if (!this.state.modeC.mapAddedStops) this.state.modeC.mapAddedStops = [];
+                    this.state.modeC.mapAddedStops.unshift(targetStop);
+
+                    // Shift previous selectedStops map keys by +1
+                    const newSelected = new Map();
+                    this.state.modeC.selectedStops.forEach((val, oldIdx) => {
+                        newSelected.set(oldIdx + 1, val);
+                    });
+                    // Select new stop at index 0
+                    newSelected.set(0, { stop: targetStop, pax: targetStop.passengers || 2, checked: true });
+                    this.state.modeC.selectedStops = newSelected;
+
+                    showToast(`📍 မြေပုံမှ မှတ်တိုင်ထည့်သွင်းပြီး: "${targetStop.name}" (+${targetStop.passengers || 2} PAX)`, 'success');
+                }
+
+                this.renderModeCList();
+                this.updateModeCGauge();
+                this.renderCorridorMapMarkers();
+
+                // Show feedback popup on map
+                if (typeof map !== 'undefined') {
+                    L.popup({ offset: [0, -10], closeButton: false, autoClose: true })
+                        .setLatLng([lat, lng])
+                        .setContent(`<div class="text-xs p-1 font-sans"><strong>📍 ${targetStop.name}</strong><br><span class="text-emerald-600 font-bold">✓ Added to Corridor (${targetStop.township})</span></div>`)
+                        .openOn(map);
+                }
+            },
+
+            removeCustomStop(index) {
+                const stop = this.state.modeC.availableStops[index];
+                if (!stop) return;
+
+                this.state.modeC.availableStops.splice(index, 1);
+                if (this.state.modeC.mapAddedStops) {
+                    this.state.modeC.mapAddedStops = this.state.modeC.mapAddedStops.filter(s => s !== stop && s.id !== stop.id);
+                }
+                if (this.state.modeC.csvImportedStops) {
+                    this.state.modeC.csvImportedStops = this.state.modeC.csvImportedStops.filter(s => s !== stop && s.id !== stop.id);
+                }
+
+                // Re-index selectedStops
+                const newSelected = new Map();
+                this.state.modeC.selectedStops.forEach((val, oldIdx) => {
+                    if (oldIdx < index) {
+                        newSelected.set(oldIdx, val);
+                    } else if (oldIdx > index) {
+                        newSelected.set(oldIdx - 1, val);
+                    }
+                });
+                this.state.modeC.selectedStops = newSelected;
+
+                // Sync badges
+                const csvBadge = document.getElementById('capModeCCsvImportedBadge');
+                const csvCount = document.getElementById('capModeCCsvImportedCount');
+                const csvLen = (this.state.modeC.csvImportedStops || []).length;
+                if (csvBadge && csvCount) {
+                    if (csvLen > 0) {
+                        csvBadge.classList.remove('hidden');
+                        csvCount.textContent = csvLen;
+                    } else {
+                        csvBadge.classList.add('hidden');
+                    }
+                }
+
+                const mapBadge = document.getElementById('capModeCMapAddedBadge');
+                const mapCount = document.getElementById('capModeCMapAddedCount');
+                const mapLen = (this.state.modeC.mapAddedStops || []).length;
+                if (mapBadge && mapCount) {
+                    if (mapLen > 0) {
+                        mapBadge.classList.remove('hidden');
+                        mapCount.textContent = mapLen;
+                    } else {
+                        mapBadge.classList.add('hidden');
+                    }
+                }
+
+                this.renderModeCList();
+                this.updateModeCGauge();
+                if (this.state.modeC.showMapMarkers || this.state.modeC.isMapClickActive) {
+                    this.renderCorridorMapMarkers();
+                }
+                showToast(`✓ ဖယ်ရှားပြီး: ${stop.name}`, 'info');
+            },
+
+            removeMapAddedStop(index) {
+                this.removeCustomStop(index);
+            },
+
+            renderCorridorMapMarkers() {
+                if (!window.corridorMapLayer && typeof L !== 'undefined' && typeof map !== 'undefined') {
+                    window.corridorMapLayer = L.layerGroup().addTo(map);
+                }
+                if (!window.corridorMapLayer) return;
+                window.corridorMapLayer.clearLayers();
+
+                if (!this.state.modeC.showMapMarkers && !this.state.modeC.isMapClickActive) return;
+
+                const stops = this.state.modeC.availableStops;
+                stops.forEach((s, idx) => {
+                    const isChecked = this.state.modeC.selectedStops.has(idx);
+                    const item = isChecked ? this.state.modeC.selectedStops.get(idx) : null;
+                    const pax = item ? item.pax : (s.passengers || 2);
+
+                    let iconHtml = '';
+                    if (isChecked) {
+                        iconHtml = `<div style="background:#10b981; color:white; border:2px solid white; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px; box-shadow:0 3px 8px rgba(0,0,0,0.4); cursor:pointer;">${pax}</div>`;
+                    } else if (s.isCsvImported) {
+                        iconHtml = `<div style="background:#6366f1; color:white; border:2px solid white; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:11px; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer;">📊</div>`;
+                    } else if (s.isMapAdded) {
+                        iconHtml = `<div style="background:#f59e0b; color:white; border:2px solid white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:11px; box-shadow:0 2px 6px rgba(0,0,0,0.3); cursor:pointer;">📍</div>`;
+                    } else {
+                        iconHtml = `<div style="background:#3b82f6; color:white; border:1.5px solid white; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:10px; box-shadow:0 2px 5px rgba(0,0,0,0.25); cursor:pointer;">•</div>`;
+                    }
+
+                    const markerIcon = L.divIcon({
+                        className: 'corridor-stop-marker',
+                        html: iconHtml,
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14]
+                    });
+
+                    const marker = L.marker([s.lat, s.lng], { icon: markerIcon });
+                    
+                    const popupContent = `
+                        <div class="text-xs p-1 font-sans min-w-[140px]">
+                            <div class="font-bold text-slate-900">${s.name}</div>
+                            <div class="text-[10px] text-slate-500">${s.township || 'Yangon'} · ${s.road || ''}</div>
+                            <div class="mt-1 flex items-center justify-between gap-2 border-t pt-1 border-slate-200">
+                                <span class="font-bold ${isChecked ? 'text-emerald-600' : 'text-slate-600'}">${isChecked ? '✓ Selected (' + pax + ' PAX)' : 'Not Selected'}</span>
+                                <button onclick="CapacityRoutePlannerEngine.toggleModeCStop(${idx}, ${!isChecked});" class="px-2 py-0.5 rounded text-[10px] font-bold ${isChecked ? 'bg-red-100 text-red-600' : 'bg-blue-600 text-white'} cursor-pointer">
+                                    ${isChecked ? 'Deselect' : 'Select'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    marker.bindPopup(popupContent);
+
+                    marker.on('click', () => {
+                        if (CapacityRoutePlannerEngine.state.modeC.isMapClickActive) {
+                            CapacityRoutePlannerEngine.toggleModeCStop(idx, !isChecked);
+                        }
+                    });
+
+                    window.corridorMapLayer.addLayer(marker);
+                });
+            },
+
+            autoFillModeCTo100() {
+                const vehCap = (currentVehicle && currentVehicle.capacity) ? currentVehicle.capacity : 15;
+                let currentPax = 0;
+                this.state.modeC.selectedStops.forEach(item => currentPax += item.pax);
+
+                const gap = vehCap - currentPax;
+                if (gap <= 0) {
+                    showToast('Vehicle is already full or overloaded!', 'info');
+                    return;
+                }
+
+                // Find unchecked stops
+                const stops = this.state.modeC.availableStops;
+                const uncheckedIndices = [];
+                for (let i = 0; i < stops.length; i++) {
+                    if (!this.state.modeC.selectedStops.has(i)) {
+                        uncheckedIndices.push(i);
+                    }
+                }
+
+                if (uncheckedIndices.length === 0) {
+                    showToast('No more unchecked stops in this corridor!', 'info');
+                    return;
+                }
+
+                let chosenIdx = uncheckedIndices[0];
+                const perfect = uncheckedIndices.find(idx => this.getPaxForStop(stops[idx], idx, 'dynamic') === gap);
+                if (perfect !== undefined) chosenIdx = perfect;
+
+                const chosenStop = stops[chosenIdx];
+                this.state.modeC.selectedStops.set(chosenIdx, { stop: chosenStop, pax: gap, checked: true });
+                
+                this.renderModeCList();
+                this.updateModeCGauge();
+                if (this.state.modeC.showMapMarkers || this.state.modeC.isMapClickActive) {
+                    this.renderCorridorMapMarkers();
+                }
+                showToast(`✓ Auto-selected "${chosenStop.name}" (${chosenStop.township}) with ${gap} PAX for exact 100% capacity!`, 'success');
+            },
+
+            autoSplitModeCOverflow() {
+                let rawStops = [];
+                if (this.state.modeC.selectedStops && this.state.modeC.selectedStops.size > 0) {
+                    rawStops = Array.from(this.state.modeC.selectedStops.values()).map(item => ({
+                        ...item.stop,
+                        passengers: (Number(item.pax) > 0) ? Number(item.pax) : 1
+                    }));
+                } else if (this.state.modeC.csvImportedStops && this.state.modeC.csvImportedStops.length > 0) {
+                    rawStops = this.state.modeC.csvImportedStops.map(s => ({
+                        ...s,
+                        passengers: (Number(s.passengers) > 0) ? Number(s.passengers) : 1
+                    }));
+                } else if (this.state.modeC.availableStops && this.state.modeC.availableStops.length > 0) {
+                    rawStops = this.state.modeC.availableStops.map((s, idx) => ({
+                        ...s,
+                        passengers: this.getPaxForStop(s, idx, 'dynamic')
+                    }));
+                } else if (stops && stops.length > 0) {
+                    rawStops = stops.map((s, idx) => ({
+                        ...s,
+                        passengers: (Number(s.passengers) > 0) ? Number(s.passengers) : 1
+                    }));
+                }
+
+                if (rawStops.length === 0) {
+                    showToast('⚠️ မည်သည့် မှတ်တိုင်မျှ မရှိသေးပါ (No stops found to split)!', 'error');
+                    return;
+                }
+
+                // Determine vehicle type (prefer Mini Bus 25 seats for high-capacity fleet split)
+                const vehSelect = document.getElementById('capModeBFleetVehSelect');
+                const vehType = (vehSelect && vehSelect.value) ? vehSelect.value : 'mini_bus';
+                const vehCap = (VEHICLE_TYPES && VEHICLE_TYPES[vehType]) ? VEHICLE_TYPES[vehType].capacity : 25;
+
+                // Sync UI controls
+                if (vehSelect) vehSelect.value = vehType;
+                const capDisp = document.getElementById('capModeBFleetCapDisplay');
+                if (capDisp) capDisp.textContent = `${vehCap} PAX`;
+
+                this.switchTab('B');
+                setTimeout(() => {
+                    this.executeContinuousFleetAutoSplit(rawStops, vehType, vehCap);
+                    showToast(`✂️ Auto-Split Overflow: မှတ်တိုင် ${rawStops.length} ခုလုံးကို စစ်ဆေး၍ ကားစီးရေ အလိုအလျောက် ခွဲဝေရေးဆွဲပေးပြီးပါပြီ!`, 'success');
+                }, 120);
+            },
+
+            clearModeCSelection() {
+                this.state.modeC.selectedStops.clear();
+                this.renderModeCList();
+                this.updateModeCGauge();
+                if (this.state.modeC.showMapMarkers || this.state.modeC.isMapClickActive) {
+                    this.renderCorridorMapMarkers();
+                }
+            },
+
+            applyModeCFinalize(triggerOptimization = true) {
+                if (this.state.modeC.selectedStops.size === 0) {
+                    showToast('⚠️ Please select at least one stop!', 'error');
+                    return;
+                }
+
+                // Cleanup map click mode & corridor layer
+                this.state.modeC.isMapClickActive = false;
+                if (window.corridorMapLayer) {
+                    window.corridorMapLayer.clearLayers();
+                }
+                const floatBar = document.getElementById('capModeCMapClickFloatingBar');
+                if (floatBar) floatBar.classList.add('hidden');
+                const mapEl = document.getElementById('map');
+                if (mapEl) mapEl.style.cursor = '';
+
+                const selectedItems = Array.from(this.state.modeC.selectedStops.values());
+                stops = selectedItems.map(item => ({
+                    id: item.stop.id || 'stop_' + Math.random().toString(36).substr(2, 9),
+                    name: item.stop.name,
+                    lat: item.stop.lat,
+                    lng: item.stop.lng,
+                    passengers: item.pax,
+                    township: item.stop.township,
+                    road: item.stop.road,
+                    type: 'Pickup'
+                }));
+
+                isRouteModified = true;
+                if (typeof resetOptimization === 'function') resetOptimization();
+                if (typeof renderStops === 'function') renderStops();
+                if (typeof updateMapMarkers === 'function') updateMapMarkers();
+                if (typeof updateActiveRouteBar === 'function') updateActiveRouteBar();
+                if (typeof updateAllViews === 'function') updateAllViews();
+
+                // Auto-fit map to loaded stops
+                if (stops.length > 0 && typeof map !== 'undefined') {
+                    const bounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+                    if (depot && depot.lat && depot.lng) bounds.extend([depot.lat, depot.lng]);
+                    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+                }
+
+                this.close();
+
+                if (triggerOptimization) {
+                    showToast(`✓ Loaded ${stops.length} stops across corridor into Active Route! Optimizing...`, 'success');
+                    setTimeout(() => {
+                        const optBtn = document.getElementById('optimizeBtn');
+                        if (optBtn) optBtn.click();
+                    }, 300);
+                }
+            },
+
+            // -------------------------------------------------------------
+            // Load CSV Imported Stops into Hybrid Builder (Mode C)
+            // -------------------------------------------------------------
+            loadFromCsv(importedStops, autoOptimize = true) {
+                if (!importedStops || importedStops.length === 0) {
+                    showToast('⚠️ No CSV stops available to load!', 'warning');
+                    return;
+                }
+
+                // 1. Enrich stops with township, road, pax
+                const enriched = importedStops.map((s, idx) => {
+                    let township = (s.township && s.township.trim() && s.township.trim() !== 'Yangon') 
+                        ? s.township.trim() 
+                        : this.detectNearestTownship(s.lat, s.lng);
+                    return {
+                        id: s.id || ('csv_' + Date.now() + '_' + idx),
+                        name: s.name || `CSV Stop ${idx + 1}`,
+                        lat: Number(s.lat),
+                        lng: Number(s.lng),
+                        passengers: (Number(s.passengers) > 0) ? Number(s.passengers) : 2,
+                        township: township || 'Yangon',
+                        road: s.road || s.notes || township || 'Corridor Road',
+                        isCsvImported: true
+                    };
+                });
+
+                // 2. Detect unique townships in corridor order (up to 6)
+                const detectedTownships = [];
+                enriched.forEach(s => {
+                    if (s.township && !detectedTownships.includes(s.township)) {
+                        detectedTownships.push(s.township);
+                    }
+                });
+
+                if (detectedTownships.length > 0) {
+                    this.state.modeC.selectedTownships = detectedTownships.slice(0, 6);
+                }
+
+                // 3. Store in modeC state
+                this.state.modeC.csvImportedStops = enriched;
+
+                // 4. Update Township UI in Mode C
+                this.renderTownshipChips('C');
+                this.populateTownshipSelects('C');
+
+                // 5. Load and select stops in Mode C
+                this.loadModeCStops();
+
+                // 6. Calculate total PAX and Capacity
+                let totalPax = 0;
+                enriched.forEach(s => totalPax += (s.passengers || 2));
+                const vehCap = (currentVehicle && currentVehicle.capacity) ? currentVehicle.capacity : 15;
+
+                // 7. Auto-Plan & Route Execution
+                if (autoOptimize) {
+                    if (totalPax <= vehCap) {
+                        this.applyModeCFinalize(true);
+                        showToast(`⚡ CSV မှတ်တိုင် ${enriched.length} ခု (${totalPax}/${vehCap} PAX) ဖြင့် Interactive Hybrid Builder မှ အလိုအလျောက် လမ်းကြောင်းရေးဆွဲပြီး OSRM ဖြင့် optimize လုပ်နေပါသည်!`, 'success');
+                    } else {
+                        this.open('C');
+                        showToast(`⚠️ CSV မှတ်တိုင် စုစုပေါင်း (${totalPax} PAX) သည် ယာဉ်ဆံ့အား (${vehCap} ခုံ) ထက်ကျော်လွန်နေပါသည်။ Hybrid Builder တွင် အလိုအလျောက် ဖွင့်ပေးထားပါသည် (Auto-Split ခလုတ်ဖြင့် ယာဉ်အများအပြား ခွဲနိုင်ပါသည်)`, 'warning');
+                    }
+                } else {
+                    this.open('C');
+                    showToast(`✓ Loaded ${enriched.length} CSV stops into Interactive Hybrid Builder!`, 'info');
+                }
+            },
+
+            // Bind UI Click Handlers
+            bindEvents() {
+                // Header & Sidebar open triggers
+                document.getElementById('headerCapacityPlannerBtn')?.addEventListener('click', () => this.open('A'));
+                document.getElementById('openCapacityPlannerBtn')?.addEventListener('click', () => this.open('A'));
+                document.getElementById('quickPlanCurrentVehicleBtn')?.addEventListener('click', () => {
+                    const cap = (currentVehicle && currentVehicle.capacity) ? currentVehicle.capacity : 15;
+                    const vInput = document.getElementById('capModeATargetCapInput');
+                    if (vInput) vInput.value = cap;
+                    this.open('A');
+                });
+                document.getElementById('quickCapacityPlannerBtn')?.addEventListener('click', () => this.open('A'));
+                document.getElementById('quickFleetSplitterBtn')?.addEventListener('click', () => this.open('B'));
+
+                // Close buttons
+                document.getElementById('closeCapacityPlannerModalBtn')?.addEventListener('click', () => this.close());
+                document.getElementById('closeCapacityPlannerFooterBtn')?.addEventListener('click', () => this.close());
+
+                // Modal backdrop click
+                const modal = document.getElementById('capacityPlannerModal');
+                if (modal) {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) this.close();
+                    });
+                }
+
+                // Tab switch buttons
+                document.getElementById('capTabBtnA')?.addEventListener('click', () => this.switchTab('A'));
+                document.getElementById('capTabBtnB')?.addEventListener('click', () => this.switchTab('B'));
+                document.getElementById('capTabBtnC')?.addEventListener('click', () => this.switchTab('C'));
+
+                // Mode A Vehicle Cards
+                const vehCards = document.querySelectorAll('.cap-veh-card');
+                vehCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        vehCards.forEach(c => {
+                            c.className = 'cap-veh-card p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-left transition hover:border-blue-400 flex flex-col cursor-pointer';
+                        });
+                        card.className = 'cap-veh-card p-2.5 rounded-lg border-2 border-amber-500 bg-amber-50/60 dark:bg-amber-950/40 text-left transition flex flex-col cursor-pointer';
+                        
+                        const cap = parseInt(card.dataset.cap, 10) || 15;
+                        const vType = card.dataset.vehType || 'van';
+                        this.state.modeA.vehicleType = vType;
+                        this.state.modeA.targetCapacity = cap;
+
+                        const capInput = document.getElementById('capModeATargetCapInput');
+                        if (capInput) capInput.value = cap;
+
+                        const badge = document.getElementById('capModeASelectedVehBadge');
+                        if (badge) {
+                            const nameMap = { light_truck: 'Light Truck', van: 'Van', mini_bus: 'Mini Bus', city_bus: 'City Bus' };
+                            badge.textContent = `${nameMap[vType] || vType} (${cap} Seats)`;
+                        }
+                    });
+                });
+
+                // Mode A Source Radio toggles
+                const sourceRadios = document.querySelectorAll('input[name="capModeASourceType"]');
+                sourceRadios.forEach(r => {
+                    r.addEventListener('change', () => {
+                        const townshipBox = document.getElementById('capModeASourceTownshipBox');
+                        const hubBox = document.getElementById('capModeASourceHubBox');
+                        if (r.value === 'township') {
+                            townshipBox?.classList.remove('hidden');
+                            hubBox?.classList.add('hidden');
+                        } else if (r.value === 'hub') {
+                            townshipBox?.classList.add('hidden');
+                            hubBox?.classList.remove('hidden');
+                        } else {
+                            townshipBox?.classList.add('hidden');
+                            hubBox?.classList.add('hidden');
+                        }
+                    });
+                });
+
+                // Mode A Actions
+                document.getElementById('capModeAGenerateBtn')?.addEventListener('click', () => this.generateModeAPlan());
+                document.getElementById('capModeAApplyBtn')?.addEventListener('click', () => this.applyModeAPlanToActive());
+                document.getElementById('capModeASaveDirectBtn')?.addEventListener('click', () => this.saveModeAPlanDirect());
+
+                // Mode B Actions
+                document.getElementById('capModeBFleetVehSelect')?.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    const cap = (VEHICLE_TYPES && VEHICLE_TYPES[val]) ? VEHICLE_TYPES[val].capacity : 15;
+                    const disp = document.getElementById('capModeBFleetCapDisplay');
+                    if (disp) disp.textContent = `${cap} PAX`;
+                });
+                document.getElementById('capModeBRunSplitterBtn')?.addEventListener('click', () => this.runFleetSplitter());
+                document.getElementById('capModeBLoadAllToMultiMapBtn')?.addEventListener('click', () => this.loadAllToMultiMap());
+                document.getElementById('capModeBSaveAllRoutesBtn')?.addEventListener('click', () => this.saveAllFleetRoutes());
+
+                // Mode C Actions
+                document.getElementById('capModeCLoadCsvBtn')?.addEventListener('click', () => {
+                    if (this.state.modeC.csvImportedStops && this.state.modeC.csvImportedStops.length > 0) {
+                        this.loadModeCStops();
+                        showToast(`✓ Loaded ${this.state.modeC.csvImportedStops.length} CSV stops into corridor!`, 'info');
+                    } else if (stops && stops.length > 0) {
+                        this.loadFromCsv(stops, false);
+                    } else if (els.csvFileInput) {
+                        els.csvFileInput.click();
+                    } else {
+                        showToast('💡 ကျေးဇူးပြု၍ Data Management မှ CSV ဖိုင် import ပြုလုပ်ပါ', 'info');
+                    }
+                });
+                document.getElementById('capModeCAutoFillBtn')?.addEventListener('click', () => this.autoFillModeCTo100());
+                document.getElementById('capModeCAutoSplitBtn')?.addEventListener('click', () => this.autoSplitModeCOverflow());
+                document.getElementById('capModeCClearBtn')?.addEventListener('click', () => this.clearModeCSelection());
+                document.getElementById('capModeCFinalizeBtn')?.addEventListener('click', () => this.applyModeCFinalize(true));
+                document.getElementById('capModeCStartMapClickBtn')?.addEventListener('click', () => this.startMapClickMode());
+                document.getElementById('capModeCToggleMapBtn')?.addEventListener('click', () => this.toggleCorridorMapMarkers());
+                document.getElementById('capModeCFinishMapClickBtn')?.addEventListener('click', () => this.finishMapClickMode());
+                document.getElementById('capModeCCancelMapClickBtn')?.addEventListener('click', () => this.cancelMapClickMode());
+            }
+        };
+
+        window.CapacityRoutePlannerEngine = CapacityRoutePlannerEngine;
+
+
         // Initialize Bus Stops Database UI
         initBusStopsDatabaseUI();
+
+        // Initialize Smart Capacity Route Planner Engine (Single Vehicle, Fleet Splitter & Hybrid)
+        CapacityRoutePlannerEngine.init();
 
         // Initialize Role-Based Authentication System
         setupAuthSystem();
