@@ -1,6 +1,6 @@
 {
   "name": "Route Management Optimizer MVP",
-  "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, role-based access control, cyber attack defense, automated security audit checks, and real-time client IP threat tracing.",
+  "description": "Logistics dashboard for managing pick-up points, generating optimized route manifests, simultaneous multi-route map visualization (up to 30 routes), fleet logistics overview, cyber security defenses, and enriched Yangon bus stop directory with 3,154 points.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
