@@ -39,7 +39,227 @@
                 }
             }
         })();
-    </script>
+    
+
+        // --- AI Features (Gemini Integration) ---
+        const initAIFeatures = () => {
+            const aiClusterBtn = document.getElementById('aiClusterBtn');
+            const aiInsightsBtn = document.getElementById('aiInsightsBtn');
+            const aiAnomalyBtn = document.getElementById('aiAnomalyBtn');
+            const aiCleanerBtn = document.getElementById('aiCleanerBtn');
+
+            if (aiClusterBtn) {
+                aiClusterBtn.addEventListener('click', async () => {
+                    const activeStops = window.CapacityRoutePlannerEngine ? (window.CapacityRoutePlannerEngine.stops || stops) : stops;
+                    if (activeStops.length < 3) {
+                        return showToast('⚠️ Not enough stops to cluster (requires 3+).', 'warning');
+                    }
+                    
+                    showToast('✨ AI is clustering your stops geographically...', 'info');
+                    try {
+                        const originalBtnContent = aiClusterBtn.innerHTML;
+                        aiClusterBtn.innerHTML = '<span>⏳</span> Processing...';
+                        aiClusterBtn.disabled = true;
+
+                        const numClusters = prompt('How many clusters/zones do you want to group these stops into?', '2');
+                        if (!numClusters || isNaN(numClusters)) {
+                            aiClusterBtn.innerHTML = originalBtnContent;
+                            aiClusterBtn.disabled = false;
+                            return;
+                        }
+
+                        const res = await fetch('/api/ai/cluster', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ stops: activeStops, numClusters: parseInt(numClusters, 10) })
+                        });
+                        const clusters = await res.json();
+                        
+                        if (clusters && clusters.length > 0) {
+                            let report = '<b>✨ AI Smart Clustering Results:</b><br><br>';
+                            clusters.forEach((c, idx) => {
+                                report += `<b>${idx + 1}. ${c.clusterName}</b>: ${c.stopIds.length} stops<br>`;
+                            });
+                            
+                            showConfirmModal({
+                                title: 'AI Clustering Complete',
+                                message: report + '<br><i>(Check browser console for full ID mapping)</i>',
+                                confirmText: 'OK',
+                                cancelText: 'Close',
+                                confirmColor: 'purple',
+                                icon: '✨',
+                                onConfirm: () => {}
+                            });
+                            console.log("AI Clusters:", clusters);
+                        } else {
+                            showToast('⚠️ AI could not cluster the stops.', 'error');
+                        }
+                    } catch (e) {
+                        showToast('❌ AI Clustering failed: ' + e.message, 'error');
+                    } finally {
+                        aiClusterBtn.innerHTML = '<span>✨</span> AI Smart Clustering';
+                        aiClusterBtn.disabled = false;
+                    }
+                });
+            }
+
+            if (aiInsightsBtn) {
+                aiInsightsBtn.addEventListener('click', async () => {
+                    let r = optimizedStops && optimizedStops.length > 0 ? optimizedStops : stops;
+                    if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.optimizedStops && window.CapacityRoutePlannerEngine.optimizedStops.length > 0) {
+                        r = window.CapacityRoutePlannerEngine.optimizedStops;
+                    } else if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.stops && window.CapacityRoutePlannerEngine.stops.length > 0) {
+                        r = window.CapacityRoutePlannerEngine.stops;
+                    }
+
+                    if (r.length < 2) return showToast('⚠️ Not enough stops for insights.', 'warning');
+                    
+                    showToast('✨ AI is analyzing the route...', 'info');
+                    try {
+                        const originalBtnContent = aiInsightsBtn.innerHTML;
+                        aiInsightsBtn.innerHTML = '<span>⏳</span> Analyzing...';
+                        aiInsightsBtn.disabled = true;
+
+                        const res = await fetch('/api/ai/insights', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ route: { stops: r } })
+                        });
+                        const data = await res.json();
+                        
+                        showConfirmModal({
+                            title: '✨ AI Route Insights & Recommendations',
+                            message: data.text ? data.text.replace(/\n/g, '<br>') : 'No insights generated.',
+                            confirmText: 'Got it',
+                            cancelText: 'Close',
+                            confirmColor: 'purple',
+                            icon: '💡',
+                            onConfirm: () => {}
+                        });
+                    } catch (e) {
+                        showToast('❌ AI Insights failed: ' + e.message, 'error');
+                    } finally {
+                        aiInsightsBtn.innerHTML = '<span>✨</span> AI Insights';
+                        aiInsightsBtn.disabled = false;
+                    }
+                });
+            }
+
+            if (aiAnomalyBtn) {
+                aiAnomalyBtn.addEventListener('click', async () => {
+                    let r = optimizedStops && optimizedStops.length > 0 ? optimizedStops : stops;
+                    if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.optimizedStops && window.CapacityRoutePlannerEngine.optimizedStops.length > 0) {
+                        r = window.CapacityRoutePlannerEngine.optimizedStops;
+                    } else if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.stops && window.CapacityRoutePlannerEngine.stops.length > 0) {
+                        r = window.CapacityRoutePlannerEngine.stops;
+                    }
+
+                    if (r.length < 3) return showToast('⚠️ Not enough stops for anomaly detection.', 'warning');
+                    
+                    showToast('🔍 AI is scanning for anomalies...', 'info');
+                    try {
+                        const originalBtnContent = aiAnomalyBtn.innerHTML;
+                        aiAnomalyBtn.innerHTML = '<span>⏳</span> Scanning...';
+                        aiAnomalyBtn.disabled = true;
+
+                        const res = await fetch('/api/ai/anomaly', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ route: { stops: r } })
+                        });
+                        const data = await res.json();
+                        
+                        if (data.hasAnomaly) {
+                            showConfirmModal({
+                                title: '🚨 Geographic Anomaly Detected!',
+                                message: `<b>Reason:</b> ${data.reason}<br><br><b>Anomalous Stops ID(s):</b> ${data.anomalousStopIds.join(', ')}`,
+                                confirmText: 'Review Route',
+                                cancelText: 'Ignore',
+                                confirmColor: 'red',
+                                icon: '🔍',
+                                onConfirm: () => {}
+                            });
+                        } else {
+                            showToast('✅ AI Scan passed! No geographic anomalies detected.', 'success');
+                        }
+                    } catch (e) {
+                        showToast('❌ AI Anomaly Scan failed: ' + e.message, 'error');
+                    } finally {
+                        aiAnomalyBtn.innerHTML = '<span>🔍</span> Anomaly Scan';
+                        aiAnomalyBtn.disabled = false;
+                    }
+                });
+            }
+
+            if (aiCleanerBtn) {
+                aiCleanerBtn.addEventListener('click', async () => {
+                    if (stops.length === 0 && (!window.CapacityRoutePlannerEngine || !window.CapacityRoutePlannerEngine.state.modeC.csvImportedStops || window.CapacityRoutePlannerEngine.state.modeC.csvImportedStops.length === 0)) {
+                        return showToast('⚠️ ကျေးဇူးပြု၍ လိပ်စာ/မှတ်တိုင် ဒေတာ (CSV) အရင်သွင်းပါ', 'warning');
+                    }
+                    
+                    showToast('🧹 AI သည် လိပ်စာများကို စစ်ဆေးပြင်ဆင်ပေးနေပါသည်...', 'info');
+                    try {
+                        const originalBtnContent = aiCleanerBtn.innerHTML;
+                        aiCleanerBtn.innerHTML = '<span>⏳</span> Cleaning...';
+                        aiCleanerBtn.disabled = true;
+
+                        // Clean active stops or CSV imported stops
+                        let activeData = stops;
+                        if (stops.length === 0 && window.CapacityRoutePlannerEngine) {
+                            activeData = window.CapacityRoutePlannerEngine.state.modeC.csvImportedStops || [];
+                        }
+
+                        // Grab the first 50 stops to prevent API payload from being too huge for demo
+                        const sampleStops = activeData.slice(0, 50).map(s => ({ id: s.id || s.name, address_text: s.name + ' ' + (s.township || '') }));
+                        
+                        const res = await fetch('/api/ai/clean-address', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ records: sampleStops })
+                        });
+                        const cleanedData = await res.json();
+                        
+                        // Apply cleaned data
+                        let count = 0;
+                        cleanedData.forEach(cd => {
+                            const stop = activeData.find(s => (s.id || s.name) === cd.id);
+                            if (stop) {
+                                stop.name = cd.cleanedAddress || stop.name;
+                                stop.township = cd.township || stop.township;
+                                count++;
+                            }
+                        });
+                        
+                        // Update UI
+                        if (typeof updateUI === 'function') updateUI();
+                        if (typeof renderStopsList === 'function') renderStopsList();
+                        if (typeof renderDynamicRouteGeoJSON === 'function' && routeGeoJSON) {
+                            renderDynamicRouteGeoJSON(routeGeoJSON);
+                        }
+                        
+                        showConfirmModal({
+                            title: '✨ AI Address Cleaned Successfully!',
+                            message: `<b>${count}</b> ခုသော လိပ်စာများကို AI မှ မှန်ကန်အောင် အလိုအလျောက် ပြင်ဆင်ပေးလိုက်ပါသည်။<br>(Successfully standardized Townships & Addresses)`,
+                            confirmText: 'OK',
+                            cancelText: 'Close',
+                            confirmColor: 'purple',
+                            icon: '🧹',
+                            onConfirm: () => {}
+                        });
+                    } catch (e) {
+                        showToast('❌ AI Address Cleaner failed: ' + e.message, 'error');
+                    } finally {
+                        aiCleanerBtn.innerHTML = '<span>✨</span> AI Address Cleaner (လိပ်စာ/မြို့နယ် မှန်ကန်ရေး)';
+                        aiCleanerBtn.disabled = false;
+                    }
+                });
+            }
+        };
+
+        // Call init after a short delay
+        setTimeout(initAIFeatures, 1000);
+
+</script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -227,7 +447,7 @@
 <body class="bg-slate-100 text-slate-800 font-sans flex flex-col md:flex-row h-screen overflow-hidden transition-colors duration-200">
 
     <!-- Sidebar Dashboard -->
-    <aside id="appSidebar" class="w-full md:w-[360px] flex-shrink-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col h-full z-10">
+    <aside id="appSidebar" class="w-full md:w-[360px] flex-shrink-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col h-full z-10 transition-all duration-300 relative">
         <!-- Header -->
         <div class="p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-900 text-white flex justify-between items-center">
             <div>
@@ -662,6 +882,12 @@
                         </button>
                     </div>
 
+                    
+                    <!-- AI Address Cleaner Feature -->
+                    <button id="aiCleanerBtn" type="button" class="w-full mt-2 py-2 bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 text-white rounded text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+                        <span>✨</span> AI Address Cleaner (လိပ်စာ/မြို့နယ် မှန်ကန်ရေး)
+                    </button>
+
                     <!-- Enhanced Interactive Dropzone -->
                     <div id="csvDropZone" class="relative group rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 bg-slate-50/80 hover:bg-blue-50/40 dark:bg-slate-900/40 dark:hover:bg-blue-950/20 p-3 transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center overflow-hidden">
                         <input type="file" id="csvFileInput" accept=".csv,text/csv,text/comma-separated-values" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10">
@@ -763,6 +989,13 @@
 
     <!-- Main Content Area: Map + Route Manifest Table Dock -->
     <main id="appMain" class="flex-1 flex flex-col h-full relative z-0 overflow-hidden">
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebarToggleBtn" class="absolute top-1/2 left-0 z-[1000] -translate-y-1/2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 border-l-0 shadow-[2px_0_5px_rgba(0,0,0,0.1)] rounded-r-md px-0.5 py-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 focus:outline-none flex items-center justify-center group transition-colors" title="Toggle Sidebar">
+            <svg id="sidebarToggleIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:text-blue-500 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline> <!-- Chevron Left -->
+            </svg>
+        </button>
+
         <!-- Map Viewport -->
         <div id="map" class="flex-1 w-full h-full relative z-0"></div>
 
@@ -855,6 +1088,14 @@
                 </div>
 
                 <div class="flex items-center gap-2">
+                    
+                    <button id="aiInsightsBtn" class="text-[10px] font-bold px-2 py-1 bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 text-white rounded transition items-center gap-1 shadow-sm uppercase tracking-wider flex">
+                        <span>✨</span> AI Insights
+                    </button>
+                    <button id="aiAnomalyBtn" class="text-[10px] font-bold px-2 py-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white rounded transition items-center gap-1 shadow-sm uppercase tracking-wider flex" title="Detect Geographic Anomalies">
+                        <span>🔍</span> Anomaly Scan
+                    </button>
+
                     <button id="focusMatchesBtn" class="hidden text-[10px] font-bold px-2 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded transition items-center gap-1 shadow-sm uppercase tracking-wider" title="Zoom to highlighted matching stops">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path></svg>
                         Focus Matches
@@ -1639,7 +1880,7 @@
 
     <!-- Add / Edit Stop in Database Modal -->
     <div id="dbStopFormModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-150">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
             <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="text-lg">🚏</span>
@@ -1647,39 +1888,58 @@
                 </div>
                 <button id="closeDbStopFormModalBtn" class="text-slate-400 hover:text-white text-lg">✕</button>
             </div>
-            <form id="dbStopForm" class="p-4 space-y-3">
+            <form id="dbStopForm" class="p-5">
                 <input type="hidden" id="dbStopFormId">
-                <div>
-                    <label for="dbStopFormName" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Stop Name (English)</label>
-                    <input type="text" id="dbStopFormName" required placeholder="e.g. Hledan Bus Stop" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100">
-                </div>
-                <div>
-                    <label for="dbStopFormMyanmar" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Myanmar Script (မြန်မာအမည်)</label>
-                    <input type="text" id="dbStopFormMyanmar" placeholder="ဥပမာ - လှည်းတန်း မှတ်တိုင်" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label for="dbStopFormTownship" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Township (မြို့နယ်)</label>
-                        <input type="text" id="dbStopFormTownship" required placeholder="e.g. Kamayut" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Left Column: Names & Location -->
+                    <div class="space-y-4">
+                        <div>
+                            <label for="dbStopFormName" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Stop Name (English)</label>
+                            <input type="text" id="dbStopFormName" required placeholder="e.g. Hledan Bus Stop" class="w-full text-xs p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 transition-colors shadow-sm">
+                        </div>
+                        <div>
+                            <label for="dbStopFormMyanmar" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Myanmar Script (မြန်မာအမည်)</label>
+                            <input type="text" id="dbStopFormMyanmar" placeholder="ဥပမာ - လှည်းတန်း မှတ်တိုင်" class="w-full text-xs p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 transition-colors shadow-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="dbStopFormTownship" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Township (မြို့နယ်)</label>
+                                <input type="text" id="dbStopFormTownship" required placeholder="e.g. Kamayut" class="w-full text-xs p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 transition-colors shadow-sm">
+                            </div>
+                            <div>
+                                <label for="dbStopFormRoad" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Road Name (လမ်းအမည်)</label>
+                                <input type="text" id="dbStopFormRoad" placeholder="e.g. Pyay Road" class="w-full text-xs p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 transition-colors shadow-sm">
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label for="dbStopFormRoad" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Road Name (လမ်းအမည်)</label>
-                        <input type="text" id="dbStopFormRoad" placeholder="e.g. Pyay Road" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100">
+                    
+                    <!-- Right Column: Coordinates -->
+                    <div class="space-y-4">
+                        <div class="bg-blue-50/50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-900/30 h-full flex flex-col justify-center">
+                            <h4 class="text-[11px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                                <span>📍</span> Geographic Coordinates
+                            </h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="dbStopFormLat" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Latitude (လတ္တီကျု)</label>
+                                    <input type="number" step="any" id="dbStopFormLat" required placeholder="16.8265" class="w-full text-xs p-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 font-mono shadow-inner transition-colors">
+                                </div>
+                                <div>
+                                    <label for="dbStopFormLng" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Longitude (လောင်ဂျီကျု)</label>
+                                    <input type="number" step="any" id="dbStopFormLng" required placeholder="96.1288" class="w-full text-xs p-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 font-mono shadow-inner transition-colors">
+                                </div>
+                                <div class="mt-3 text-[10px] text-slate-500 dark:text-slate-400 flex items-start gap-1.5 leading-snug bg-white/50 dark:bg-slate-950/50 p-2 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
+                                    <span class="text-blue-500">💡</span>
+                                    <span>Tip: You can obtain precise coordinates from Google Maps by right-clicking on any location and copying the numbers.</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label for="dbStopFormLat" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Latitude</label>
-                        <input type="number" step="any" id="dbStopFormLat" required placeholder="16.8265" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 font-mono">
-                    </div>
-                    <div>
-                        <label for="dbStopFormLng" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Longitude</label>
-                        <input type="number" step="any" id="dbStopFormLng" required placeholder="96.1288" class="w-full text-xs p-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none focus:border-blue-500 text-slate-800 dark:text-slate-100 font-mono">
-                    </div>
-                </div>
-                <div class="pt-2 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
-                    <button type="button" id="cancelDbStopFormBtn" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">Cancel</button>
-                    <button type="submit" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1">
+
+                <div class="pt-4 mt-5 flex justify-end gap-2 border-t border-slate-200 dark:border-slate-800">
+                    <button type="button" id="cancelDbStopFormBtn" class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-sm">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-md transition flex items-center gap-1.5">
                         <span>💾</span>
                         <span>Save to Database</span>
                     </button>
