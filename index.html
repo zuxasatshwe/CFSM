@@ -222,6 +222,7 @@
             max-height: 48px !important;
         }
     </style>
+    <script type="module" src="/firebase-db.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans flex flex-col md:flex-row h-screen overflow-hidden transition-colors duration-200">
 
@@ -5509,6 +5510,7 @@
             },
 
             async add(stop) {
+                if (window.FirebaseDB) { window.FirebaseDB.saveCustomStop(stop); }
                 stop.id = stop.id || Date.now();
                 ybsStopsDB.unshift(stop);
                 if (this.db) {
@@ -5523,6 +5525,7 @@
             },
 
             async update(stop) {
+                if (window.FirebaseDB) { window.FirebaseDB.saveCustomStop(stop); }
                 const idx = ybsStopsDB.findIndex(s => s.id === stop.id);
                 if (idx !== -1) {
                     ybsStopsDB[idx] = { ...ybsStopsDB[idx], ...stop };
@@ -5539,6 +5542,7 @@
             },
 
             async delete(id) {
+                if (window.FirebaseDB) { window.FirebaseDB.deleteCustomStop(id); }
                 if (!currentUser || currentUser.role !== 'Admin') {
                     showToast("❌ Admin သာ ဒေတာဘေ့စ်မှ မှတ်တမ်းများ ဖျက်ပစ်နိုင်ပါသည် (Manager & Operator cannot delete database records)", 'error');
                     return false;
@@ -7221,6 +7225,7 @@
                     activeRouteName = name;
                     isRouteModified = false;
                     localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                     closeSaveRouteModal();
                     updateActiveRouteBar();
                     renderSavedRoutesList();
@@ -7253,6 +7258,7 @@
             if (!savedRoutes) savedRoutes = [];
             savedRoutes.unshift(newRoute);
             localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
 
             activeRouteId = newRouteId;
             activeRouteName = name;
@@ -7490,6 +7496,7 @@
                             if (target) target.routeGeoJSON = newGeoJSON;
                             if (typeof savedRoutes !== 'undefined') {
                                 localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                             }
                             
                             // Only redraw if this route is still active
@@ -7543,6 +7550,7 @@
 
             savedRoutes.unshift(cloned);
             localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
             renderSavedRoutesList(els.routesSearchInput ? els.routesSearchInput.value : '');
             updateActiveRouteBar();
             showToast(`Route duplicated as "${cloned.name}"`, 'info');
@@ -7562,6 +7570,7 @@
                     activeRouteName = target.name;
                 }
                 localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                 renderSavedRoutesList(els.routesSearchInput ? els.routesSearchInput.value : '');
                 updateActiveRouteBar();
                 showToast("Route renamed successfully!", 'success');
@@ -7587,7 +7596,9 @@
                 icon: '🗑️',
                 onConfirm: () => {
                     savedRoutes = savedRoutes.filter(r => r.id !== routeId);
+                    if (window.FirebaseDB) { window.FirebaseDB.deleteRoute(routeId); }
                     localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                     if (activeRouteId === routeId) {
                         activeRouteId = null;
                         activeRouteName = 'Draft Route (သိမ်းမထားရသေး)';
@@ -8123,6 +8134,7 @@
 
                     // Save state
                     localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                     renderSavedRoutesList();
 
                     // DIRECTLY LOAD FIRST ROUTE TO ACTIVE DASHBOARD
@@ -8587,6 +8599,7 @@
             if (!savedRoutes || savedRoutes.length === 0) {
                 savedRoutes = JSON.parse(JSON.stringify(DEFAULT_SAVED_ROUTES));
                 localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
             }
 
             // Auto-load first route if stops are currently empty
@@ -9344,6 +9357,7 @@
                                     if (sr) {
                                         sr.routeGeoJSON = newGeoJSON;
                                         localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                                     }
                                 }
                                 
@@ -9695,6 +9709,7 @@
             const existingNonDemo = (savedRoutes || []).filter(r => !r.id.startsWith('route_yangon_fleet_'));
             savedRoutes = [...routes30, ...existingNonDemo];
             localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
 
             // Select all 30 IDs
             const all30Ids = routes30.map(r => r.id);
@@ -12032,6 +12047,7 @@
                 if (!Array.isArray(savedRoutes)) savedRoutes = [];
                 savedRoutes.unshift(newRoute);
                 localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
 
                 if (typeof updateSavedRoutesBadge === 'function') updateSavedRoutesBadge();
                 if (typeof renderSavedRoutesModalList === 'function') renderSavedRoutesModalList();
@@ -12419,6 +12435,7 @@
                 if (!savedRoutes.find(r => r.id === target.id)) {
                     savedRoutes.unshift(target);
                     localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
                 }
 
                 this.close();
@@ -12445,6 +12462,7 @@
                     }
                 });
                 localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
 
                 if (typeof updateSavedRoutesBadge === 'function') updateSavedRoutesBadge();
 
@@ -12474,6 +12492,7 @@
                     }
                 });
                 localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+    if (window.FirebaseDB) { window.FirebaseDB.syncAll(savedRoutes); }
 
                 if (typeof updateSavedRoutesBadge === 'function') updateSavedRoutesBadge();
                 if (typeof renderSavedRoutesModalList === 'function') renderSavedRoutesModalList();
@@ -13390,6 +13409,56 @@
         // Initialize Smart Capacity Route Planner Engine (Single Vehicle, Fleet Splitter & Hybrid)
         CapacityRoutePlannerEngine.init();
 
+        
+        // Firebase Auto-Sync for Routes
+        window.addEventListener('FirebaseReady', () => {
+            if (window.FirebaseDB) {
+                // If local storage has routes but Firebase is empty, we might want to upload them?
+                // For now, let's just subscribe to Firebase.
+                
+                window.FirebaseDB.subscribeToCustomStops((customStops) => {
+                    if (customStops && customStops.length > 0) {
+                        // Merge customStops into ybsStopsDB
+                        customStops.forEach(customStop => {
+                            const idx = ybsStopsDB.findIndex(s => String(s.id) === String(customStop.id));
+                            if (idx !== -1) {
+                                ybsStopsDB[idx] = { ...ybsStopsDB[idx], ...customStop };
+                            } else {
+                                ybsStopsDB.unshift(customStop);
+                            }
+                        });
+                        // Trigger UI update if necessary
+                        if (typeof renderDbStopsTable === 'function' && document.getElementById('dbStopsTableBody')) {
+                            const query = els.dbSearchInput ? els.dbSearchInput.value : '';
+                            const township = els.dbTownshipFilter ? els.dbTownshipFilter.value : '';
+                            const source = els.dbSourceFilter ? els.dbSourceFilter.value : '';
+                            const matches = YBS_Database.search(query, township, source);
+                            if (matches.length > 0 && typeof renderDbStopsTable === 'function') {
+                                // re-render table with current matches to reflect changes
+                                renderDbStopsTable();
+                            }
+                        }
+                    }
+                });
+
+                window.FirebaseDB.subscribeToRoutes((routes) => {
+                    // Update global savedRoutes
+                    if (routes && routes.length > 0) {
+                        savedRoutes = routes;
+                        localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+                        // Re-render the routes list if the function exists
+                        if (typeof renderSavedRoutesList === 'function') {
+                            const q = els.routesSearchInput ? els.routesSearchInput.value : '';
+                            renderSavedRoutesList(q);
+                        }
+                        if (typeof updateSavedRoutesBadge === 'function') {
+                            updateSavedRoutesBadge();
+                        }
+                    }
+                });
+            }
+        });
+
         // Initialize Role-Based Authentication System
         setupAuthSystem();
 
@@ -13639,6 +13708,7 @@
                                 
                                 if (importedRoutesCount > 0) {
                                     localStorage.setItem('ferry_saved_routes', JSON.stringify(sRoutes));
+                                    if (window.FirebaseDB) { window.FirebaseDB.syncAll(sRoutes); }
                                     if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.renderSavedRoutesList) {
                                         window.CapacityRoutePlannerEngine.renderSavedRoutesList();
                                     }

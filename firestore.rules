@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /routes/{document=**} {
+      allow read, write: if true;
+    }
+    match /custom_bus_stops/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
