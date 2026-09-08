@@ -26,7 +26,7 @@ Stops:
 ${JSON.stringify(stops.map((s: any) => ({ id: s.id, name: s.name, township: s.township })), null, 2)}
 `;
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.6-flash",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -62,7 +62,7 @@ Provide human-readable insights (in Myanmar language or bilingual). Mention pote
 Format as a brief, engaging paragraph or bullet points. Keep it under 100 words.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.6-flash",
         contents: prompt,
       });
       res.json({ text: response.text() });
@@ -85,7 +85,7 @@ Identify if there are any anomalous stops. Return JSON format.
 If yes, set 'hasAnomaly' to true, provide a 'reason' (Myanmar language), and list the 'anomalousStopIds'. If no, set 'hasAnomaly' to false.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.6-flash",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -123,7 +123,7 @@ cleanedAddress: nicely formatted address in Myanmar or English
 township: standard English township name (e.g., "Hlaing", "Kamaryut", "Thingangyun")
 `;
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.6-flash",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
