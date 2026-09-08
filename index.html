@@ -646,10 +646,14 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-2.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 mb-2.5">
                         <button type="button" id="exportActiveRouteCsvBtn" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800/60 rounded-lg text-[10.5px] font-bold text-emerald-700 dark:text-emerald-300 transition shadow-2xs group cursor-pointer" title="Export current active route stops to CSV format (လက်ရှိမှတ်တိုင်များကို CSV ဖြင့် ထုတ်ယူမည်)">
                             <span class="text-xs">📊</span>
                             <span>Export CSV</span>
+                        </button>
+                        <button type="button" id="exportActiveRouteKmlBtn" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200 dark:border-blue-800/60 rounded-lg text-[10.5px] font-bold text-blue-700 dark:text-blue-300 transition shadow-2xs group cursor-pointer" title="Export current active route to KML format (လက်ရှိလမ်းကြောင်းကို KML ဖြင့် ထုတ်ယူမည်)">
+                            <span class="text-xs">🗺️</span>
+                            <span>Export KML</span>
                         </button>
                         <button type="button" id="buildHybridRouteFromCsvBtn" class="flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-[10.5px] font-bold transition shadow-2xs group cursor-pointer" title="Load imported CSV or active stops into Interactive Hybrid Builder to build an optimized capacity route">
                             <span class="text-xs group-hover:scale-110 transition-transform">🎯</span>
@@ -1296,14 +1300,18 @@
                         <span>📄</span>
                         <span>Template (JSON)</span>
                     </button>
-                    <input type="file" id="importRoutesFileInput" accept=".csv,.json,text/csv,application/json" class="hidden">
-                    <button id="importRoutesBtn" class="px-2.5 py-1 rounded border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 transition flex items-center gap-1" title="Import Routes Backup or Bulk List (CSV / JSON)">
+                    <input type="file" id="importRoutesFileInput" accept=".csv,.json,.kml,text/csv,application/json,application/vnd.google-earth.kml+xml" class="hidden">
+                    <button id="importRoutesBtn" class="px-2.5 py-1 rounded border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 transition flex items-center gap-1" title="Import Routes Backup or Bulk List (CSV / JSON / KML)">
                         <span>📤</span>
-                        <span>Import (CSV / JSON)</span>
+                        <span>Import (CSV/JSON/KML)</span>
                     </button>
                     <button id="exportAllRoutesCsvBtn" class="px-2.5 py-1 rounded border border-emerald-300 dark:border-emerald-700/60 bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center gap-1 shadow-xs" title="Export all saved routes as a single comprehensive CSV spreadsheet">
                         <span>📊</span>
                         <span>Export All (CSV)</span>
+                    </button>
+                    <button id="exportAllRoutesKmlBtn" class="px-2.5 py-1 rounded border border-blue-300 dark:border-blue-700/60 bg-blue-600 hover:bg-blue-700 text-white font-bold transition flex items-center gap-1 shadow-xs" title="Export all saved routes as a KML file">
+                        <span>🗺️</span>
+                        <span>Export All (KML)</span>
                     </button>
                     <button id="exportAllRoutesBtn" class="px-2.5 py-1 rounded border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 transition flex items-center gap-1" title="Export all saved routes as JSON backup">
                         <span>📥</span>
@@ -1451,10 +1459,14 @@
                         <span>📊</span>
                         <span>CSV</span>
                     </button>
+                    <button id="exportDbKmlBtn" class="px-2 py-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1 transition">
+                        <span>🗺️</span>
+                        <span>KML</span>
+                    </button>
                     <label class="px-2 py-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1 transition cursor-pointer">
                         <span>📤</span>
                         <span>Import</span>
-                        <input type="file" id="importDbFileInput" accept=".json,.csv" class="hidden">
+                        <input type="file" id="importDbFileInput" accept=".json,.csv,.kml" class="hidden">
                     </label>
                     <button id="resetDbBtn" class="px-2 py-1 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg text-xs font-semibold transition" title="Restore official YBS directory data">
                         <span>🔄</span>
@@ -5452,7 +5464,7 @@
                 }
             },
 
-            async getAllFromIDB() {
+            async getAll() {
                 if (!this.db) {
                     try {
                         return JSON.parse(localStorage.getItem('ferry_ybs_stops_fallback') || '[]');
@@ -5469,6 +5481,10 @@
                         resolve([]);
                     }
                 });
+            },
+
+            async getAllFromIDB() {
+                return this.getAll();
             },
 
             async bulkInsert(stops) {
@@ -5563,7 +5579,8 @@
             },
 
             search(query = '', township = '', source = '') {
-                const q = (query || '').trim().toLowerCase();
+                const qRaw = (query || '').trim().toLowerCase();
+                const q = qRaw.replace(/\s+/g, '');
                 const tsp = (township || '').trim().toLowerCase();
                 const src = (source || '').trim().toLowerCase();
 
@@ -5579,11 +5596,13 @@
                         if (src === 'official' && isOsm) return false;
                     }
                     if (!q) return true;
-                    const name = (s.name || '').toLowerCase();
-                    const mm = (s.myanmar || '').toLowerCase();
-                    const road = (s.road || '').toLowerCase();
-                    const t = (s.township || '').toLowerCase();
-                    const sSource = (s.source || '').toLowerCase();
+                    
+                    const name = (s.name || '').toLowerCase().replace(/\s+/g, '');
+                    const mm = (s.myanmar || '').toLowerCase().replace(/\s+/g, '');
+                    const road = (s.road || '').toLowerCase().replace(/\s+/g, '');
+                    const t = (s.township || '').toLowerCase().replace(/\s+/g, '');
+                    const sSource = (s.source || '').toLowerCase().replace(/\s+/g, '');
+                    
                     return name.includes(q) || mm.includes(q) || road.includes(q) || t.includes(q) || sSource.includes(q);
                 });
             },
@@ -7390,7 +7409,10 @@
                             <button type="button" onclick="exportSingleRouteCsv('${route.id}')" class="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded-lg transition" title="Export Route CSV (CSV ဖော်မတ်ဖြင့် ထုတ်မည်)">
                                 📊
                             </button>
-                            <button type="button" onclick="exportSingleRoute('${route.id}')" class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-lg transition" title="Export Route JSON (JSON ဖော်မတ်ဖြင့် ထုတ်မည်)">
+                            <button type="button" onclick="exportSingleRouteKml('${route.id}')" class="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-lg transition" title="Export Route KML (KML ဖော်မတ်ဖြင့် ထုတ်မည်)">
+                                🗺️
+                            </button>
+                            <button type="button" onclick="exportSingleRoute('${route.id}')" class="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-lg transition" title="Export Route JSON (JSON ဖော်မတ်ဖြင့် ထုတ်မည်)">
                                 📥
                             </button>
                             ${currentUser && currentUser.role === 'Operator' ? `
@@ -7439,9 +7461,11 @@
             // Draw route polyline if exists or reconstruct dynamically
             clearDynamicRouteLayer();
 
+            let isStraightLineFallback = false;
             if (!routeGeoJSON && (optimizedStops.length > 0 || stops.length > 0)) {
                 const waypoints = (optimizedStops.length > 0 ? optimizedStops : [...stops, { ...depot, type: 'Depot' }]);
                 if (waypoints.length >= 2) {
+                    isStraightLineFallback = true;
                     routeGeoJSON = {
                         type: "LineString",
                         coordinates: waypoints.map(w => [w.lng, w.lat])
@@ -7451,6 +7475,38 @@
 
             if (routeGeoJSON) {
                 renderDynamicRouteGeoJSON(routeGeoJSON, { fitBounds: true });
+                
+                // Fetch real geometry asynchronously if using straight line fallback
+                if (isStraightLineFallback) {
+                    const coords = routeGeoJSON.coordinates.map(c => `${c[0]},${c[1]}`); // lon,lat
+                    const url = `https://router.project-osrm.org/route/v1/driving/${coords.join(';')}?overview=full&geometries=geojson`;
+                    
+                    fetch(url).then(r => r.json()).then(data => {
+                        if (data && data.code === 'Ok' && data.routes && data.routes[0]) {
+                            const newGeoJSON = data.routes[0].geometry;
+                            routeGeoJSON = newGeoJSON;
+                            
+                            // Save globally
+                            if (target) target.routeGeoJSON = newGeoJSON;
+                            if (typeof savedRoutes !== 'undefined') {
+                                localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+                            }
+                            
+                            // Only redraw if this route is still active
+                            if (activeRouteId === target.id) {
+                                clearDynamicRouteLayer();
+                                renderDynamicRouteGeoJSON(routeGeoJSON, { fitBounds: false });
+                                
+                                const manifest = getRouteManifestData();
+                                if (manifest.length > 0) {
+                                    const finalStop = manifest[manifest.length - 1];
+                                    els.totalDistance.innerHTML = `${finalStop.cumulativeDistanceKm} <small class="text-[10px] font-normal text-slate-500">KM</small>`;
+                                    els.totalDuration.innerHTML = `${finalStop.cumulativeDurationMins} <small class="text-[10px] font-normal text-slate-500">MINS</small>`;
+                                }
+                            }
+                        }
+                    }).catch(e => console.error("OSRM Single-Route fetch error:", e));
+                }
                 
                 const manifest = getRouteManifestData();
                 if (manifest.length > 0) {
@@ -7550,6 +7606,17 @@
                 return '';
             }
 
+            const calcHaversine = (lat1, lon1, lat2, lon2) => {
+                if (!lat1 || !lon1 || !lat2 || !lon2) return 0;
+                const R = 6371; // Earth's radius in km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            };
+
             const escapeCsvCell = (val) => {
                 if (val === null || val === undefined) return '""';
                 const str = String(val);
@@ -7571,6 +7638,8 @@
                 'Latitude',
                 'Longitude',
                 'Pax_Count',
+                'Distance_To_Next_KM',
+                'Est_Duration_To_Next_Mins',
                 'Township',
                 'Notes'
             ];
@@ -7579,11 +7648,11 @@
 
             routesList.forEach((route) => {
                 const routeName = route.name || 'Untitled Route';
-                const vName = (route.vehicle && route.vehicle.name) ? route.vehicle.name : (currentVehicle?.name || 'Toyota HiAce Van');
-                const vCap = (route.vehicle && route.vehicle.capacity) ? route.vehicle.capacity : (currentVehicle?.capacity || 15);
-                const dName = (route.depot && route.depot.name) ? route.depot.name : (depot?.name || '');
-                const dLat = (route.depot && route.depot.lat !== undefined && route.depot.lat !== null) ? route.depot.lat : (depot?.lat || '');
-                const dLng = (route.depot && route.depot.lng !== undefined && route.depot.lng !== null) ? route.depot.lng : (depot?.lng || '');
+                const vName = (route.vehicle && route.vehicle.name) ? route.vehicle.name : (typeof currentVehicle !== 'undefined' && currentVehicle?.name ? currentVehicle.name : 'Toyota HiAce Van');
+                const vCap = (route.vehicle && route.vehicle.capacity) ? route.vehicle.capacity : (typeof currentVehicle !== 'undefined' && currentVehicle?.capacity ? currentVehicle.capacity : 15);
+                const dName = (route.depot && route.depot.name) ? route.depot.name : (typeof depot !== 'undefined' && depot?.name ? depot.name : '');
+                const dLat = (route.depot && route.depot.lat !== undefined && route.depot.lat !== null) ? route.depot.lat : (typeof depot !== 'undefined' && depot?.lat ? depot.lat : '');
+                const dLng = (route.depot && route.depot.lng !== undefined && route.depot.lng !== null) ? route.depot.lng : (typeof depot !== 'undefined' && depot?.lng ? depot.lng : '');
                 const note = route.note || '';
 
                 const stopList = (Array.isArray(route.optimizedStops) && route.optimizedStops.length > 0)
@@ -7604,9 +7673,14 @@
                         '""',
                         '0',
                         '""',
+                        '""',
+                        '""',
                         escapeCsvCell(note)
                     ].join(','));
                 } else {
+                    let totalRouteKm = 0;
+                    let totalRouteMins = 0;
+
                     stopList.forEach((stop, sIdx) => {
                         const sOrder = stop.seq !== undefined ? stop.seq : (sIdx + 1);
                         const sName = stop.name || `Stop ${sIdx + 1}`;
@@ -7614,6 +7688,23 @@
                         const sLng = stop.lng !== undefined ? stop.lng : '';
                         const sPax = stop.passengers !== undefined ? stop.passengers : (stop.pax !== undefined ? stop.pax : 1);
                         const sTownship = stop.township || '';
+
+                        let legKm = 0;
+                        let legMins = 0;
+                        if (sIdx < stopList.length - 1) {
+                            const nextStop = stopList[sIdx + 1];
+                            // If OSRM leg distance exists, use it, else haversine
+                            if (stop.legDistanceKm !== undefined && stop.legDurationMins !== undefined) {
+                                legKm = stop.legDistanceKm;
+                                legMins = stop.legDurationMins;
+                            } else {
+                                legKm = Number(calcHaversine(sLat, sLng, nextStop.lat, nextStop.lng).toFixed(2));
+                                legMins = Math.max(1, Math.round(legKm * 2.2 + 2)); // ~25km/h avg + 2m boarding time
+                            }
+                        }
+
+                        totalRouteKm += legKm;
+                        totalRouteMins += legMins;
 
                         rows.push([
                             escapeCsvCell(routeName),
@@ -7627,10 +7718,37 @@
                             sLat,
                             sLng,
                             sPax,
+                            legKm > 0 ? legKm : '0',
+                            legMins > 0 ? legMins : '0',
                             escapeCsvCell(sTownship),
                             escapeCsvCell(note)
                         ].join(','));
                     });
+
+                    // Append total row at the bottom for this route
+                    // Override total if route has real OSRM metrics saved
+                    if (route.metrics && route.metrics.distance && route.metrics.duration) {
+                        totalRouteKm = route.metrics.distance;
+                        totalRouteMins = route.metrics.duration;
+                    }
+
+                    rows.push([
+                        escapeCsvCell(routeName + ' (TOTALS)'),
+                        '""',
+                        '""',
+                        '""',
+                        '""',
+                        '""',
+                        '""',
+                        escapeCsvCell('Total Route Distance & Duration'),
+                        '""',
+                        '""',
+                        '""',
+                        Number(totalRouteKm).toFixed(2),
+                        totalRouteMins,
+                        '""',
+                        '""'
+                    ].join(','));
                 }
             });
 
@@ -9171,18 +9289,19 @@
 
                 // Determine coordinates
                 let latLngs = [];
+                let isStraightLineFallback = false;
+                
                 if (route.routeGeoJSON && route.routeGeoJSON.coordinates && route.routeGeoJSON.coordinates.length > 0) {
                     latLngs = route.routeGeoJSON.coordinates.map(c => [c[1], c[0]]);
                 } else if (route.optimizedStops && route.optimizedStops.length > 0) {
                     latLngs = route.optimizedStops.map(s => [s.lat, s.lng]);
-                    if (route.depot && route.depot.lat && route.depot.lng) {
-                        latLngs.push([route.depot.lat, route.depot.lng]);
-                    }
+                    isStraightLineFallback = true;
                 } else if (route.stops && route.stops.length > 0) {
                     latLngs = route.stops.map(s => [s.lat, s.lng]);
                     if (route.depot && route.depot.lat && route.depot.lng) {
                         latLngs.push([route.depot.lat, route.depot.lng]);
                     }
+                    isStraightLineFallback = true;
                 }
 
                 // Render polyline
@@ -9206,6 +9325,35 @@
                         lineCap: 'round',
                         lineJoin: 'round'
                     });
+                    multiRouteLayerGroup.addLayer(polyline);
+                    routeEntry.polyline = polyline;
+
+                    // Async fetch real geometry if falling back to straight lines
+                    if (isStraightLineFallback) {
+                        const coords = latLngs.map(ll => `${ll[1]},${ll[0]}`); // lon,lat
+                        const url = `https://router.project-osrm.org/route/v1/driving/${coords.join(';')}?overview=full&geometries=geojson`;
+                        
+                        fetch(url).then(r => r.json()).then(data => {
+                            if (data && data.code === 'Ok' && data.routes && data.routes[0]) {
+                                const newGeoJSON = data.routes[0].geometry;
+                                route.routeGeoJSON = newGeoJSON;
+                                
+                                // Save to localStorage
+                                if (typeof savedRoutes !== 'undefined') {
+                                    const sr = savedRoutes.find(r => r.id === route.id);
+                                    if (sr) {
+                                        sr.routeGeoJSON = newGeoJSON;
+                                        localStorage.setItem('ferry_saved_routes', JSON.stringify(savedRoutes));
+                                    }
+                                }
+                                
+                                // Redraw polylines on map smoothly
+                                const realLatLngs = newGeoJSON.coordinates.map(c => [c[1], c[0]]);
+                                casing.setLatLngs(realLatLngs);
+                                polyline.setLatLngs(realLatLngs);
+                            }
+                        }).catch(e => console.error("OSRM Multi-Route fetch error:", e));
+                    }
 
                     // Interactive Popup
                     const loadPct = Math.round((totalPax / (v.capacity || 15)) * 100);
@@ -12004,7 +12152,7 @@
 
             // Continuous Fleet Auto-Split: Runs in a loop until ALL uploaded stops are exhausted
             // Evaluates each batch with Plan (A) & Plan (B), naming output sequentially: Route 1, Route 2, etc.
-            executeContinuousFleetAutoSplit(rawStops, vehType = 'mini_bus', capacityPerCar = 25) {
+            async executeContinuousFleetAutoSplit(rawStops, vehType = 'mini_bus', capacityPerCar = 25) {
                 if (!rawStops || rawStops.length === 0) {
                     showToast('⚠️ No bus stops found to auto-split!', 'error');
                     return;
@@ -12174,10 +12322,40 @@
                 }
 
                 // Loop Complete: 100% of uploaded stops are exhausted and allocated
+                // Initial render with Haversine estimates
                 this.state.modeB.splitRoutes = splitRoutes;
                 this.renderFleetResults(splitRoutes, totalInitialStops, capacityPerCar);
 
-                showToast(`✓ စုစုပေါင်း မှတ်တိုင် ${totalInitialStops} ခုလုံးကို စစ်ဆေး၍ ${vehConfig.name} (${capacityPerCar} ဦး/မှတ်တိုင်) အလိုက် Route 1 မှ Route ${splitRoutes.length} အထိ အလိုအလျောက် ခွဲဝေရေးဆွဲပြီးစီးပါပြီ!`, 'success');
+                showToast(`✓ စုစုပေါင်း မှတ်တိုင် ${totalInitialStops} ခုလုံးကို ခွဲဝေရေးဆွဲပြီးစီးပါပြီ! Smart Routing (Road-snapped) တွက်ချက်နေပါသည်...`, 'info');
+
+                // Async fetch OSRM for all routes to get true distance, duration and Road-snapped GeoJSON
+                const fetchPromises = splitRoutes.map(async (r, index) => {
+                    // Stagger to avoid OSRM rate limits (100 req/min)
+                    await new Promise(resolve => setTimeout(resolve, index * 250));
+                    
+                    const coords = r.optimizedStops.map(s => `${s.lng},${s.lat}`);
+                    if (coords.length < 2) return;
+                    
+                    const url = `https://router.project-osrm.org/route/v1/driving/${coords.join(';')}?overview=full&geometries=geojson`;
+                    
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        if (data && data.code === 'Ok' && data.routes && data.routes[0]) {
+                            const osrmRoute = data.routes[0];
+                            r.routeGeoJSON = osrmRoute.geometry;
+                            r.metrics.distance = Number((osrmRoute.distance / 1000).toFixed(1));
+                            r.metrics.duration = Math.max(12, Math.round(osrmRoute.duration / 60) + (r.stops.length * 2)); // Add boarding time
+                        }
+                    } catch (e) {
+                        console.error("Auto-split OSRM route fetch error for", r.name, e);
+                    }
+                });
+
+                Promise.allSettled(fetchPromises).then(() => {
+                    this.renderFleetResults(this.state.modeB.splitRoutes, totalInitialStops, capacityPerCar);
+                    showToast(`✓ Smart Routing Plan (Road-snapped Polylines) ဖြင့် လမ်းကြောင်းအားလုံးကို တိကျစွာ တွက်ချက်ပြီးစီးပါပြီ!`, 'success');
+                });
             },
 
             renderFleetResults(splitRoutes, totalStopsCount, capacityPerCar) {
@@ -13218,6 +13396,345 @@
         // Initialize Cyber Security, Attack Defense & IP Tracer Engine
         FerrySecurityEngine.init();
 
-    </script>
+    
+        // ==========================================
+        // KML Export & Import Utilities
+        // ==========================================
+
+        const generateKmlForStops = (stopsArray, routeName = "YBS Bus Stops", drawLine = false) => {
+            let kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>${escapeHTML(routeName)}</name>
+    <description>Exported from Yangon Ferry Fleet Logistics</description>
+    <Style id="stopIcon">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="routeLine">
+      <LineStyle>
+        <color>ffeb822b</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+`;
+
+            // Add placemarks for each stop
+            stopsArray.forEach((s, idx) => {
+                const name = escapeHTML(s.myanmar || s.name || `Stop ${idx+1}`);
+                const desc = escapeHTML(`Township: ${s.township_mm || s.township || ''}\nPassengers: ${s.passengers || 1}\nDistance: ${s.cumulativeDistanceKm || 0} km`);
+                kml += `    <Placemark>
+      <name>${name}</name>
+      <description>${desc}</description>
+      <styleUrl>#stopIcon</styleUrl>
+      <Point>
+        <coordinates>${s.lng},${s.lat},0</coordinates>
+      </Point>
+    </Placemark>
+`;
+            });
+
+            // Optionally draw a line string for routes
+            if (drawLine && stopsArray.length > 1) {
+                kml += `    <Placemark>
+      <name>${escapeHTML(routeName)} Path</name>
+      <styleUrl>#routeLine</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+`;
+                stopsArray.forEach(s => {
+                    kml += `          ${s.lng},${s.lat},0
+`;
+                });
+                kml += `        </coordinates>
+      </LineString>
+    </Placemark>
+`;
+            }
+
+            kml += `  </Document>
+</kml>`;
+            return kml;
+        };
+
+        const generateBulkRoutesKml = (routesArray) => {
+            let kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Yangon Ferry All Routes</name>
+    <description>Bulk Exported Routes</description>
+    <Style id="routeLine">
+      <LineStyle><color>ffeb822b</color><width>4</width></LineStyle>
+    </Style>
+`;
+            routesArray.forEach((route) => {
+                kml += `    <Folder><name>${escapeHTML(route.name)}</name>\n`;
+                route.stops.forEach((s, idx) => {
+                    const name = escapeHTML(s.myanmar || s.name || `Stop ${idx+1}`);
+                    kml += `      <Placemark><name>${name}</name><Point><coordinates>${s.lng},${s.lat},0</coordinates></Point></Placemark>\n`;
+                });
+                
+                if (route.stops.length > 1) {
+                    kml += `      <Placemark>
+        <name>${escapeHTML(route.name)} Path</name>
+        <styleUrl>#routeLine</styleUrl>
+        <LineString><tessellate>1</tessellate><coordinates>
+`;
+                    route.stops.forEach(s => {
+                        kml += `          ${s.lng},${s.lat},0
+`;
+                    });
+                    kml += `        </coordinates></LineString>
+      </Placemark>
+`;
+                }
+                kml += `    </Folder>
+`;
+            });
+            kml += `  </Document>
+</kml>`;
+            return kml;
+        };
+
+        // Attach listeners when DOM is ready
+        setTimeout(() => {
+            // Bus Stops DB KML Export
+            const exportDbKmlBtn = document.getElementById('exportDbKmlBtn');
+            if (exportDbKmlBtn) {
+                exportDbKmlBtn.addEventListener('click', async () => {
+                    const allStops = await YBS_Database.getAll();
+                    if (!allStops || allStops.length === 0) return showToast('No stops to export', 'error');
+                    const kmlContent = generateKmlForStops(allStops, "YBS Database (Yangon)", false);
+                    downloadFile(kmlContent, `ybs_stops_database_${Date.now()}.kml`, 'application/vnd.google-earth.kml+xml');
+                    showToast(`Exported ${allStops.length} bus stops to KML`, 'info');
+                });
+            }
+
+            // Active Route KML Export
+            const exportActiveRouteKmlBtn = document.getElementById('exportActiveRouteKmlBtn');
+            if (exportActiveRouteKmlBtn) {
+                exportActiveRouteKmlBtn.addEventListener('click', () => {
+                    const currentStops = window.CapacityRoutePlannerEngine ? window.CapacityRoutePlannerEngine.stops : [];
+                    if (!currentStops || currentStops.length === 0) {
+                        showToast("⚠️ လက်ရှိမြေပုံပေါ်တွင် မှတ်တိုင်များ မရှိသေးပါ (No stops in active route to export)", "warning");
+                        return;
+                    }
+                    const routeName = (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.activeRouteName) ? window.CapacityRoutePlannerEngine.activeRouteName : 'active_route';
+                    const kmlContent = generateKmlForStops(currentStops, routeName, true);
+                    const safeName = routeName.replace(/[^a-zA-Z0-9_-]/g, '_');
+                    downloadFile(kmlContent, `${safeName}_${new Date().toISOString().slice(0, 10)}.kml`, 'application/vnd.google-earth.kml+xml');
+                    showToast(`✓ Active route exported to KML (${currentStops.length} stops)`, 'success');
+                });
+            }
+
+            // All Routes KML Export
+            const exportAllRoutesKmlBtn = document.getElementById('exportAllRoutesKmlBtn');
+            if (exportAllRoutesKmlBtn) {
+                exportAllRoutesKmlBtn.addEventListener('click', () => {
+                    const sRoutes = JSON.parse(localStorage.getItem('ferry_saved_routes') || '[]');
+                    if (!sRoutes || sRoutes.length === 0) return alert("No saved routes to export.");
+                    const kmlContent = generateBulkRoutesKml(sRoutes);
+                    downloadFile(kmlContent, `ferry_all_routes_${new Date().toISOString().slice(0, 10)}.kml`, 'application/vnd.google-earth.kml+xml');
+                    showToast(`Exported ${sRoutes.length} routes to KML`, 'success');
+                });
+            }
+
+            // Single Route KML Export
+            window.exportSingleRouteKml = (routeId) => {
+                const sRoutes = JSON.parse(localStorage.getItem('ferry_saved_routes') || '[]');
+                const target = sRoutes.find(r => r.id === routeId);
+                if (!target) return;
+                const kmlContent = generateKmlForStops(target.stops, target.name, true);
+                const safeName = target.name.replace(/[^a-zA-Z0-9_-]/g, '_');
+                downloadFile(kmlContent, `${safeName}.kml`, 'application/vnd.google-earth.kml+xml');
+                showToast(`Exported "${target.name}" KML file`, 'success');
+            };
+
+            // Patch importRoutesFileInput to handle KML
+            const importRoutesFileInput = document.getElementById('importRoutesFileInput');
+            if (importRoutesFileInput) {
+                importRoutesFileInput.addEventListener('change', (e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (!file) return;
+                    
+                    if (file.name.endsWith('.kml')) {
+                        e.stopImmediatePropagation(); // prevent existing handler from failing
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            try {
+                                const content = event.target.result;
+                                const parser = new DOMParser();
+                                const xmlDoc = parser.parseFromString(content, "text/xml");
+                                
+                                // Determine if it's a single route or multiple routes (Folders)
+                                const folders = xmlDoc.getElementsByTagName("Folder");
+                                let importedRoutesCount = 0;
+                                
+                                const sRoutes = JSON.parse(localStorage.getItem('ferry_saved_routes') || '[]');
+                                
+                                const parseStopsFromContainer = (container) => {
+                                    const placemarks = container.getElementsByTagName("Placemark");
+                                    const stops = [];
+                                    Array.from(placemarks).forEach((p, idx) => {
+                                        const pt = p.getElementsByTagName("Point")[0];
+                                        if (pt) {
+                                            const coordsNode = pt.getElementsByTagName("coordinates")[0];
+                                            const nameNode = p.getElementsByTagName("name")[0];
+                                            if (coordsNode) {
+                                                const coords = coordsNode.textContent.trim().split(',');
+                                                if (coords.length >= 2) {
+                                                    const lng = parseFloat(coords[0]);
+                                                    const lat = parseFloat(coords[1]);
+                                                    const name = nameNode ? nameNode.textContent : `Stop ${idx+1}`;
+                                                    if (!isNaN(lat) && !isNaN(lng)) {
+                                                        stops.push({
+                                                            name: name,
+                                                            myanmar: name,
+                                                            lat: lat,
+                                                            lng: lng,
+                                                            passengers: 1
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    return stops;
+                                };
+
+                                if (folders.length > 0) {
+                                    Array.from(folders).forEach(f => {
+                                        const nameNode = f.getElementsByTagName("name")[0];
+                                        const name = nameNode ? nameNode.textContent : `Imported Route ${Date.now()}`;
+                                        const routeStops = parseStopsFromContainer(f);
+                                        if (routeStops.length > 0) {
+                                            sRoutes.push({
+                                                id: 'route_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                                                name: name,
+                                                stops: routeStops,
+                                                createdAt: new Date().toISOString()
+                                            });
+                                            importedRoutesCount++;
+                                        }
+                                    });
+                                } else {
+                                    // Single route
+                                    const nameNode = xmlDoc.getElementsByTagName("Document")[0]?.getElementsByTagName("name")[0];
+                                    const name = nameNode ? nameNode.textContent : `Imported KML Route ${Date.now()}`;
+                                    const routeStops = parseStopsFromContainer(xmlDoc);
+                                    if (routeStops.length > 0) {
+                                        sRoutes.push({
+                                            id: 'route_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                                            name: name,
+                                            stops: routeStops,
+                                            createdAt: new Date().toISOString()
+                                        });
+                                        importedRoutesCount++;
+                                    }
+                                }
+                                
+                                if (importedRoutesCount > 0) {
+                                    localStorage.setItem('ferry_saved_routes', JSON.stringify(sRoutes));
+                                    if (window.CapacityRoutePlannerEngine && window.CapacityRoutePlannerEngine.renderSavedRoutesList) {
+                                        window.CapacityRoutePlannerEngine.renderSavedRoutesList();
+                                    }
+                                    showToast(`Successfully imported ${importedRoutesCount} routes from KML!`, 'success');
+                                } else {
+                                    showToast('No valid route stops found in KML', 'error');
+                                }
+                            } catch(err) {
+                                console.error(err);
+                                showToast('Failed to parse KML: ' + err.message, 'error');
+                            }
+                            importRoutesFileInput.value = '';
+                        };
+                        reader.readAsText(file);
+                    }
+                }, true); // Use capture phase so we can intercept .kml before existing handler errors
+            }
+
+            // Patch importDbFileInput to handle KML
+            const importDbFileInput = document.getElementById('importDbFileInput');
+            if (importDbFileInput) {
+                importDbFileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (!file || !file.name.endsWith('.kml')) return;
+                    
+                    e.stopImmediatePropagation();
+                    const reader = new FileReader();
+                    reader.onload = async (event) => {
+                        try {
+                            const content = event.target.result;
+                            const parser = new DOMParser();
+                            const xmlDoc = parser.parseFromString(content, "text/xml");
+                            const placemarks = xmlDoc.getElementsByTagName("Placemark");
+                            const importedStops = [];
+                            
+                            Array.from(placemarks).forEach((p, idx) => {
+                                const nameNode = p.getElementsByTagName("name")[0];
+                                const pt = p.getElementsByTagName("Point")[0];
+                                if (nameNode && pt) {
+                                    const coordsNode = pt.getElementsByTagName("coordinates")[0];
+                                    if (coordsNode) {
+                                        const name = nameNode.textContent;
+                                        const coords = coordsNode.textContent.trim().split(',');
+                                        if (coords.length >= 2) {
+                                            const lng = parseFloat(coords[0]);
+                                            const lat = parseFloat(coords[1]);
+                                            if (!isNaN(lat) && !isNaN(lng)) {
+                                                importedStops.push({
+                                                    no: idx + 1,
+                                                    id: Date.now() + idx,
+                                                    name: name,
+                                                    myanmar: name,
+                                                    township: 'Yangon (KML)',
+                                                    lat: parseFloat(lat.toFixed(6)),
+                                                    lng: parseFloat(lng.toFixed(6)),
+                                                    source: 'KML Import'
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                            
+                            if (importedStops.length > 0) {
+                                if (window.showConfirmModal) {
+                                    window.showConfirmModal({
+                                        title: 'Merge KML Bus Stops',
+                                        message: `Found <b>${importedStops.length}</b> bus stops in KML. Do you want to merge these into the database?`,
+                                        confirmText: `Merge ${importedStops.length} Stops`,
+                                        cancelText: 'Cancel',
+                                        confirmColor: 'blue',
+                                        icon: '📥',
+                                        onConfirm: async () => {
+                                            await YBS_Database.bulkInsert(importedStops);
+                                            window.ybsStopsDB = await YBS_Database.getAll();
+                                            if (window.renderDbStopsTable) window.renderDbStopsTable();
+                                            if (window.refreshPopularBusStopChips) window.refreshPopularBusStopChips();
+                                            showToast(`Successfully imported ${importedStops.length} stops from KML!`, 'success');
+                                        }
+                                    });
+                                }
+                            } else {
+                                showToast('No points found in KML', 'error');
+                            }
+                        } catch(err) {
+                            showToast('Failed to parse KML: ' + err.message, 'error');
+                        }
+                        importDbFileInput.value = '';
+                    };
+                    reader.readAsText(file);
+                }, true);
+            }
+
+        }, 1500); // Attach after initialization
+
+
+</script>
 </body>
 </html>
